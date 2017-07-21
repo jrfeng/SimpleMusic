@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/ivIcon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@mipmap/ic_launcher_round"/>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingLeft="16dp">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/app_name"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/tvArtist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="无音乐"
+            android:textColor="@color/colorGray"
+            android:textSize="14sp"/>
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/ibPrevious"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:background="#0FFF"
+        android:src="@drawable/btn_previous"/>
+
+    <ImageButton
+        android:id="@+id/ibPlayPause"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:background="#0FFF"
+        android:src="@drawable/btn_play"/>
+
+    <ImageButton
+        android:id="@+id/ibNext"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:background="#0FFF"
+        android:src="@drawable/btn_next"/>
+
+    <ImageButton
+        android:id="@+id/ibCancel"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:background="#0FFF"
+        android:src="@drawable/btn_cancel"/>
+
+</LinearLayout>
