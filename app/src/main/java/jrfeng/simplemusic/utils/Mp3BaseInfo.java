@@ -27,14 +27,6 @@ public class Mp3BaseInfo {
     }
 
     public void load(File mp3file, String charset) throws IOException {
-        if (!mp3file.exists()) {
-            throw new InvalidParameterException("file not exists.");
-        }
-
-        if (mp3file.isDirectory()) {
-            throw new InvalidParameterException("need a file, not directory.");
-        }
-
         songName = mp3file.getName().substring(0, mp3file.getName().lastIndexOf("."));
 
         RandomAccessFile raf = new RandomAccessFile(mp3file, "r");
@@ -59,15 +51,30 @@ public class Mp3BaseInfo {
     }
 
     public String getArtist() {
-        return decode(33, 30) + "歌手";
+        String msg = decode(33, 30);
+        if (msg.equals("未知")) {
+            return msg + "歌手";
+        } else {
+            return msg;
+        }
     }
 
     public String getAlbum() {
-        return decode(63, 30) + "专辑";
+        String msg = decode(33, 30);
+        if (msg.equals("未知")) {
+            return msg + "专辑";
+        } else {
+            return msg;
+        }
     }
 
     public String getYear() {
-        return decode(93, 4) + "年代";
+        String msg = decode(33, 30);
+        if (msg.equals("未知")) {
+            return msg + "年代";
+        } else {
+            return msg;
+        }
     }
 
     public String getComment() {

@@ -13,6 +13,11 @@ public class MusicScanner {
     private MusicStorage mMusicStorage;
     private Mp3BaseInfo mMp3Info;
 
+    private FileFilter musicFileFilter;
+    private FileFilter dirFilter;
+
+    private int addCount;
+
     /**
      * 创建音乐扫描器
      *
@@ -21,6 +26,21 @@ public class MusicScanner {
     public MusicScanner(MusicStorage musicStorage) {
         mMp3Info = new Mp3BaseInfo();
         mMusicStorage = musicStorage;
+
+        musicFileFilter = new FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                String f = file.getName();
+                return f.endsWith(".mp3") || f.endsWith(".ogg") || f.endsWith(".flac") || f.endsWith(".wav");
+            }
+        };
+
+        dirFilter = new FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                return file.isDirectory() && !file.getName().startsWith(".");
+            }
+        };
     }
 
     /**
@@ -32,12 +52,13 @@ public class MusicScanner {
      */
     public void scan(File targetDir, OnScanListener listener) {
         mScanListener = listener;
+        addCount = 0;
         if (mScanListener != null) {
             mScanListener.onStart();
         }
         scan(targetDir);
         if (mScanListener != null) {
-            mScanListener.onFinished();
+            mScanListener.onFinished(addCount);
         }
         mMusicStorage.saveAsync();
     }
@@ -49,33 +70,24 @@ public class MusicScanner {
      */
     private void scan(File targetDir) {
         if (!targetDir.exists()) {
-            throw new InvalidParameterException("directory not exists.");
+            System.err.println("target directory not exist.");
+            return;
         }
 
         if (!targetDir.isDirectory()) {
-            throw new InvalidParameterException("need a directory.");
+            System.err.println("not a directory.");
+            return;
         }
 
         if (mScanListener != null) {
             mScanListener.onScan(targetDir.getAbsolutePath());
         }
 
-        File[] musicFiles = targetDir.listFiles(new FileFilter() {
-            @Override
-            public boolean accept(File file) {
-                String f = file.getName();
-                return f.endsWith(".mp3") || f.endsWith(".ogg") || f.endsWith(".flac") || f.endsWith(".wav");
-            }
-        });
+        File[] musicFiles = targetDir.listFiles(musicFileFilter);
 
         addToMusicStorage(musicFiles);
 
-        File[] dirs = targetDir.listFiles(new FileFilter() {
-            @Override
-            public boolean accept(File file) {
-                return file.isDirectory() && !file.getName().startsWith(".");
-            }
-        });
+        File[] dirs = targetDir.listFiles(dirFilter);
 
         if (dirs != null) {
             for (File dir : dirs) {
@@ -102,24 +114,28 @@ public class MusicScanner {
             name = f.getName();
             if (name.endsWith(".mp3")) {
                 try {
-                    mMp3Info.load(f);
-                    mMusicStorage.addMusic(new Music(f.getAbsolutePath(),
+                    mMp3Info.load(f, "GBK");
+                    if (mMusicStorage.addMusic(new Music(f.getAbsolutePath(),
                             mMp3Info.getSongName(),
                             mMp3Info.getArtist(),
                             mMp3Info.getAlbum(),
                             mMp3Info.getYear(),
-                            mMp3Info.getComment()));
+                            mMp3Info.getComment()))) {
+                        addCount++;
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             } else {
                 String songName = name.substring(0, name.lastIndexOf("."));
-                mMusicStorage.addMusic(new Music(f.getAbsolutePath(),
+                if (mMusicStorage.addMusic(new Music(f.getAbsolutePath(),
                         songName,
                         "未知歌手",
                         "未知专辑",
                         "未知年份",
-                        "未知"));
+                        "未知"))) {
+                    addCount++;
+                }
             }
         }
     }
@@ -134,6 +150,6 @@ public class MusicScanner {
 
         void onStart();
 
-        void onFinished();
+        void onFinished(int count);
     }
 }

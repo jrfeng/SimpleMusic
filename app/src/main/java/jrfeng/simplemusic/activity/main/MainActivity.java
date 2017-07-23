@@ -52,9 +52,9 @@ public class MainActivity extends BaseActivity {
                             }
 
                             @Override
-                            public void onFinished() {
+                            public void onFinished(int count) {
                                 Message message = Message.obtain();
-                                message.obj = "扫描完成";
+                                message.obj = "扫描完成, 新添加 " + count + " 首歌曲";
                                 handler.sendMessage(message);
                                 MyApplication.getInstance().getPlayerClient().reload();
                             }

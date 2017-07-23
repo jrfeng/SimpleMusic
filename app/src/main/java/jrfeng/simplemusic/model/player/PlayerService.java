@@ -36,7 +36,6 @@ public class PlayerService extends Service {
 
     private static final String KEY_LIST_NAME = "listName";
     private static final String KEY_MUSIC_POSITION = "musicPosition";
-    private static final String KEY_PLAYING_POSITION = "playingPosition";
     private static final String KEY_LOOPING = "looping";
 
     @Override
@@ -67,23 +66,13 @@ public class PlayerService extends Service {
 
         Controller controller = new Controller();
 
-        //***************测试用*************
-//        String dir = Environment.getExternalStorageDirectory().getAbsolutePath();
-//        List<Music> musicList = new LinkedList<>();
-//        musicList.add(new Music(dir + "/想要去的地方.mp3", "想要去的地方", "关晓彤", "未知", "未知", "未知"));
-//        musicList.add(new Music(dir + "/卑微的承诺.mp3", "卑微的承诺", "乔洋", "未知", "未知", "未知"));
-//        controller.load(musicList);
-        //**********************************
-
         String listName = mPreferences.getString(KEY_LIST_NAME, "所有音乐");
         int musicPosition = mPreferences.getInt(KEY_MUSIC_POSITION, 0);
-        int playingPosition = mPreferences.getInt(KEY_PLAYING_POSITION, 0);
         boolean looping = mPreferences.getBoolean(KEY_LOOPING, false);
 
         controller.load(
                 listName,
                 musicPosition,
-                playingPosition,
                 looping);
 
         return controller;
@@ -124,7 +113,7 @@ public class PlayerService extends Service {
                 PendingIntent.getBroadcast(this, 0, new Intent(MediaButtonControlReceiver.PLAYER_SHUTDOWN), 0));
 
         Notification notification = new NotificationCompat.Builder(getBaseContext())
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setContentIntent(mWelcomeActivityPendingIntent)
                 .setCustomContentView(mNotifyView)
                 .build();
@@ -147,7 +136,7 @@ public class PlayerService extends Service {
             MediaPlayer.OnSeekCompleteListener {
         private MediaPlayer mMediaPlayer;
         private Music mPlayingMusic;
-        private int mPlayingPosition;
+//        private int mPlayingPosition;
         private boolean mLooping;
         private boolean mPlaying;
 
@@ -205,14 +194,14 @@ public class PlayerService extends Service {
 
         //**************************public***********************
 
-        public void load(String listName, int musicPosition, int playingPosition, boolean looping) {
+        public void load(String listName, int musicPosition, boolean looping) {
             //调试
             log("load");
 
             mListName = listName;
             mMusicList = mMusicStorage.getMusicList(mListName);
             mMusicPosition = musicPosition;
-            mPlayingPosition = playingPosition;
+//            mPlayingPosition = 0;
             mLooping = looping;
 
             if (mMusicList.size() > 0) {
@@ -226,7 +215,7 @@ public class PlayerService extends Service {
 
         @Override
         public void reload() {
-            if (mPlayingMusic == null) {
+            if (mMusicList.size() > 0 && mPlayingMusic == null) {
                 mPlayingMusic = mMusicList.get(mMusicPosition);
                 mNotifyView.setTextViewText(R.id.tvTitle, mPlayingMusic.getSongName());
                 mNotifyView.setTextViewText(R.id.tvArtist, mPlayingMusic.getArtist());
@@ -235,15 +224,48 @@ public class PlayerService extends Service {
             }
         }
 
+        @Override
         public boolean isPlaying() {
             return mPlaying;
+        }
+
+        @Override
+        public boolean isLooping() {
+            return mLooping;
+        }
+
+        @Override
+        public boolean setLooping(boolean looping) {
+            if(mPlayingMusic == null){
+                return false;
+            }
+
+            mLooping = looping;
+            mMediaPlayer.setLooping(mLooping);
+            return true;
+        }
+
+        @Override
+        public int getDuration() {
+            if (mPlayingMusic == null) {
+                return 0;
+            }
+            return mMediaPlayer.getDuration();
+        }
+
+        @Override
+        public int getCurrentPosition() {
+            if (mPlayingMusic == null) {
+                return 0;
+            }
+            return mMediaPlayer.getCurrentPosition();
         }
 
         //********************private***********************
 
         private void updateNotifyView() {
             Notification notification = new NotificationCompat.Builder(getBaseContext())
-                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setSmallIcon(R.mipmap.ic_launcher_round)
                     .setCustomContentView(mNotifyView)
                     .setContentIntent(mWelcomeActivityPendingIntent)
                     .build();
@@ -278,9 +300,6 @@ public class PlayerService extends Service {
                 mMediaPlayer.setDataSource(mPlayingMusic.getPath());
                 mMediaPlayer.prepare();
                 mMediaPlayer.setLooping(mLooping);
-                if (mPlayingPosition > 0) {
-                    mMediaPlayer.seekTo(mPlayingPosition);
-                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -290,21 +309,11 @@ public class PlayerService extends Service {
             //调试
             log("saveState");
 
-            if (mPlayingMusic == null) {
-                mPreferences.edit()
-                        .putString(KEY_LIST_NAME, mListName)
-                        .putInt(KEY_MUSIC_POSITION, mMusicPosition)
-                        .putInt(KEY_PLAYING_POSITION, 0)
-                        .putBoolean(KEY_LOOPING, mLooping)
-                        .apply();
-            } else {
-                mPreferences.edit()
-                        .putString(KEY_LIST_NAME, mListName)
-                        .putInt(KEY_MUSIC_POSITION, mMusicPosition)
-                        .putInt(KEY_PLAYING_POSITION, mMediaPlayer.getCurrentPosition())
-                        .putBoolean(KEY_LOOPING, mLooping)
-                        .apply();
-            }
+            mPreferences.edit()
+                    .putString(KEY_LIST_NAME, mListName)
+                    .putInt(KEY_MUSIC_POSITION, mMusicPosition)
+                    .putBoolean(KEY_LOOPING, mLooping)
+                    .apply();
         }
 
         //***********************PlayerController*****************
@@ -325,7 +334,7 @@ public class PlayerService extends Service {
                 mMusicPosition = mMusicList.size() - 1;
             }
             mPlayingMusic = mMusicList.get(mMusicPosition);
-            mPlayingPosition = 0;
+//            mPlayingPosition = 0;
             prepare();
             play();
         }
@@ -346,7 +355,7 @@ public class PlayerService extends Service {
                 mMusicPosition = 0;
             }
             mPlayingMusic = mMusicList.get(mMusicPosition);
-            mPlayingPosition = 0;
+//            mPlayingPosition = 0;
             prepare();
             play();
         }
@@ -425,21 +434,19 @@ public class PlayerService extends Service {
 
             mPlaying = false;
             prepare();
-            mPlayingPosition = 0;
+//            mPlayingPosition = 0;
         }
 
         @Override
-        public void seekTo(float percent) {
-            //调试
-            log("seekTo");
-
+        public void seekTo(int msec) {
             if (mPlayingMusic == null) {
-                //调试
-                logE("PlayingMusic is Null");
                 return;
             }
 
-            //TODO seek逻辑
+            //调试
+            log("seekTo");
+
+            mMediaPlayer.seekTo(msec);
         }
 
         @Override
@@ -480,14 +487,14 @@ public class PlayerService extends Service {
             mNotifyView.setImageViewResource(R.id.ibPlayPause, R.drawable.btn_play);
             updateNotifyView();
             mPlaying = false;
-            mPlayingPosition = 0;
+//            mPlayingPosition = 0;
             prepare();
             return true;
         }
 
         @Override
         public void onSeekComplete(MediaPlayer mediaPlayer) {
-            //TODO seek逻辑
+            play();
         }
     }
 

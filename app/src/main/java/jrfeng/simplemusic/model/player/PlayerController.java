@@ -13,7 +13,17 @@ public interface PlayerController {
 
     void stop();
 
-    void seekTo(float percent);
+    boolean isPlaying();
+
+    boolean isLooping();
+
+    boolean setLooping(boolean looping);
+
+    void seekTo(int msec);
+
+    int getDuration();
+
+    int getCurrentPosition();
 
     void shutdown();
 

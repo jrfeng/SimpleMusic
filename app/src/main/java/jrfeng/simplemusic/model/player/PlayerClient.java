@@ -70,8 +70,33 @@ public class PlayerClient implements ServiceConnection, PlayerController {
     }
 
     @Override
-    public void seekTo(float percent) {
-        mController.seekTo(percent);
+    public boolean isPlaying() {
+        return mController.isPlaying();
+    }
+
+    @Override
+    public boolean isLooping() {
+        return mController.isLooping();
+    }
+
+    @Override
+    public boolean setLooping(boolean looping) {
+        return mController.setLooping(looping);
+    }
+
+    @Override
+    public void seekTo(int msec) {
+        mController.seekTo(msec);
+    }
+
+    @Override
+    public int getDuration() {
+        return mController.getDuration();
+    }
+
+    @Override
+    public int getCurrentPosition() {
+        return mController.getCurrentPosition();
     }
 
     @Override
