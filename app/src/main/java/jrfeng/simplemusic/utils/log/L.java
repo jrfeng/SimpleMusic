@@ -1,4 +1,4 @@
-package jrfeng.simplemusic.utils;
+package jrfeng.simplemusic.utils.log;
 
 
 import android.util.Log;

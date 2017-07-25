@@ -1,4 +1,4 @@
-package jrfeng.simplemusic.utils;
+package jrfeng.simplemusic.utils.durable;
 
 public interface Durable {
     void restore();

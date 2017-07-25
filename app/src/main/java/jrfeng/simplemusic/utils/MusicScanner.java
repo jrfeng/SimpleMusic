@@ -2,16 +2,15 @@ package jrfeng.simplemusic.utils;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.IOException;
-import java.security.InvalidParameterException;
 
 import jrfeng.simplemusic.data.Music;
 import jrfeng.simplemusic.model.MusicStorage;
+import jrfeng.simplemusic.utils.mp3info.BaseInfo;
+import jrfeng.simplemusic.utils.mp3info.Mp3Info;
 
 public class MusicScanner {
-    private OnScanListener mScanListener;
     private MusicStorage mMusicStorage;
-    private Mp3BaseInfo mMp3Info;
+    private Mp3Info mMp3Info;
 
     private FileFilter musicFileFilter;
     private FileFilter dirFilter;
@@ -24,14 +23,13 @@ public class MusicScanner {
      * @param musicStorage 音乐存储器
      */
     public MusicScanner(MusicStorage musicStorage) {
-        mMp3Info = new Mp3BaseInfo();
         mMusicStorage = musicStorage;
 
         musicFileFilter = new FileFilter() {
             @Override
             public boolean accept(File file) {
                 String f = file.getName();
-                return f.endsWith(".mp3") || f.endsWith(".ogg") || f.endsWith(".flac") || f.endsWith(".wav");
+                return f.endsWith(".mp3") || f.endsWith(".flac") || f.endsWith(".wav");
             }
         };
 
@@ -48,18 +46,19 @@ public class MusicScanner {
      * 有阻塞调用线程的风险。
      *
      * @param targetDir 要扫描的目标目录。
-     * @param listener  扫描监听器。在扫描时，和扫描完成后是会收到通知。
+     * @param listener  扫描监听器（一次性的）。在扫描开始时，和扫描完成后会收到通知。
      */
     public void scan(File targetDir, OnScanListener listener) {
-        mScanListener = listener;
+        mMp3Info = new Mp3Info();
         addCount = 0;
-        if (mScanListener != null) {
-            mScanListener.onStart();
+        if (listener != null) {
+            listener.onStart();
         }
         scan(targetDir);
-        if (mScanListener != null) {
-            mScanListener.onFinished(addCount);
+        if (listener != null) {
+            listener.onFinished(addCount);
         }
+        mMp3Info.release();
         mMusicStorage.saveAsync();
     }
 
@@ -77,10 +76,6 @@ public class MusicScanner {
         if (!targetDir.isDirectory()) {
             System.err.println("not a directory.");
             return;
-        }
-
-        if (mScanListener != null) {
-            mScanListener.onScan(targetDir.getAbsolutePath());
         }
 
         File[] musicFiles = targetDir.listFiles(musicFileFilter);
@@ -108,35 +103,56 @@ public class MusicScanner {
 
         String name;
         for (File f : musicFiles) {
-            if (mScanListener != null) {
-                mScanListener.onScan(f.getAbsolutePath());
-            }
             name = f.getName();
             if (name.endsWith(".mp3")) {
-                try {
-                    mMp3Info.load(f, "GBK");
-                    if (mMusicStorage.addMusic(new Music(f.getAbsolutePath(),
-                            mMp3Info.getSongName(),
-                            mMp3Info.getArtist(),
-                            mMp3Info.getAlbum(),
-                            mMp3Info.getYear(),
-                            mMp3Info.getComment()))) {
-                        addCount++;
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
+                mMp3Info.load(f);
+                //过滤小于60秒的文件
+                if (mMp3Info.getLengthSeconds() < 60) {
+                    continue;
                 }
+
+                BaseInfo baseInfo;
+                String songName = name.substring(0, name.lastIndexOf("."));
+                if (mMp3Info.hasId3v2()) {
+                    baseInfo = mMp3Info.getId3v2Info();
+                } else if (mMp3Info.hasId3v1()) {
+                    baseInfo = mMp3Info.getId3v1Info();
+                } else {
+                    addMusic(f.getAbsolutePath(),
+                            songName,
+                            "未知",
+                            "未知",
+                            "未知",
+                            "未知");
+                    continue;
+                }
+
+                addMusic(f.getAbsolutePath(),
+                        songName,
+                        baseInfo.getArtist(),
+                        baseInfo.getAlbum(),
+                        baseInfo.getYear(),
+                        baseInfo.getComment());
             } else {
                 String songName = name.substring(0, name.lastIndexOf("."));
-                if (mMusicStorage.addMusic(new Music(f.getAbsolutePath(),
+                addMusic(f.getAbsolutePath(),
                         songName,
-                        "未知歌手",
-                        "未知专辑",
-                        "未知年份",
-                        "未知"))) {
-                    addCount++;
-                }
+                        "未知",
+                        "未知",
+                        "未知",
+                        "未知");
             }
+        }
+    }
+
+    private void addMusic(String path, String songName, String artist, String album, String year, String comment) {
+        if (mMusicStorage.addMusic(new Music(path,
+                songName,
+                artist,
+                album,
+                year,
+                comment))) {
+            addCount++;
         }
     }
 
@@ -146,8 +162,6 @@ public class MusicScanner {
      * 扫描监听器接口
      */
     public interface OnScanListener {
-        void onScan(String fileName);
-
         void onStart();
 
         void onFinished(int count);

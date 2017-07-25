@@ -14,7 +14,9 @@ import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -23,7 +25,7 @@ import jrfeng.simplemusic.R;
 import jrfeng.simplemusic.activity.main.MainActivity;
 import jrfeng.simplemusic.data.Music;
 import jrfeng.simplemusic.model.MusicStorage;
-import jrfeng.simplemusic.utils.L;
+import jrfeng.simplemusic.utils.log.L;
 
 public class PlayerService extends Service {
     private RemoteViews mNotifyView;
@@ -37,6 +39,8 @@ public class PlayerService extends Service {
     private static final String KEY_LIST_NAME = "listName";
     private static final String KEY_MUSIC_POSITION = "musicPosition";
     private static final String KEY_LOOPING = "looping";
+
+    private boolean mHasMediaButton;
 
     @Override
     public void onCreate() {
@@ -91,7 +95,7 @@ public class PlayerService extends Service {
         super.onDestroy();
         //调试
         log("onDestroy");
-
+        unregisterMediaButtonReceiver();
         stopForeground(true);
     }
 
@@ -123,9 +127,19 @@ public class PlayerService extends Service {
 
     private void registerMediaButtonReceiver() {
         //将应用程序注册为MediaButton的唯一处理程序
+        mHasMediaButton = true;
         AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
         ComponentName componentName = new ComponentName(getBaseContext(), MediaButtonControlReceiver.class);
         audioManager.registerMediaButtonEventReceiver(componentName);
+    }
+
+    private void unregisterMediaButtonReceiver() {
+        //注销媒体按钮监听器
+        //将应用程序注册为MediaButton的唯一处理程序
+        mHasMediaButton = false;
+        AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+        audioManager.unregisterMediaButtonEventReceiver(
+                new ComponentName(getBaseContext(), MediaButtonControlReceiver.class));
     }
 
     //********************Controller*********************
@@ -136,7 +150,7 @@ public class PlayerService extends Service {
             MediaPlayer.OnSeekCompleteListener {
         private MediaPlayer mMediaPlayer;
         private Music mPlayingMusic;
-//        private int mPlayingPosition;
+        //        private int mPlayingPosition;
         private boolean mLooping;
         private boolean mPlaying;
 
@@ -159,37 +173,46 @@ public class PlayerService extends Service {
             mAudioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
 
             mAudioFocusChangeListener = new AudioManager.OnAudioFocusChangeListener() {
-                private boolean transientLoss;
+                private boolean lossCanDuck;
+                private boolean lossTransient;
 
                 @Override
                 public void onAudioFocusChange(int focusChange) {
                     switch (focusChange) {
                         case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                            if (isPlaying()) {
+                                lossCanDuck = true;
+                                mMediaPlayer.setVolume(0.2F, 0.2F);
+                            }
+                            break;
                         case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                             //暂停播放
-                            pause();
-                            transientLoss = true;
+                            if (isPlaying()) {
+                                lossTransient = true;
+                                pause();
+                            }
                             break;
                         case AudioManager.AUDIOFOCUS_LOSS:
                             //停止播放，并注销媒体按钮 Receiver
-                            pause();
-                            transientLoss = false;
-                            mAudioManager.unregisterMediaButtonEventReceiver(
-                                    new ComponentName(getBaseContext(), MediaButtonControlReceiver.class));
+                            if (isPlaying()) {
+                                pause();
+                            }
+                            unregisterMediaButtonReceiver();
                             break;
                         case AudioManager.AUDIOFOCUS_GAIN:
-                            if (transientLoss) {
+                            if (lossCanDuck) {
+                                lossCanDuck = false;
+                                mMediaPlayer.setVolume(1.0F, 1.0F);
+                            }
+
+                            if (lossTransient) {
+                                lossTransient = false;
                                 play();
-                            } else {
-                                registerMediaButtonReceiver();
                             }
                             break;
                     }
                 }
             };
-
-            //请求音频焦点
-            mAudioManager.requestAudioFocus(mAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
         }
 
         //**************************public***********************
@@ -236,7 +259,7 @@ public class PlayerService extends Service {
 
         @Override
         public boolean setLooping(boolean looping) {
-            if(mPlayingMusic == null){
+            if (mPlayingMusic == null) {
                 return false;
             }
 
@@ -305,6 +328,16 @@ public class PlayerService extends Service {
             }
         }
 
+        private void requestAudioFocus() {
+            //请求音频焦点
+            mAudioManager.requestAudioFocus(mAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+        }
+
+        private void abandonAudioFocus() {
+            //放弃音频焦点
+            mAudioManager.abandonAudioFocus(mAudioFocusChangeListener);
+        }
+
         private void saveState() {
             //调试
             log("saveState");
@@ -371,14 +404,28 @@ public class PlayerService extends Service {
                 return;
             }
 
-            //更新View
-            mNotifyView.setImageViewResource(R.id.ibPlayPause, R.drawable.btn_pause);
-            mNotifyView.setTextViewText(R.id.tvTitle, mPlayingMusic.getSongName());
-            mNotifyView.setTextViewText(R.id.tvArtist, mPlayingMusic.getArtist());
-            updateNotifyView();
+            File file = new File(mPlayingMusic.getPath());
+            if(!file.exists()){
+                Toast.makeText(getBaseContext(), "文件不存在", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "播放下一首", Toast.LENGTH_SHORT).show();
+                next();
+            }
 
             if (!mPlaying) {
                 mPlaying = true;
+
+                if(!mHasMediaButton){
+                    registerMediaButtonReceiver();
+                }
+
+                requestAudioFocus();
+
+                //更新View
+                mNotifyView.setImageViewResource(R.id.ibPlayPause, R.drawable.btn_pause);
+                mNotifyView.setTextViewText(R.id.tvTitle, mPlayingMusic.getSongName());
+                mNotifyView.setTextViewText(R.id.tvArtist, mPlayingMusic.getArtist());
+                updateNotifyView();
+
                 mMediaPlayer.start();
             }
         }
@@ -394,12 +441,15 @@ public class PlayerService extends Service {
                 return;
             }
 
-            //更新View
-            mNotifyView.setImageViewResource(R.id.ibPlayPause, R.drawable.btn_play);
-            updateNotifyView();
 
             if (mPlaying) {
                 mPlaying = false;
+
+                abandonAudioFocus();
+
+                //更新View
+                mNotifyView.setImageViewResource(R.id.ibPlayPause, R.drawable.btn_play);
+                updateNotifyView();
                 mMediaPlayer.pause();
             }
         }
@@ -431,6 +481,7 @@ public class PlayerService extends Service {
             mNotifyView.setImageViewResource(R.id.ibPlayPause, R.drawable.btn_play);
             updateNotifyView();
 
+            abandonAudioFocus();
 
             mPlaying = false;
             prepare();
@@ -454,11 +505,7 @@ public class PlayerService extends Service {
             //调试
             log("shutdown");
 
-            //放弃音频焦点
-            mAudioManager.abandonAudioFocus(mAudioFocusChangeListener);
-            //注销媒体按钮
-            mAudioManager.unregisterMediaButtonEventReceiver(
-                    new ComponentName(getBaseContext(), MediaButtonControlReceiver.class));
+            abandonAudioFocus();
 
             //同时结束应用程序
             MyApplication.shutdown();
@@ -470,6 +517,7 @@ public class PlayerService extends Service {
 
         @Override
         public void onCompletion(MediaPlayer mediaPlayer) {
+            abandonAudioFocus();
             if (mMusicList.size() == 1) {
                 mNotifyView.setImageViewResource(R.id.ibPlayPause, R.drawable.btn_play);
                 updateNotifyView();
@@ -482,6 +530,8 @@ public class PlayerService extends Service {
         public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
             //调试
             log("onError");
+
+            abandonAudioFocus();
 
             //更新View
             mNotifyView.setImageViewResource(R.id.ibPlayPause, R.drawable.btn_play);

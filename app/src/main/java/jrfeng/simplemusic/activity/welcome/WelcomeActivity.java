@@ -12,8 +12,7 @@ import jrfeng.simplemusic.R;
 import jrfeng.simplemusic.activity.main.MainActivity;
 import jrfeng.simplemusic.base.BaseActivity;
 import jrfeng.simplemusic.model.player.PlayerClient;
-import jrfeng.simplemusic.model.player.PlayerService;
-import jrfeng.simplemusic.utils.Durable;
+import jrfeng.simplemusic.utils.durable.Durable;
 
 public class WelcomeActivity extends BaseActivity {
     private boolean mIsActive = true;
@@ -31,6 +30,9 @@ public class WelcomeActivity extends BaseActivity {
         getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+//        TextView tvAppName = (TextView) findViewById(R.id.appName);
+//        tvAppName.setTypeface(Typeface.createFromAsset(getAssets(), "noto_sans_thin.otf"));
 
         MyApplication.getInstance().getMusicStorage().restoreAsync(new Durable.OnRestoredListener() {
             @Override

@@ -7,9 +7,9 @@ import java.util.List;
 
 import jrfeng.simplemusic.MyApplication;
 import jrfeng.simplemusic.data.Music;
-import jrfeng.simplemusic.utils.Durable;
-import jrfeng.simplemusic.utils.DurableList;
-import jrfeng.simplemusic.utils.L;
+import jrfeng.simplemusic.utils.durable.Durable;
+import jrfeng.simplemusic.utils.durable.DurableList;
+import jrfeng.simplemusic.utils.log.L;
 
 /**
  * 音乐存储器。用于保存简单的音乐列表信息。
@@ -22,6 +22,7 @@ public class MusicStorage implements Durable {
     private List<DurableList<Music>> mMusicLists;   //用于保存列表
 
     private boolean mAutoSave = false;              //自动保存。默认不自动保存
+    private boolean mIsStored = false;
 
     /**
      * 创建以 MusicStorage。注意！创建对象后，一定要记得
@@ -43,6 +44,10 @@ public class MusicStorage implements Durable {
      */
     @Override
     public void restore() {
+        if(mIsStored){
+            return;
+        }
+
         mListNames = new DurableList<>(mFileDir + LIST_NAMES);  //恢复保存列表名称的列表
         mListNames.restore();
         mMusicLists = new LinkedList<>();
@@ -57,6 +62,8 @@ public class MusicStorage implements Durable {
             list.restore();
             mMusicLists.add(list);
         }
+
+        mIsStored = true;
     }
 
     /**

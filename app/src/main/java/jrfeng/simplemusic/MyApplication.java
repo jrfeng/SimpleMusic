@@ -8,7 +8,7 @@ import java.util.List;
 import jrfeng.simplemusic.base.BaseActivity;
 import jrfeng.simplemusic.model.MusicStorage;
 import jrfeng.simplemusic.model.player.PlayerClient;
-import jrfeng.simplemusic.utils.L;
+import jrfeng.simplemusic.utils.log.L;
 import jrfeng.simplemusic.utils.MusicScanner;
 
 public class MyApplication extends Application {

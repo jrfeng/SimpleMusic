@@ -4,10 +4,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-
-import java.io.File;
 
 import jrfeng.simplemusic.MyApplication;
 import jrfeng.simplemusic.R;
@@ -19,7 +18,11 @@ public class MainActivity extends BaseActivity {
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message message) {
-            tvMessage.setText(message.obj.toString());
+            String msg = (String)message.obj;
+            if(msg != null && msg.length() > 0) {
+                tvMessage.setText(msg);
+                Log.d("App", (String) message.obj);
+            }
             return true;
         }
     });
@@ -40,21 +43,16 @@ public class MainActivity extends BaseActivity {
                         Environment.getExternalStorageDirectory(),
                         new MusicScanner.OnScanListener() {
                             @Override
-                            public void onScan(String fileName) {
-
-                            }
-
-                            @Override
                             public void onStart() {
-                                Message message = Message.obtain();
+                                Message message = handler.obtainMessage();
                                 message.obj = "扫描中...";
                                 handler.sendMessage(message);
                             }
 
                             @Override
                             public void onFinished(int count) {
-                                Message message = Message.obtain();
-                                message.obj = "扫描完成, 新添加 " + count + " 首歌曲";
+                                Message message = handler.obtainMessage();
+                                message.obj = "扫描完成, 共添加 " + count + " 首新歌";
                                 handler.sendMessage(message);
                                 MyApplication.getInstance().getPlayerClient().reload();
                             }
