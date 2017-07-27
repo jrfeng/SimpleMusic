@@ -7,16 +7,17 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class MusicDBHelper extends SQLiteOpenHelper {
     public static final String DB_NAME = "music_list.db";
     public static final int DB_VERSION = 1;
+//    private static final int DB_OLD_VERSION = 0;    //请在下次升级数据库时取消注释
 
     public static final String TABLE_MUSIC_LIST = "musicList";
 
-    public static final String COLUMN_PATH    = "songPath";
-    public static final String COLUMN_NAME    = "songName";
-    public static final String COLUMN_ARTIST  = "songArtist";
-    public static final String COLUMN_ALBUM   = "songAlbum";
-    public static final String COLUMN_YEAR    = "songYear";
+    public static final String COLUMN_PATH = "songPath";
+    public static final String COLUMN_NAME = "songName";
+    public static final String COLUMN_ARTIST = "songArtist";
+    public static final String COLUMN_ALBUM = "songAlbum";
+    public static final String COLUMN_YEAR = "songYear";
     public static final String COLUMN_COMMENT = "songComment";
-    public static final String COLUMN_IMAGE   = "songImage";
+    public static final String COLUMN_IMAGE = "songImage";
 
     private static final String CREATE_TABLE_musicList = "CREATE TABLE musicList (\n" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +

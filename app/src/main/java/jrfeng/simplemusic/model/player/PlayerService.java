@@ -1,5 +1,8 @@
 package jrfeng.simplemusic.model.player;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -191,7 +194,7 @@ public class PlayerService extends Service {
                         case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                             if (isPlaying()) {
                                 lossCanDuck = true;
-                                mMediaPlayer.setVolume(0.2F, 0.2F);
+                                mMediaPlayer.setVolume(0.1F, 0.1F);
                             }
                             break;
                         case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
@@ -211,7 +214,7 @@ public class PlayerService extends Service {
                         case AudioManager.AUDIOFOCUS_GAIN:
                             if (lossCanDuck) {
                                 lossCanDuck = false;
-                                mMediaPlayer.setVolume(1.0F, 1.0F);
+                                volumeTransition(0.1F, 1.0F, false, null);
                             }
 
                             if (lossTransient) {
@@ -363,6 +366,39 @@ public class PlayerService extends Service {
                     .apply();
         }
 
+        private void volumeTransition(float start, float end, boolean act, final String action) {
+            ValueAnimator animator = ValueAnimator.ofFloat(start, end);
+            animator.setDuration(1000);
+            if (act) {
+                animator.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        super.onAnimationStart(animation);
+                        if (action.equals(ACTION_PLAY)) {
+                            mMediaPlayer.setVolume(0, 0);
+                            mMediaPlayer.start();
+                        }
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        if (action.equals(ACTION_PAUSE)) {
+                            mMediaPlayer.pause();
+                        }
+                    }
+                });
+            }
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    float currentValue = (float) valueAnimator.getAnimatedValue();
+                    mMediaPlayer.setVolume(currentValue, currentValue);
+                }
+            });
+            animator.start();
+        }
+
         //***********************PlayerController*****************
 
         @Override
@@ -440,7 +476,7 @@ public class PlayerService extends Service {
                 mNotifyView.setTextViewText(R.id.tvArtist, mPlayingMusic.getArtist());
                 updateNotifyView();
 
-                mMediaPlayer.start();
+                volumeTransition(0.0F, 1.0F, true, ACTION_PLAY);
                 sendActionBroadcast(ACTION_PLAY);
             }
         }
@@ -465,7 +501,8 @@ public class PlayerService extends Service {
                 //更新View
                 mNotifyView.setImageViewResource(R.id.ibPlayPause, R.drawable.btn_play);
                 updateNotifyView();
-                mMediaPlayer.pause();
+//                mMediaPlayer.pause();
+                volumeTransition(1.0F, 0.0F, true, ACTION_PAUSE);
                 sendActionBroadcast(ACTION_PAUSE);
             }
         }
