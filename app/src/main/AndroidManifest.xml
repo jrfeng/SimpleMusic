@@ -26,10 +26,10 @@
             android:name=".activity.main.MainActivity"
             android:launchMode="singleTask"/>
 
-        <service android:name=".model.player.PlayerService"/>
+        <service android:name=".service.player.PlayerService"/>
 
         <receiver
-            android:name=".model.player.MediaButtonControlReceiver"
+            android:name=".service.player.MediaButtonControlReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

@@ -1,4 +1,4 @@
-package jrfeng.simplemusic.model.player;
+package jrfeng.simplemusic.service.player;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

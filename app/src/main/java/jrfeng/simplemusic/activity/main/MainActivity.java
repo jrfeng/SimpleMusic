@@ -23,7 +23,7 @@ import jrfeng.simplemusic.R;
 import jrfeng.simplemusic.base.BaseActivity;
 import jrfeng.simplemusic.data.Music;
 import jrfeng.simplemusic.model.MusicDBHelper;
-import jrfeng.simplemusic.model.player.PlayerService;
+import jrfeng.simplemusic.service.player.PlayerService;
 import jrfeng.simplemusic.utils.MusicScanner;
 
 public class MainActivity extends BaseActivity {

@@ -1,4 +1,4 @@
-package jrfeng.simplemusic.model.player;
+package jrfeng.simplemusic.service.player;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

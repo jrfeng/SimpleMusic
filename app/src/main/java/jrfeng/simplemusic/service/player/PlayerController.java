@@ -1,4 +1,4 @@
-package jrfeng.simplemusic.model.player;
+package jrfeng.simplemusic.service.player;
 
 public interface PlayerController {
     void previous();

@@ -2,7 +2,6 @@ package jrfeng.simplemusic;
 
 import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import java.util.LinkedList;
@@ -11,10 +10,9 @@ import java.util.List;
 import jrfeng.simplemusic.base.BaseActivity;
 import jrfeng.simplemusic.model.MusicDBHelper;
 import jrfeng.simplemusic.model.MusicStorage;
-import jrfeng.simplemusic.model.player.PlayerClient;
+import jrfeng.simplemusic.service.player.PlayerClient;
 import jrfeng.simplemusic.utils.durable.Durable;
 import jrfeng.simplemusic.utils.log.L;
-import jrfeng.simplemusic.utils.MusicScanner;
 
 public class MyApplication extends Application {
     public static final String TAG = "SimpleMusic";
