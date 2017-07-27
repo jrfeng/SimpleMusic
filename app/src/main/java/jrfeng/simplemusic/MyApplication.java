@@ -1,12 +1,15 @@
 package jrfeng.simplemusic;
 
 import android.app.Application;
+import android.database.sqlite.SQLiteDatabase;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import jrfeng.simplemusic.base.BaseActivity;
+import jrfeng.simplemusic.model.MusicDBHelper;
 import jrfeng.simplemusic.model.MusicStorage;
 import jrfeng.simplemusic.model.player.PlayerClient;
 import jrfeng.simplemusic.utils.durable.Durable;
@@ -20,6 +23,8 @@ public class MyApplication extends Application {
     private static List<BaseActivity> mActivityStack;
 
     private PlayerClient mPlayerClient;
+
+    private SQLiteDatabase mMusicDB;
     private MusicStorage mMusicStorage;
 
     @Override
@@ -30,6 +35,9 @@ public class MyApplication extends Application {
             mActivityStack = new LinkedList<>();
             mPlayerClient = new PlayerClient(this);
             mMusicStorage = new MusicStorage(this);
+
+            MusicDBHelper dBHelper = new MusicDBHelper(this, MusicDBHelper.DB_NAME, null, MusicDBHelper.DB_VERSION);
+            mMusicDB = dBHelper.getWritableDatabase();
 
             mMusicStorage.restoreAsync(new Durable.OnRestoredListener() {
                 @Override
@@ -71,5 +79,9 @@ public class MyApplication extends Application {
 
     public MusicStorage getMusicStorage() {
         return mMusicStorage;
+    }
+
+    public SQLiteDatabase getMusicDB() {
+        return mMusicDB;
     }
 }

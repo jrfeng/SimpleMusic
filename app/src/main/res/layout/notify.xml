@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="歌手:未知"
+            android:text="无音乐"
             android:textColor="@color/colorGray"
             android:textSize="14sp"/>
 

@@ -1,9 +1,13 @@
 package jrfeng.simplemusic.utils;
 
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
+
 import java.io.File;
 import java.io.FileFilter;
 
 import jrfeng.simplemusic.data.Music;
+import jrfeng.simplemusic.model.MusicDBHelper;
 import jrfeng.simplemusic.model.MusicStorage;
 import jrfeng.simplemusic.utils.mp3info.BaseInfo;
 import jrfeng.simplemusic.utils.mp3info.Id3v2Info;
@@ -13,20 +17,25 @@ public class MusicScanner {
     private MusicStorage mMusicStorage;
     private Mp3Info mMp3Info;
 
-    private FileFilter musicFileFilter;
-    private FileFilter dirFilter;
+    private FileFilter mMusicFileFilter;
+    private FileFilter mDirFilter;
 
-    private int addCount;
+    private SQLiteDatabase mMusicDB;
+    private ContentValues mValues;
+
+    private int mCount;
 
     /**
      * 创建音乐扫描器
      *
      * @param musicStorage 音乐存储器
      */
-    public MusicScanner(MusicStorage musicStorage) {
+    public MusicScanner(MusicStorage musicStorage, SQLiteDatabase database) {
         mMusicStorage = musicStorage;
+        mMusicDB = database;
+        mValues = new ContentValues();
 
-        musicFileFilter = new FileFilter() {
+        mMusicFileFilter = new FileFilter() {
             @Override
             public boolean accept(File file) {
                 String f = file.getName();
@@ -34,7 +43,7 @@ public class MusicScanner {
             }
         };
 
-        dirFilter = new FileFilter() {
+        mDirFilter = new FileFilter() {
             @Override
             public boolean accept(File file) {
                 return file.isDirectory() && !file.getName().startsWith(".");
@@ -51,13 +60,13 @@ public class MusicScanner {
      */
     public void scan(File targetDir, OnScanListener listener) {
         mMp3Info = new Mp3Info();
-        addCount = 0;
+        mCount = 0;
         if (listener != null) {
             listener.onStart();
         }
         scan(targetDir);
         if (listener != null) {
-            listener.onFinished(addCount);
+            listener.onFinished(mCount);
         }
         mMp3Info.release();
         mMusicStorage.saveAsync();
@@ -79,11 +88,11 @@ public class MusicScanner {
             return;
         }
 
-        File[] musicFiles = targetDir.listFiles(musicFileFilter);
+        File[] musicFiles = targetDir.listFiles(mMusicFileFilter);
 
         addToMusicStorage(musicFiles);
 
-        File[] dirs = targetDir.listFiles(dirFilter);
+        File[] dirs = targetDir.listFiles(mDirFilter);
 
         if (dirs != null) {
             for (File dir : dirs) {
@@ -105,6 +114,7 @@ public class MusicScanner {
         String name;
         for (File f : musicFiles) {
             name = f.getName();
+            String songName = name.substring(0, name.lastIndexOf("."));
             if (name.endsWith(".mp3")) {
                 mMp3Info.load(f);
                 //过滤小于60秒的文件
@@ -113,12 +123,12 @@ public class MusicScanner {
                 }
 
                 BaseInfo baseInfo;
-                String songName = name.substring(0, name.lastIndexOf("."));
                 if (mMp3Info.hasId3v2()) {
                     baseInfo = mMp3Info.getId3v2Info();
                     Id3v2Info id3v2Info = (Id3v2Info) baseInfo;
-                    if(id3v2Info.hasImage()){
+                    if (id3v2Info.hasImage()) {
                         byte[] image = id3v2Info.getImage();
+                        mValues.put(MusicDBHelper.COLUMN_IMAGE, image);
                     }
                 } else if (mMp3Info.hasId3v1()) {
                     baseInfo = mMp3Info.getId3v1Info();
@@ -139,7 +149,6 @@ public class MusicScanner {
                         baseInfo.getYear(),
                         baseInfo.getComment());
             } else {
-                String songName = name.substring(0, name.lastIndexOf("."));
                 addMusic(f.getAbsolutePath(),
                         songName,
                         "未知",
@@ -147,6 +156,8 @@ public class MusicScanner {
                         "未知",
                         "未知");
             }
+            mMusicDB.insert(MusicDBHelper.TABLE_MUSIC_LIST, null, mValues);
+            mValues.clear();
         }
     }
 
@@ -157,7 +168,13 @@ public class MusicScanner {
                 album,
                 year,
                 comment))) {
-            addCount++;
+            mValues.put(MusicDBHelper.COLUMN_PATH, path);
+            mValues.put(MusicDBHelper.COLUMN_NAME, songName);
+            mValues.put(MusicDBHelper.COLUMN_ARTIST, artist);
+            mValues.put(MusicDBHelper.COLUMN_ALBUM, album);
+            mValues.put(MusicDBHelper.COLUMN_YEAR, year);
+            mValues.put(MusicDBHelper.COLUMN_COMMENT, comment);
+            mCount++;
         }
     }
 

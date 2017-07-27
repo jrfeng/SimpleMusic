@@ -12,6 +12,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.NotificationCompat;
 import android.widget.RemoteViews;
 import android.widget.Toast;
@@ -28,6 +29,15 @@ import jrfeng.simplemusic.model.MusicStorage;
 import jrfeng.simplemusic.utils.log.L;
 
 public class PlayerService extends Service {
+    public static final String ACTION_PLAY = "jrfeng.simplemusic.action.PLAY";
+    public static final String ACTION_PAUSE = "jrfeng.simplemusic.action.PAUSE";
+    public static final String ACTION_NEXT = "jrfeng.simplemusic.action.NEXT";
+    public static final String ACTION_PREVIOUS = "jrfeng.simplemusic.action.PREVIOUS";
+
+    public static final String KEY_PLAYING_MUSIC = "playing_music";
+
+    private LocalBroadcastManager mLocalBroadcastManager;
+
     private RemoteViews mNotifyView;
     private MusicStorage mMusicStorage;
     private SharedPreferences mPreferences;
@@ -47,6 +57,7 @@ public class PlayerService extends Service {
         super.onCreate();
         //调试
         log("onCreate");
+        mLocalBroadcastManager = LocalBroadcastManager.getInstance(getBaseContext());
         mMusicStorage = MyApplication.getInstance().getMusicStorage();
         mPreferences = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
         mWelcomeActivityPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), 0);
@@ -149,7 +160,6 @@ public class PlayerService extends Service {
             MediaPlayer.OnSeekCompleteListener {
         private MediaPlayer mMediaPlayer;
         private Music mPlayingMusic;
-        //        private int mPlayingPosition;
         private boolean mLooping;
         private boolean mPlaying;
 
@@ -326,6 +336,12 @@ public class PlayerService extends Service {
             }
         }
 
+        private void sendActionBroadcast(String action) {
+            Intent intent = new Intent(action);
+            intent.putExtra(KEY_PLAYING_MUSIC, mPlayingMusic);
+            mLocalBroadcastManager.sendBroadcast(intent);
+        }
+
         private void requestAudioFocus() {
             //请求音频焦点
             mAudioManager.requestAudioFocus(mAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
@@ -366,6 +382,7 @@ public class PlayerService extends Service {
             }
             mPlayingMusic = mMusicList.get(mMusicPosition);
             prepare();
+            sendActionBroadcast(ACTION_PREVIOUS);
             play();
         }
 
@@ -386,6 +403,7 @@ public class PlayerService extends Service {
             }
             mPlayingMusic = mMusicList.get(mMusicPosition);
             prepare();
+            sendActionBroadcast(ACTION_NEXT);
             play();
         }
 
@@ -401,16 +419,16 @@ public class PlayerService extends Service {
             }
 
             File file = new File(mPlayingMusic.getPath());
-            if(!file.exists()){
+            if (!file.exists()) {
                 Toast.makeText(getBaseContext(), "文件不存在", Toast.LENGTH_SHORT).show();
-                Toast.makeText(getBaseContext(), "播放下一首", Toast.LENGTH_SHORT).show();
-                next();
+//                Toast.makeText(getBaseContext(), "播放下一首", Toast.LENGTH_SHORT).show();
+//                next();
             }
 
             if (!mPlaying) {
                 mPlaying = true;
 
-                if(!mHasMediaButton){
+                if (!mHasMediaButton) {
                     registerMediaButtonReceiver();
                 }
 
@@ -423,6 +441,7 @@ public class PlayerService extends Service {
                 updateNotifyView();
 
                 mMediaPlayer.start();
+                sendActionBroadcast(ACTION_PLAY);
             }
         }
 
@@ -447,6 +466,7 @@ public class PlayerService extends Service {
                 mNotifyView.setImageViewResource(R.id.ibPlayPause, R.drawable.btn_play);
                 updateNotifyView();
                 mMediaPlayer.pause();
+                sendActionBroadcast(ACTION_PAUSE);
             }
         }
 

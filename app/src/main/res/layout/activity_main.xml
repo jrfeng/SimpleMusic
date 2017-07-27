@@ -1,23 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/ivMusicImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@mipmap/ic_launcher"/>
 
     <TextView
         android:id="@+id/tvMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/ivMusicImage"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="center"
         android:ellipsize="start"
         android:maxLines="1"
-        android:text="Hello World!"/>
+        android:text="@string/app_name"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
         android:onClick="onClick"
-        android:text="Scan"/>
+        android:text="扫描本地音乐"/>
 
-</FrameLayout>
+</RelativeLayout>
