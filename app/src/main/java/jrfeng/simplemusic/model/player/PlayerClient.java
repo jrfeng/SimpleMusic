@@ -10,12 +10,18 @@ public class PlayerClient implements ServiceConnection, PlayerController {
     private PlayerService.Controller mController;
     private Context mContext;
     private boolean isConnect;
+    private OnConnectedListener mConnectedListener;
 
     public PlayerClient(Context context) {
         mContext = context;
     }
 
     public void connect() {
+        connect(null);
+    }
+
+    public void connect(OnConnectedListener listener) {
+        mConnectedListener = listener;
         isConnect = true;
         mContext.bindService(new Intent(mContext, PlayerService.class), this, Context.BIND_AUTO_CREATE);
     }
@@ -33,6 +39,10 @@ public class PlayerClient implements ServiceConnection, PlayerController {
     public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
         isConnect = true;
         mController = (PlayerService.Controller) iBinder;
+        if (mConnectedListener != null) {
+            mConnectedListener.onConnected();
+            mConnectedListener = null;
+        }
     }
 
     @Override
@@ -108,5 +118,11 @@ public class PlayerClient implements ServiceConnection, PlayerController {
     public void shutdown() {
         disconnect();
         mController.shutdown();
+    }
+
+    //**********************listener********************
+
+    public interface OnConnectedListener {
+        void onConnected();
     }
 }

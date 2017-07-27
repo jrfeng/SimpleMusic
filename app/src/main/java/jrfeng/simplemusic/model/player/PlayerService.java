@@ -95,7 +95,6 @@ public class PlayerService extends Service {
         super.onDestroy();
         //调试
         log("onDestroy");
-        unregisterMediaButtonReceiver();
         stopForeground(true);
     }
 
@@ -224,7 +223,6 @@ public class PlayerService extends Service {
             mListName = listName;
             mMusicList = mMusicStorage.getMusicList(mListName);
             mMusicPosition = musicPosition;
-//            mPlayingPosition = 0;
             mLooping = looping;
 
             if (mMusicList.size() > 0) {
@@ -367,7 +365,6 @@ public class PlayerService extends Service {
                 mMusicPosition = mMusicList.size() - 1;
             }
             mPlayingMusic = mMusicList.get(mMusicPosition);
-//            mPlayingPosition = 0;
             prepare();
             play();
         }
@@ -388,7 +385,6 @@ public class PlayerService extends Service {
                 mMusicPosition = 0;
             }
             mPlayingMusic = mMusicList.get(mMusicPosition);
-//            mPlayingPosition = 0;
             prepare();
             play();
         }
@@ -485,7 +481,6 @@ public class PlayerService extends Service {
 
             mPlaying = false;
             prepare();
-//            mPlayingPosition = 0;
         }
 
         @Override
@@ -537,7 +532,6 @@ public class PlayerService extends Service {
             mNotifyView.setImageViewResource(R.id.ibPlayPause, R.drawable.btn_play);
             updateNotifyView();
             mPlaying = false;
-//            mPlayingPosition = 0;
             prepare();
             return true;
         }

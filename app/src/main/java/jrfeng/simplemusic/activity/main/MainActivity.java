@@ -18,8 +18,8 @@ public class MainActivity extends BaseActivity {
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message message) {
-            String msg = (String)message.obj;
-            if(msg != null && msg.length() > 0) {
+            String msg = (String) message.obj;
+            if (msg != null && msg.length() > 0) {
                 tvMessage.setText(msg);
                 Log.d("App", (String) message.obj);
             }
@@ -39,7 +39,8 @@ public class MainActivity extends BaseActivity {
         new Thread() {
             @Override
             public void run() {
-                MyApplication.getInstance().getMusicScanner().scan(
+                MusicScanner musicScanner = new MusicScanner(MyApplication.getInstance().getMusicStorage());
+                musicScanner.scan(
                         Environment.getExternalStorageDirectory(),
                         new MusicScanner.OnScanListener() {
                             @Override

@@ -16,8 +16,21 @@ public class MediaButtonControlReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, final Intent intent) {
-        PlayerClient client = MyApplication.getInstance().getPlayerClient();
-        final String action = intent.getAction();
+        final PlayerClient client = MyApplication.getInstance().getPlayerClient();
+        if (!client.isConnect()) {
+            client.connect(new PlayerClient.OnConnectedListener() {
+                @Override
+                public void onConnected() {
+                    onButtonClicked(intent, client);
+                }
+            });
+        } else {
+            onButtonClicked(intent, client);
+        }
+    }
+
+    private void onButtonClicked(Intent intent, PlayerClient client) {
+        String action = intent.getAction();
         switch (action) {
             case PLAYER_PREVIOUS:
                 client.previous();
@@ -37,12 +50,12 @@ public class MediaButtonControlReceiver extends BroadcastReceiver {
                 break;
             //响应MediaButtons
             case Intent.ACTION_MEDIA_BUTTON:
-                mediaButtonsClicked(client, intent);
+                onMediaButtonsClicked(intent, client);
                 break;
         }
     }
 
-    private void mediaButtonsClicked(PlayerClient client, Intent intent) {
+    private void onMediaButtonsClicked(Intent intent, PlayerClient client) {
         KeyEvent keyEvent = intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
         if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
             switch (keyEvent.getKeyCode()) {

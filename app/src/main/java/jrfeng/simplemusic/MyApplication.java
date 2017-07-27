@@ -1,6 +1,7 @@
 package jrfeng.simplemusic;
 
 import android.app.Application;
+import android.util.Log;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
 import jrfeng.simplemusic.base.BaseActivity;
 import jrfeng.simplemusic.model.MusicStorage;
 import jrfeng.simplemusic.model.player.PlayerClient;
+import jrfeng.simplemusic.utils.durable.Durable;
 import jrfeng.simplemusic.utils.log.L;
 import jrfeng.simplemusic.utils.MusicScanner;
 
@@ -19,7 +21,6 @@ public class MyApplication extends Application {
 
     private PlayerClient mPlayerClient;
     private MusicStorage mMusicStorage;
-    private MusicScanner mMusicScanner;
 
     @Override
     public void onCreate() {
@@ -29,8 +30,16 @@ public class MyApplication extends Application {
             mActivityStack = new LinkedList<>();
             mPlayerClient = new PlayerClient(this);
             mMusicStorage = new MusicStorage(this);
-            mMusicScanner = new MusicScanner(mMusicStorage);
+
+            mMusicStorage.restoreAsync(new Durable.OnRestoredListener() {
+                @Override
+                public void onRestored() {
+                    mPlayerClient.connect();
+                }
+            });
         }
+
+        Log.d("SimpleMusic", "Application onCreate");
     }
 
     public static MyApplication getInstance() {
@@ -62,9 +71,5 @@ public class MyApplication extends Application {
 
     public MusicStorage getMusicStorage() {
         return mMusicStorage;
-    }
-
-    public MusicScanner getMusicScanner() {
-        return mMusicScanner;
     }
 }

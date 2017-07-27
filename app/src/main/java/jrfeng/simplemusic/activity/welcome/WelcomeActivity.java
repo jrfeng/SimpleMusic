@@ -31,33 +31,19 @@ public class WelcomeActivity extends BaseActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-//        TextView tvAppName = (TextView) findViewById(R.id.appName);
-//        tvAppName.setTypeface(Typeface.createFromAsset(getAssets(), "noto_sans_thin.otf"));
-
-        MyApplication.getInstance().getMusicStorage().restoreAsync(new Durable.OnRestoredListener() {
+        //启动定时器, 延时2秒
+        final Timer timer = new Timer(true);
+        timer.schedule(new TimerTask() {
             @Override
-            public void onRestored() {
-                //初始化PlayerClient
-                PlayerClient client = MyApplication.getInstance().getPlayerClient();
-                if (!client.isConnect()) {
-                    client.connect();
+            public void run() {
+                if (mIsActive) {
+                    //启动MainActivity
+                    Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+                    startActivity(intent);
                 }
-
-                //启动定时器, 延时2秒
-                final Timer timer = new Timer(true);
-                timer.schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        if (mIsActive) {
-                            //启动MainActivity
-                            Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
-                            startActivity(intent);
-                        }
-                        timer.cancel();
-                    }
-                }, 2000);
+                timer.cancel();
             }
-        });
+        }, 2000);
     }
 
 

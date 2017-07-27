@@ -6,6 +6,7 @@ import java.io.FileFilter;
 import jrfeng.simplemusic.data.Music;
 import jrfeng.simplemusic.model.MusicStorage;
 import jrfeng.simplemusic.utils.mp3info.BaseInfo;
+import jrfeng.simplemusic.utils.mp3info.Id3v2Info;
 import jrfeng.simplemusic.utils.mp3info.Mp3Info;
 
 public class MusicScanner {
@@ -115,6 +116,10 @@ public class MusicScanner {
                 String songName = name.substring(0, name.lastIndexOf("."));
                 if (mMp3Info.hasId3v2()) {
                     baseInfo = mMp3Info.getId3v2Info();
+                    Id3v2Info id3v2Info = (Id3v2Info) baseInfo;
+                    if(id3v2Info.hasImage()){
+                        byte[] image = id3v2Info.getImage();
+                    }
                 } else if (mMp3Info.hasId3v1()) {
                     baseInfo = mMp3Info.getId3v1Info();
                 } else {
