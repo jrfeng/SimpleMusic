@@ -1,4 +1,4 @@
-package jrfeng.simplemusic.utils;
+package jrfeng.simplemusic.utils.scanner;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;

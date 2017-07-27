@@ -24,7 +24,7 @@ import jrfeng.simplemusic.base.BaseActivity;
 import jrfeng.simplemusic.data.Music;
 import jrfeng.simplemusic.model.MusicDBHelper;
 import jrfeng.simplemusic.service.player.PlayerService;
-import jrfeng.simplemusic.utils.MusicScanner;
+import jrfeng.simplemusic.utils.scanner.MusicScanner;
 
 public class MainActivity extends BaseActivity {
     private TextView tvMessage;
