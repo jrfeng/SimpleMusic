@@ -26,7 +26,7 @@ import java.util.List;
 
 import jrfeng.simplemusic.MyApplication;
 import jrfeng.simplemusic.R;
-import jrfeng.simplemusic.activity.main.MainActivity;
+import jrfeng.simplemusic.activity.navigation.NavigationActivity;
 import jrfeng.simplemusic.data.Music;
 import jrfeng.simplemusic.model.MusicStorage;
 import jrfeng.simplemusic.utils.log.L;
@@ -63,7 +63,7 @@ public class PlayerService extends Service {
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(getBaseContext());
         mMusicStorage = MyApplication.getInstance().getMusicStorage();
         mPreferences = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
-        mWelcomeActivityPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), 0);
+        mWelcomeActivityPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, NavigationActivity.class), 0);
 
         runAsForeground();              //作为前台Service运行
         registerMediaButtonReceiver();  //将应用程序注册为MediaButton的唯一处理程序
@@ -115,7 +115,7 @@ public class PlayerService extends Service {
     //*********************private************************
 
     private void runAsForeground() {
-        mNotifyView = new RemoteViews(getPackageName(), R.layout.notify);
+        mNotifyView = new RemoteViews(getPackageName(), R.layout.widget_notify_controller);
 
         mNotifyView.setOnClickPendingIntent(R.id.ibPrevious,
                 PendingIntent.getBroadcast(this, 0, new Intent(MediaButtonControlReceiver.PLAYER_PREVIOUS), 0));

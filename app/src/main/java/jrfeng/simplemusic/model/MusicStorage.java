@@ -22,7 +22,7 @@ public class MusicStorage implements Durable {
     private List<DurableList<Music>> mMusicLists;   //用于保存列表
 
     private boolean mAutoSave = false;              //自动保存。默认不自动保存
-    private boolean mIsStored = false;
+    private boolean mIsRestored = false;
 
     /**
      * 创建以 MusicStorage。注意！创建对象后，一定要记得
@@ -44,7 +44,7 @@ public class MusicStorage implements Durable {
      */
     @Override
     public void restore() {
-        if(mIsStored){
+        if(mIsRestored){
             return;
         }
 
@@ -63,7 +63,7 @@ public class MusicStorage implements Durable {
             mMusicLists.add(list);
         }
 
-        mIsStored = true;
+        mIsRestored = true;
     }
 
     /**
@@ -80,6 +80,10 @@ public class MusicStorage implements Durable {
                 listener.onRestored();
             }
         }.start();
+    }
+
+    public boolean isRestored(){
+        return mIsRestored;
     }
 
     /**

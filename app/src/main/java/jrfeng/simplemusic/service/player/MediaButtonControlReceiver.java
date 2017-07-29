@@ -7,6 +7,8 @@ import android.media.AudioManager;
 import android.view.KeyEvent;
 
 import jrfeng.simplemusic.MyApplication;
+import jrfeng.simplemusic.model.MusicStorage;
+import jrfeng.simplemusic.utils.durable.Durable;
 
 public class MediaButtonControlReceiver extends BroadcastReceiver {
     public static final String PLAYER_PREVIOUS = "jrfeng.simplemusic.action.PLAYER_PREVIOUS";
@@ -16,20 +18,35 @@ public class MediaButtonControlReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, final Intent intent) {
+        MusicStorage musicStorage = MyApplication.getInstance().getMusicStorage();
         final PlayerClient client = MyApplication.getInstance().getPlayerClient();
-        if (!client.isConnect()) {
+
+        if (!musicStorage.isRestored()) {
+            musicStorage.restoreAsync(new Durable.OnRestoredListener() {
+                @Override
+                public void onRestored() {
+                    client.connect(new PlayerClient.OnConnectedListener() {
+                        @Override
+                        public void onConnected() {
+                            onButtonClicked(intent);
+                        }
+                    });
+                }
+            });
+        } else if (!client.isConnect()) {
             client.connect(new PlayerClient.OnConnectedListener() {
                 @Override
                 public void onConnected() {
-                    onButtonClicked(intent, client);
+                    onButtonClicked(intent);
                 }
             });
         } else {
-            onButtonClicked(intent, client);
+            onButtonClicked(intent);
         }
     }
 
-    private void onButtonClicked(Intent intent, PlayerClient client) {
+    private void onButtonClicked(Intent intent) {
+        PlayerClient client = MyApplication.getInstance().getPlayerClient();
         String action = intent.getAction();
         switch (action) {
             case PLAYER_PREVIOUS:
@@ -57,7 +74,7 @@ public class MediaButtonControlReceiver extends BroadcastReceiver {
 
     private void onMediaButtonsClicked(Intent intent, PlayerClient client) {
         KeyEvent keyEvent = intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
-        if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+        if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
             switch (keyEvent.getKeyCode()) {
                 case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
                     client.play_pause();

@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="horizontal"
+    android:paddingLeft="16dp"
     android:paddingRight="16dp">
 
     <ImageView
@@ -37,7 +38,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="无音乐"
-            android:textColor="@color/colorGray"
+            android:textColor="@color/colorGrey"
             android:textSize="14sp"/>
 
     </LinearLayout>

@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.main.MainActivity"
+            android:name=".activity.navigation.NavigationActivity"
             android:launchMode="singleTask"/>
 
         <service android:name=".service.player.PlayerService"/>

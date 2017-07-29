@@ -36,13 +36,6 @@ public class MyApplication extends Application {
 
             MusicDBHelper dBHelper = new MusicDBHelper(this, MusicDBHelper.DB_NAME, null, MusicDBHelper.DB_VERSION);
             mMusicDB = dBHelper.getWritableDatabase();
-
-            mMusicStorage.restoreAsync(new Durable.OnRestoredListener() {
-                @Override
-                public void onRestored() {
-                    mPlayerClient.connect();
-                }
-            });
         }
 
         Log.d("SimpleMusic", "Application onCreate");

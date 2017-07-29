@@ -7,9 +7,13 @@ import android.view.WindowManager;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import jrfeng.simplemusic.MyApplication;
 import jrfeng.simplemusic.R;
-import jrfeng.simplemusic.activity.main.MainActivity;
+import jrfeng.simplemusic.activity.navigation.NavigationActivity;
 import jrfeng.simplemusic.base.BaseActivity;
+import jrfeng.simplemusic.model.MusicStorage;
+import jrfeng.simplemusic.service.player.PlayerClient;
+import jrfeng.simplemusic.utils.durable.Durable;
 
 public class WelcomeActivity extends BaseActivity {
     private boolean mIsActive = true;
@@ -28,6 +32,18 @@ public class WelcomeActivity extends BaseActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+        MusicStorage musicStorage = MyApplication.getInstance().getMusicStorage();
+        final PlayerClient client = MyApplication.getInstance().getPlayerClient();
+
+        if (!musicStorage.isRestored()) {
+            musicStorage.restoreAsync(new Durable.OnRestoredListener() {
+                @Override
+                public void onRestored() {
+                    client.connect();
+                }
+            });
+        }
+
         //启动定时器, 延时2秒
         final Timer timer = new Timer(true);
         timer.schedule(new TimerTask() {
@@ -35,7 +51,7 @@ public class WelcomeActivity extends BaseActivity {
             public void run() {
                 if (mIsActive) {
                     //启动MainActivity
-                    Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+                    Intent intent = new Intent(WelcomeActivity.this, NavigationActivity.class);
                     startActivity(intent);
                 }
                 timer.cancel();

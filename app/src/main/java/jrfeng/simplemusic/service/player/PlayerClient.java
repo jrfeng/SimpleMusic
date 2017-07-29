@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.util.Log;
+
+import jrfeng.simplemusic.MyApplication;
 
 public class PlayerClient implements ServiceConnection, PlayerController {
     private PlayerService.Controller mController;
@@ -22,7 +25,6 @@ public class PlayerClient implements ServiceConnection, PlayerController {
 
     public void connect(OnConnectedListener listener) {
         mConnectedListener = listener;
-        isConnect = true;
         mContext.bindService(new Intent(mContext, PlayerService.class), this, Context.BIND_AUTO_CREATE);
     }
 
