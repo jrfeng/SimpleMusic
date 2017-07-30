@@ -8,11 +8,12 @@
     <include layout="@layout/widget_action_bar"/>
 
     <android.support.v7.widget.RecyclerView
-        android:background="@color/colorWhite"
-        android:overScrollMode="never"
         android:id="@+id/rvNavMenu"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:background="@color/colorWhite"
+        android:overScrollMode="ifContentScrolls"/>
 
+    <include layout="@layout/widget_controller"/>
 </LinearLayout>

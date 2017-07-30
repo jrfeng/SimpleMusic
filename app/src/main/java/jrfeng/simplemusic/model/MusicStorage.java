@@ -55,6 +55,7 @@ public class MusicStorage implements Durable {
         if (mListNames.size() == 0) {
             mListNames.add("所有音乐");    //基础音乐列表
             mListNames.add("我喜欢");      //基础音乐列表
+            mListNames.add("最近播放");    //最近播放列表
         }
 
         for (String listName : mListNames) {    //从本地恢复所有列表

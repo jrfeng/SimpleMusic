@@ -39,6 +39,8 @@ public class PlayerService extends Service {
 
     public static final String KEY_PLAYING_MUSIC = "playing_music";
 
+    private List<Music> mRecentPlayList;
+
     private LocalBroadcastManager mLocalBroadcastManager;
 
     private RemoteViews mNotifyView;
@@ -84,6 +86,7 @@ public class PlayerService extends Service {
 
         Controller controller = new Controller();
 
+        mRecentPlayList = MyApplication.getInstance().getMusicStorage().getMusicList("最近播放");
         String listName = mPreferences.getString(KEY_LIST_NAME, "所有音乐");
         int musicPosition = mPreferences.getInt(KEY_MUSIC_POSITION, 0);
         boolean looping = mPreferences.getBoolean(KEY_LOOPING, false);
@@ -172,6 +175,8 @@ public class PlayerService extends Service {
 
         private AudioManager mAudioManager;
         private AudioManager.OnAudioFocusChangeListener mAudioFocusChangeListener;
+
+        private ValueAnimator volumeAnim;
 
         //***********************Constructor*********************
 
@@ -367,10 +372,13 @@ public class PlayerService extends Service {
         }
 
         private void volumeTransition(float start, float end, boolean act, final String action) {
-            ValueAnimator animator = ValueAnimator.ofFloat(start, end);
-            animator.setDuration(1000);
+            if(volumeAnim != null && volumeAnim.isRunning()){
+                volumeAnim.cancel();
+            }
+            volumeAnim = ValueAnimator.ofFloat(start, end);
+            volumeAnim.setDuration(1000);
             if (act) {
-                animator.addListener(new AnimatorListenerAdapter() {
+                volumeAnim.addListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationStart(Animator animation) {
                         super.onAnimationStart(animation);
@@ -389,14 +397,14 @@ public class PlayerService extends Service {
                     }
                 });
             }
-            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            volumeAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator valueAnimator) {
                     float currentValue = (float) valueAnimator.getAnimatedValue();
                     mMediaPlayer.setVolume(currentValue, currentValue);
                 }
             });
-            animator.start();
+            volumeAnim.start();
         }
 
         //***********************PlayerController*****************
@@ -457,8 +465,6 @@ public class PlayerService extends Service {
             File file = new File(mPlayingMusic.getPath());
             if (!file.exists()) {
                 Toast.makeText(getBaseContext(), "文件不存在", Toast.LENGTH_SHORT).show();
-//                Toast.makeText(getBaseContext(), "播放下一首", Toast.LENGTH_SHORT).show();
-//                next();
             }
 
             if (!mPlaying) {
@@ -475,6 +481,12 @@ public class PlayerService extends Service {
                 mNotifyView.setTextViewText(R.id.tvTitle, mPlayingMusic.getSongName());
                 mNotifyView.setTextViewText(R.id.tvArtist, mPlayingMusic.getArtist());
                 updateNotifyView();
+
+                if (mRecentPlayList.size() == 0) {
+                    mRecentPlayList.add(mPlayingMusic);
+                } else if (!mRecentPlayList.get(0).equals(mPlayingMusic)) {
+                    mRecentPlayList.add(0, mPlayingMusic);
+                }
 
                 volumeTransition(0.0F, 1.0F, true, ACTION_PLAY);
                 sendActionBroadcast(ACTION_PLAY);
@@ -558,6 +570,8 @@ public class PlayerService extends Service {
             log("shutdown");
 
             abandonAudioFocus();
+
+            MyApplication.getInstance().getMusicStorage().saveAsync();
 
             //同时结束应用程序
             MyApplication.shutdown();

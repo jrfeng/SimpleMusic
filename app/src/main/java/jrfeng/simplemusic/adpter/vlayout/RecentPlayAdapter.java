@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.LayoutHelper;
@@ -45,6 +46,9 @@ public class RecentPlayAdapter extends DelegateAdapter.Adapter<RecentPlayAdapter
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        if (mMusicList.size() > 0) {
+            holder.tvSongName.setText(mMusicList.get(position).getSongName());
+        }
         //TODO 添加点击事件监听器
     }
 
@@ -54,9 +58,13 @@ public class RecentPlayAdapter extends DelegateAdapter.Adapter<RecentPlayAdapter
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
+        TextView tvSongName;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
+            if (mMusicList.size() > 0) {
+                tvSongName = itemView.findViewById(R.id.tvSongName);
+            }
         }
     }
 }

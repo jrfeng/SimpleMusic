@@ -42,6 +42,8 @@ public class WelcomeActivity extends BaseActivity {
                     client.connect();
                 }
             });
+        } else if (!client.isConnect()) {
+            client.connect();
         }
 
         //启动定时器, 延时2秒

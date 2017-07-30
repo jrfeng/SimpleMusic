@@ -41,6 +41,19 @@
                 <action android:name="android.intent.action.MEDIA_BUTTON"/>
             </intent-filter>
         </receiver>
+
+        <activity android:name=".activity.scan.ScanActivity">
+        </activity>
+        <activity android:name=".activity.allmusic.AllMusicActivity">
+        </activity>
+        <activity android:name=".activity.lovemusic.LoveMusicActivity">
+        </activity>
+        <activity android:name=".activity.musiclist.MusicListActivity">
+        </activity>
+        <activity android:name=".activity.album.AlbumActivity">
+        </activity>
+        <activity android:name=".activity.artist.ArtistActivity">
+        </activity>
     </application>
 
 </manifest>

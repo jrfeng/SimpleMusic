@@ -5,10 +5,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <fragment
-        android:id="@+id/navigation"
+    <FrameLayout
+        android:id="@+id/fmContainer"
         android:name="jrfeng.simplemusic.activity.navigation.NavigationFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:tag="navigation"/>
+        android:layout_height="match_parent"/>
 </LinearLayout>
