@@ -44,7 +44,7 @@ public class MusicStorage implements Durable {
      */
     @Override
     public void restore() {
-        if(mIsRestored){
+        if (mIsRestored) {
             return;
         }
 
@@ -74,7 +74,7 @@ public class MusicStorage implements Durable {
      */
     @Override
     public void restoreAsync(final OnRestoredListener listener) {
-        new Thread(){
+        new Thread() {
             @Override
             public void run() {
                 restore();
@@ -83,7 +83,7 @@ public class MusicStorage implements Durable {
         }.start();
     }
 
-    public boolean isRestored(){
+    public boolean isRestored() {
         return mIsRestored;
     }
 
@@ -207,13 +207,13 @@ public class MusicStorage implements Durable {
      * @param music 要移除的音乐。
      * @return 如果移除成功则返回 true，否则返回 false。
      */
-    public boolean removeMusic(Music music) {
+    public boolean removeMusicFromAllList(Music music) {
         //调试
-        log("removeMusic : 从所有列表移除 : " + music.getSongName());
+        log("removeMusicFromAllList : 从所有列表移除 : " + music.getSongName());
 
         if (!isMusicExist(music)) {
             //调试
-            log("removeMusic : 从所有列表移除 : 拒绝 : " + music.getSongName() + " [不存在]");
+            log("removeMusicFromAllList : 从所有列表移除 : 拒绝 : " + music.getSongName() + " [不存在]");
             return false;
         }
 
@@ -221,12 +221,10 @@ public class MusicStorage implements Durable {
             mMusicLists.get(i).remove(music);
         }
 
-        if (mAutoSave) {  //是否自动保存
-            saveAsync();
-        }
+        saveAsync();  //保存修改
 
         //调试
-        log("removeMusic : 从所有列表移除 : " + music.getSongName() + " : 成功");
+        log("removeMusicFromAllList : 从所有列表移除 : " + music.getSongName() + " : 成功");
         return true;
     }
 
@@ -247,18 +245,15 @@ public class MusicStorage implements Durable {
             return false;
         }
 
+        if (listName.equals("所有音乐")) {
+            return removeMusicFromAllList(music);
+        }
+
         int index = mListNames.indexOf(listName);
 
-        if (index == 0) {
-            removeMusic(music);
-        } else {
-            mMusicLists.get(index).remove(music);
-        }
+        mMusicLists.get(index).remove(music);
 
-        if (mAutoSave) {  //是否自动保存
-            saveAsync();
-        }
-
+        saveAsync();  //保存修改
         //调试
         log("removeMusic : 成功 : " + listName + " : " + music.getSongName());
         return true;
@@ -372,6 +367,17 @@ public class MusicStorage implements Durable {
         return mAutoSave;
     }
 
+    public int getListCount(String listName) {
+        int i = mListNames.indexOf(listName);
+        if (i < 0) {
+            throw new IllegalArgumentException("not that list, please check your \"listName\" argument");
+        }
+        return mMusicLists.get(i).size();
+    }
+
+    public int getCustomMusicListCount() {
+        return mMusicLists.size() - 3;
+    }
 
     //***************************调试************************
 

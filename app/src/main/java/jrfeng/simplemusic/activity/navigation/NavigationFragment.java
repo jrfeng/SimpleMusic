@@ -2,19 +2,26 @@ package jrfeng.simplemusic.activity.navigation;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.VirtualLayoutManager;
+import com.bumptech.glide.Glide;
 
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import jrfeng.simplemusic.MyApplication;
 import jrfeng.simplemusic.R;
@@ -34,6 +41,27 @@ public class NavigationFragment extends Fragment implements NavigationContract.V
     private ImageButton ibCtlNext;
     private ImageButton ibCtlMenu;
 
+    private ImageView ivCtlImage;
+    private TextView tvCtlSongName;
+    private TextView tvCtlArtist;
+    private SeekBar sbProgress;
+
+    private NavigationMenuAdapter mMenuAdapter;
+    private RecentPlayAdapter mRecentPlayAdapter;
+
+    private Handler handler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message message) {
+            byte[] imageData = (byte[]) message.obj;
+            if (imageData != null) {
+                Glide.with(mContext).load(imageData).into(ivCtlImage);
+            } else {
+                Glide.with(mContext).load(R.mipmap.ic_launcher).into(ivCtlImage);
+            }
+            return true;
+        }
+    });
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +74,7 @@ public class NavigationFragment extends Fragment implements NavigationContract.V
         mContentView = inflater.inflate(R.layout.fragment_navigation, container, false);
         findViews();
         addViewListener();
-        init();
+        initRecyclerView();
         return mContentView;
     }
 
@@ -57,57 +85,79 @@ public class NavigationFragment extends Fragment implements NavigationContract.V
 
     //***********************private**********************
 
-    private void findViews() {
-        rvNavMenu = mContentView.findViewById(R.id.rvNavMenu);
-        ibCtlPlayPause = mContentView.findViewById(R.id.ibCtlPlayPause);
-        ibCtlNext = mContentView.findViewById(R.id.ibCtlNext);
-        ibCtlMenu = mContentView.findViewById(R.id.ibCtlMenu);
-    }
-
-    private void init() {
+    private void initRecyclerView() {
         VirtualLayoutManager vLayoutManager = new VirtualLayoutManager(mContext);
         rvNavMenu.setLayoutManager(vLayoutManager);
 
         RecyclerView.RecycledViewPool viewPool = new RecyclerView.RecycledViewPool();
-        viewPool.setMaxRecycledViews(0, 10);
+        viewPool.setMaxRecycledViews(0, 20);
         rvNavMenu.setRecycledViewPool(viewPool);
 
         DelegateAdapter delegateAdapter = new DelegateAdapter(vLayoutManager);
         rvNavMenu.setAdapter(delegateAdapter);
 
-        NavigationMenuAdapter menuAdapter = new NavigationMenuAdapter(mContext, mPresenter);
-        delegateAdapter.addAdapter(menuAdapter);
+        mMenuAdapter = new NavigationMenuAdapter(mContext, mPresenter);
+        delegateAdapter.addAdapter(mMenuAdapter);
 
         DividerAdapter dividerAdapter = new DividerAdapter(mContext);
         delegateAdapter.addAdapter(dividerAdapter);
 
-        RecentPlayTitleAdapter recentPlayTitleAdapter = new RecentPlayTitleAdapter(mContext);
+        RecentPlayTitleAdapter recentPlayTitleAdapter = new RecentPlayTitleAdapter(mContext, mPresenter);
         delegateAdapter.addAdapter(recentPlayTitleAdapter);
 
         List<Music> recentPlay = MyApplication.getInstance().getMusicStorage().getMusicList("最近播放");
-        RecentPlayAdapter recentPlayAdapter = new RecentPlayAdapter(mContext, recentPlay);
-        delegateAdapter.addAdapter(recentPlayAdapter);
+        mRecentPlayAdapter = new RecentPlayAdapter(mContext, recentPlay);
+        delegateAdapter.addAdapter(mRecentPlayAdapter);
+    }
+
+    private void findViews() {
+        rvNavMenu = mContentView.findViewById(R.id.rvNavMenu);
+        ibCtlPlayPause = mContentView.findViewById(R.id.ibCtlPlayPause);
+        ibCtlNext = mContentView.findViewById(R.id.ibCtlNext);
+        ibCtlMenu = mContentView.findViewById(R.id.ibCtlMenu);
+
+        ivCtlImage = mContentView.findViewById(R.id.ivCtlImage);
+        tvCtlSongName = mContentView.findViewById(R.id.tvCtlSongName);
+        tvCtlArtist = mContentView.findViewById(R.id.tvCtlArtist);
+        sbProgress = mContentView.findViewById(R.id.sbProgress);
     }
 
     private void addViewListener() {
         ibCtlPlayPause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPresenter.playPauseClicked();
+                mPresenter.onPlayPauseClicked();
             }
         });
 
         ibCtlNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPresenter.nextClicked();
+                mPresenter.onNextClicked();
             }
         });
 
         ibCtlMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPresenter.ctlMenuClicked();
+                mPresenter.onCtlMenuClicked();
+            }
+        });
+
+        sbProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                mPresenter.onSeekBarStartSeeking();
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                mPresenter.onSeekBarStopSeeking(seekBar.getProgress());
             }
         });
     }
@@ -123,7 +173,59 @@ public class NavigationFragment extends Fragment implements NavigationContract.V
     }
 
     @Override
-    public void setProgress(float percent) {
+    public void setProgressMax(int max) {
+        sbProgress.setMax(max);
+    }
 
+    @Override
+    public void setProgress(int progress) {
+        sbProgress.setProgress(progress);
+    }
+
+    @Override
+    public void setCtlSongName(String songName) {
+        tvCtlSongName.setText(songName);
+    }
+
+    @Override
+    public void setCtlArtist(String artist) {
+        tvCtlArtist.setText(artist);
+    }
+
+    @Override
+    public void setCtlImage(byte[] imageData) {
+        Message message = handler.obtainMessage();
+        message.obj = imageData;
+        handler.sendMessage(message);
+    }
+
+    @Override
+    public void refreshRecentPlayList() {
+        mRecentPlayAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void setAllMusicMenuDesc(String desc) {
+        mMenuAdapter.setAllMusicMenuDesc(desc);
+    }
+
+    @Override
+    public void setILoveMenuDesc(String desc) {
+        mMenuAdapter.setILoveMenuDesc(desc);
+    }
+
+    @Override
+    public void setMusicListMenuDesc(String desc) {
+        mMenuAdapter.setMusicListMenuDesc(desc);
+    }
+
+    @Override
+    public void setAlbumMenuDesc(String desc) {
+        mMenuAdapter.setAlbumMenuDesc(desc);
+    }
+
+    @Override
+    public void setArtistMenuDesc(String desc) {
+        mMenuAdapter.setArtistMenuDesc(desc);
     }
 }

@@ -274,6 +274,21 @@ public class PlayerService extends Service {
         }
 
         @Override
+        public Music getPlayingMusic() {
+            return mPlayingMusic;
+        }
+
+        @Override
+        public List<Music> getMusicList() {
+            return mMusicList;
+        }
+
+        @Override
+        public void clearRecentPlayList() {
+            mRecentPlayList.clear();
+        }
+
+        @Override
         public boolean setLooping(boolean looping) {
             if (mPlayingMusic == null) {
                 return false;
@@ -369,14 +384,16 @@ public class PlayerService extends Service {
                     .putInt(KEY_MUSIC_POSITION, mMusicPosition)
                     .putBoolean(KEY_LOOPING, mLooping)
                     .apply();
+
+            MyApplication.getInstance().getMusicStorage().saveAsync();
         }
 
         private void volumeTransition(float start, float end, boolean act, final String action) {
-            if(volumeAnim != null && volumeAnim.isRunning()){
+            if (volumeAnim != null && volumeAnim.isRunning()) {
                 volumeAnim.cancel();
             }
             volumeAnim = ValueAnimator.ofFloat(start, end);
-            volumeAnim.setDuration(1000);
+            volumeAnim.setDuration(600);
             if (act) {
                 volumeAnim.addListener(new AnimatorListenerAdapter() {
                     @Override
@@ -485,6 +502,10 @@ public class PlayerService extends Service {
                 if (mRecentPlayList.size() == 0) {
                     mRecentPlayList.add(mPlayingMusic);
                 } else if (!mRecentPlayList.get(0).equals(mPlayingMusic)) {
+                    if(mRecentPlayList.contains(mPlayingMusic)){
+                        int index = mRecentPlayList.indexOf(mPlayingMusic);
+                        mRecentPlayList.remove(index);
+                    }
                     mRecentPlayList.add(0, mPlayingMusic);
                 }
 
@@ -513,9 +534,11 @@ public class PlayerService extends Service {
                 //更新View
                 mNotifyView.setImageViewResource(R.id.ibPlayPause, R.drawable.btn_play);
                 updateNotifyView();
-//                mMediaPlayer.pause();
                 volumeTransition(1.0F, 0.0F, true, ACTION_PAUSE);
                 sendActionBroadcast(ACTION_PAUSE);
+
+                //同时保存状态
+                saveState();
             }
         }
 
@@ -548,8 +571,8 @@ public class PlayerService extends Service {
 
             abandonAudioFocus();
 
-            mPlaying = false;
-            prepare();
+            pause();    //暂停播放
+            prepare();  //重置播放器
         }
 
         @Override
@@ -561,6 +584,7 @@ public class PlayerService extends Service {
             //调试
             log("seekTo");
 
+            mPlaying = false;
             mMediaPlayer.seekTo(msec);
         }
 
@@ -570,8 +594,6 @@ public class PlayerService extends Service {
             log("shutdown");
 
             abandonAudioFocus();
-
-            MyApplication.getInstance().getMusicStorage().saveAsync();
 
             //同时结束应用程序
             MyApplication.shutdown();

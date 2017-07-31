@@ -2,7 +2,7 @@ package jrfeng.simplemusic.data;
 
 import java.io.Serializable;
 
-public class Music implements Serializable {
+public class Music implements Serializable, Cloneable {
     private static final long serialVersionUID = 1L;
     private String path;        //路径
     private String songName;    //歌曲名
@@ -10,6 +10,8 @@ public class Music implements Serializable {
     private String album;       //专辑
     private String year;        //出品年份
     private String comment;     //备注信息
+
+    private String belongMusicList = "所有音乐";    //所属歌单，默认为“所有音乐”
 
     public Music(String path, String songName, String artist,
                  String album, String year, String comment) {
@@ -67,6 +69,20 @@ public class Music implements Serializable {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getBelongMusicList() {
+        return belongMusicList;
+    }
+
+    public void setBelongMusicList(String musicList) {
+        this.belongMusicList = musicList;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        super.clone();
+        return new Music(path, songName, artist, album, year, comment);
     }
 
     @Override

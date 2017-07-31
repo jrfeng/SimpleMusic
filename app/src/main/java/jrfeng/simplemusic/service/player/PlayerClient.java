@@ -7,7 +7,10 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.util.Log;
 
+import java.util.List;
+
 import jrfeng.simplemusic.MyApplication;
+import jrfeng.simplemusic.data.Music;
 
 public class PlayerClient implements ServiceConnection, PlayerController {
     private PlayerService.Controller mController;
@@ -89,6 +92,21 @@ public class PlayerClient implements ServiceConnection, PlayerController {
     @Override
     public boolean isLooping() {
         return mController.isLooping();
+    }
+
+    @Override
+    public Music getPlayingMusic() {
+        return mController.getPlayingMusic();
+    }
+
+    @Override
+    public List<Music> getMusicList() {
+        return mController.getMusicList();
+    }
+
+    @Override
+    public void clearRecentPlayList() {
+        mController.clearRecentPlayList();
     }
 
     @Override

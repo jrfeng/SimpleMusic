@@ -15,6 +15,7 @@
         android:textSize="13sp"/>
 
     <ImageButton
+        android:id="@+id/ibClear"
         android:background="@color/colorWhite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

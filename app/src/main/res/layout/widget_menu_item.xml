@@ -30,7 +30,7 @@
             android:id="@+id/tvMenuTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorBlack"
+            android:textColor="@color/colorGrey800"
             android:textSize="16sp"/>
 
         <TextView

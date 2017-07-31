@@ -10,8 +10,6 @@ import android.widget.TextView;
 import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.LayoutHelper;
 import com.alibaba.android.vlayout.layout.LinearLayoutHelper;
-import com.alibaba.android.vlayout.layout.SingleLayoutHelper;
-import com.alibaba.android.vlayout.layout.StickyLayoutHelper;
 
 import java.util.List;
 
@@ -34,13 +32,7 @@ public class RecentPlayAdapter extends DelegateAdapter.Adapter<RecentPlayAdapter
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view;
-        LayoutInflater layoutInflater = LayoutInflater.from(mContext);
-        if (mMusicList.size() == 0) {
-            view = layoutInflater.inflate(R.layout.widget_recent_play_enpty_view, parent, false);
-        } else {
-            view = layoutInflater.inflate(R.layout.widget_recent_play_item, parent, false);
-        }
+        View view = LayoutInflater.from(mContext).inflate(R.layout.widget_recent_play_item, parent, false);
         return new ViewHolder(view);
     }
 
@@ -54,7 +46,7 @@ public class RecentPlayAdapter extends DelegateAdapter.Adapter<RecentPlayAdapter
 
     @Override
     public int getItemCount() {
-        return Math.max(mMusicList.size(), 1);
+        return mMusicList.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

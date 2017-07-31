@@ -15,7 +15,14 @@
         android:layout_centerVertical="true"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="@color/colorBlack"
+        android:textColor="@color/colorGrey800"
         android:textSize="14sp"/>
+
+    <jrfeng.simplemusic.widget.Divider
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_gravity="bottom"
+        android:background="@color/colorGrey300"/>
 
 </RelativeLayout>

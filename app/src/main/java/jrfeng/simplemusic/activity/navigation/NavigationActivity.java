@@ -48,6 +48,7 @@ public class NavigationActivity extends BaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        mPresenter.stop();
         lbManager.unregisterReceiver((BroadcastReceiver) mPresenter);
     }
 }

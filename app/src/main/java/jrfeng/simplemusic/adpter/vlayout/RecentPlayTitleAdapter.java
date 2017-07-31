@@ -5,18 +5,23 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.LayoutHelper;
 import com.alibaba.android.vlayout.layout.StickyLayoutHelper;
 
+import jrfeng.simplemusic.MyApplication;
 import jrfeng.simplemusic.R;
+import jrfeng.simplemusic.activity.navigation.NavigationContract;
 
 public class RecentPlayTitleAdapter extends DelegateAdapter.Adapter<RecentPlayTitleAdapter.ViewHolder> {
     private Context mContext;
+    private NavigationContract.Presenter mPresenter;
 
-    public RecentPlayTitleAdapter(Context context) {
+    public RecentPlayTitleAdapter(Context context, NavigationContract.Presenter presenter) {
         mContext = context;
+        mPresenter = presenter;
     }
 
 
@@ -33,7 +38,13 @@ public class RecentPlayTitleAdapter extends DelegateAdapter.Adapter<RecentPlayTi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        //TODO 添加点击事件监听器
+        holder.ibClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MyApplication.getInstance().getPlayerClient().clearRecentPlayList();
+                mPresenter.onClearRecentPlayClicked();
+            }
+        });
     }
 
     @Override
@@ -42,9 +53,12 @@ public class RecentPlayTitleAdapter extends DelegateAdapter.Adapter<RecentPlayTi
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
+        ImageButton ibClear;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
+
+            ibClear = itemView.findViewById(R.id.ibClear);
         }
     }
 }

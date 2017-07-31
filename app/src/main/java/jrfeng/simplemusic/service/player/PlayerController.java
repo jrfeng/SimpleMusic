@@ -1,5 +1,9 @@
 package jrfeng.simplemusic.service.player;
 
+import java.util.List;
+
+import jrfeng.simplemusic.data.Music;
+
 public interface PlayerController {
     void previous();
 
@@ -16,6 +20,12 @@ public interface PlayerController {
     boolean isPlaying();
 
     boolean isLooping();
+
+    Music getPlayingMusic();
+
+    List<Music> getMusicList();
+
+    void clearRecentPlayList();
 
     boolean setLooping(boolean looping);
 
