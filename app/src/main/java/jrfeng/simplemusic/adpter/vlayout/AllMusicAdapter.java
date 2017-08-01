@@ -14,15 +14,19 @@ import com.alibaba.android.vlayout.layout.LinearLayoutHelper;
 import java.util.List;
 
 import jrfeng.simplemusic.R;
+import jrfeng.simplemusic.activity.navigation.NavigationContract;
 import jrfeng.simplemusic.data.Music;
 
-public class RecentPlayAdapter extends DelegateAdapter.Adapter<RecentPlayAdapter.ViewHolder> {
+public class AllMusicAdapter extends DelegateAdapter.Adapter<AllMusicAdapter.ViewHolder> {
     private Context mContext;
     private List<Music> mMusicList;
+    private NavigationContract.Presenter mPresenter;
+    private static final String mListName = "所有音乐";
 
-    public RecentPlayAdapter(Context context, List<Music> musics) {
+    public AllMusicAdapter(Context context, List<Music> musics, NavigationContract.Presenter presenter) {
         mContext = context;
         mMusicList = musics;
+        mPresenter = presenter;
     }
 
     @Override
@@ -32,16 +36,22 @@ public class RecentPlayAdapter extends DelegateAdapter.Adapter<RecentPlayAdapter
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.widget_recent_play_item, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.widget_all_music_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        if (mMusicList.size() > 0) {
-            holder.tvSongName.setText(mMusicList.get(position).getSongName());
-        }
-        //TODO 添加点击事件监听器
+        holder.tvSongName.setText(mMusicList.get(position).getSongName());
+        holder.tvArtist.setText(mMusicList.get(position).getArtist());
+
+        final int index = position;
+        holder.listItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPresenter.onListItemClicked(mListName, index);
+            }
+        });
     }
 
     @Override
@@ -50,12 +60,16 @@ public class RecentPlayAdapter extends DelegateAdapter.Adapter<RecentPlayAdapter
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
+        View listItem;
         TextView tvSongName;
+        TextView tvArtist;
 
         ViewHolder(View itemView) {
             super(itemView);
             if (mMusicList.size() > 0) {
-                tvSongName = itemView.findViewById(R.id.tvSongName);
+                listItem = itemView;
+                tvSongName = itemView.findViewById(R.id.tvItemSongName);
+                tvArtist = itemView.findViewById(R.id.tvItemArtist);
             }
         }
     }

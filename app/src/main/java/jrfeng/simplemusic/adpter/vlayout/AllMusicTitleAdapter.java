@@ -11,15 +11,14 @@ import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.LayoutHelper;
 import com.alibaba.android.vlayout.layout.StickyLayoutHelper;
 
-import jrfeng.simplemusic.MyApplication;
 import jrfeng.simplemusic.R;
 import jrfeng.simplemusic.activity.navigation.NavigationContract;
 
-public class RecentPlayTitleAdapter extends DelegateAdapter.Adapter<RecentPlayTitleAdapter.ViewHolder> {
+public class AllMusicTitleAdapter extends DelegateAdapter.Adapter<AllMusicTitleAdapter.ViewHolder> {
     private Context mContext;
     private NavigationContract.Presenter mPresenter;
 
-    public RecentPlayTitleAdapter(Context context, NavigationContract.Presenter presenter) {
+    public AllMusicTitleAdapter(Context context, NavigationContract.Presenter presenter) {
         mContext = context;
         mPresenter = presenter;
     }
@@ -32,19 +31,13 @@ public class RecentPlayTitleAdapter extends DelegateAdapter.Adapter<RecentPlayTi
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.widget_recent_play_title, parent,false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.widget_all_music_title, parent,false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.ibClear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MyApplication.getInstance().getPlayerClient().clearRecentPlayList();
-                mPresenter.onClearRecentPlayClicked();
-            }
-        });
+        //TODO 响应排序按钮
     }
 
     @Override
@@ -58,7 +51,7 @@ public class RecentPlayTitleAdapter extends DelegateAdapter.Adapter<RecentPlayTi
         ViewHolder(View itemView) {
             super(itemView);
 
-            ibClear = itemView.findViewById(R.id.ibClear);
+            ibClear = itemView.findViewById(R.id.ibSort);
         }
     }
 }

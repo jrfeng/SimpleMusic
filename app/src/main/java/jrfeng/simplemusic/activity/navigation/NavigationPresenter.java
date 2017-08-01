@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 import java.util.Date;
 import java.util.Timer;
@@ -18,6 +17,8 @@ import jrfeng.simplemusic.data.Music;
 import jrfeng.simplemusic.model.MusicDBHelper;
 import jrfeng.simplemusic.model.MusicStorage;
 import jrfeng.simplemusic.service.player.PlayerClient;
+import jrfeng.simplemusic.service.player.PlayerService;
+import jrfeng.simplemusic.utils.durable.DurableList;
 
 public class NavigationPresenter extends BroadcastReceiver implements NavigationContract.Presenter {
     private Context mContext;
@@ -26,6 +27,8 @@ public class NavigationPresenter extends BroadcastReceiver implements Navigation
     private Music mPlayingMusic;
 
     private Timer mTimer;
+
+    private DurableList<Music> mAllMusicList;
 
     //用于更新主页面的“专辑”菜单项的描述和“歌手”菜单项的描述
     private Handler handler = new Handler(new Handler.Callback() {
@@ -55,11 +58,13 @@ public class NavigationPresenter extends BroadcastReceiver implements Navigation
         mContext = context;
         mView = view;
         mClient = MyApplication.getInstance().getPlayerClient();
+        mAllMusicList = MyApplication.getInstance().getMusicStorage().getMusicList("所有音乐");
     }
 
     @Override
     public void start() {
         refreshControllerView();
+        refreshAllMusicList();
     }
 
     @Override
@@ -69,7 +74,23 @@ public class NavigationPresenter extends BroadcastReceiver implements Navigation
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        switch (intent.getAction()) {
+            case PlayerService.ACTION_NEXT:
+            case PlayerService.ACTION_PREVIOUS:
+            case PlayerService.ACTION_PAUSE:
+                stopProgressGenerator();
+                break;
+        }
+
         refreshControllerView();
+
+        MusicStorage musicStorage = MyApplication.getInstance().getMusicStorage();
+        int count_RecentPlay = musicStorage.getListCount("最近播放");
+        if (count_RecentPlay > 0) {
+            mView.setRecentPlayMenuDesc(count_RecentPlay + "条记录");
+        } else {
+            mView.setRecentPlayMenuDesc("暂无记录");
+        }
     }
 
     @Override
@@ -97,11 +118,6 @@ public class NavigationPresenter extends BroadcastReceiver implements Navigation
     }
 
     @Override
-    public void onClearRecentPlayClicked() {
-        mView.refreshRecentPlayList();
-    }
-
-    @Override
     public void onSeekBarStartSeeking() {
         stopProgressGenerator();
     }
@@ -117,14 +133,6 @@ public class NavigationPresenter extends BroadcastReceiver implements Navigation
         final SQLiteDatabase musicDB = MyApplication.getInstance().getMusicDB();
         switch (which) {
             case 0:
-                int count_AllMusic = musicStorage.getListCount("所有音乐");
-                if (count_AllMusic > 0) {
-                    mView.setAllMusicMenuDesc(count_AllMusic + "首音乐");
-                } else {
-                    mView.setAllMusicMenuDesc("暂无音乐");
-                }
-                break;
-            case 1:
                 int count_ILove = musicStorage.getListCount("我喜欢");
                 if (count_ILove > 0) {
                     mView.setILoveMenuDesc(count_ILove + "首音乐");
@@ -132,7 +140,7 @@ public class NavigationPresenter extends BroadcastReceiver implements Navigation
                     mView.setILoveMenuDesc("暂无音乐");
                 }
                 break;
-            case 2:
+            case 1:
                 int count_MusicList = musicStorage.getCustomMusicListCount();
                 if (count_MusicList > 0) {
                     mView.setMusicListMenuDesc(count_MusicList + "首音乐");
@@ -140,7 +148,7 @@ public class NavigationPresenter extends BroadcastReceiver implements Navigation
                     mView.setMusicListMenuDesc("暂无歌单");
                 }
                 break;
-            case 3:
+            case 2:
                 new Thread() {
                     @Override
                     public void run() {
@@ -157,7 +165,7 @@ public class NavigationPresenter extends BroadcastReceiver implements Navigation
                     }
                 }.start();
                 break;
-            case 4:
+            case 3:
                 new Thread() {
                     @Override
                     public void run() {
@@ -174,7 +182,20 @@ public class NavigationPresenter extends BroadcastReceiver implements Navigation
                     }
                 }.start();
                 break;
+            case 4:
+                int count_RecentPlay = musicStorage.getListCount("最近播放");
+                if (count_RecentPlay > 0) {
+                    mView.setRecentPlayMenuDesc(count_RecentPlay + "条记录");
+                } else {
+                    mView.setRecentPlayMenuDesc("暂无记录");
+                }
+                break;
         }
+    }
+
+    @Override
+    public void onListItemClicked(String listName, int position) {
+        mClient.play(listName, position);
     }
 
     //****************private***************
@@ -200,7 +221,6 @@ public class NavigationPresenter extends BroadcastReceiver implements Navigation
             mPlayingMusic = music;
             mView.setCtlSongName(mPlayingMusic.getSongName());
             mView.setCtlArtist(mPlayingMusic.getArtist());
-            mView.refreshRecentPlayList();
             //提取歌曲的封面图片
             new Thread() {
                 @Override
@@ -222,6 +242,12 @@ public class NavigationPresenter extends BroadcastReceiver implements Navigation
         }
     }
 
+    private void refreshAllMusicList() {
+        if (mAllMusicList.isChanged()) {
+            mView.updateAllMusicList();
+        }
+    }
+
     private void startProgressGenerator() {
         stopProgressGenerator();
         mTimer = new Timer(true);
@@ -230,7 +256,7 @@ public class NavigationPresenter extends BroadcastReceiver implements Navigation
             public void run() {
                 mView.setProgress(mClient.getCurrentPosition());
             }
-        }, new Date(), 500);
+        }, new Date(), 1000);
     }
 
     private void stopProgressGenerator() {

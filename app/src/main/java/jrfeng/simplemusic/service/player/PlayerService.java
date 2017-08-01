@@ -17,6 +17,7 @@ import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.NotificationCompat;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -169,7 +170,7 @@ public class PlayerService extends Service {
         private boolean mLooping;
         private boolean mPlaying;
 
-        private String mListName;
+        private String mCurrentListName;
         private List<Music> mMusicList;
         private int mMusicPosition;
 
@@ -215,6 +216,8 @@ public class PlayerService extends Service {
                                 pause();
                             }
                             unregisterMediaButtonReceiver();
+                            //调试
+                            Log.d(MyApplication.TAG, "失去音频焦点, 暂停播放");
                             break;
                         case AudioManager.AUDIOFOCUS_GAIN:
                             if (lossCanDuck) {
@@ -238,15 +241,15 @@ public class PlayerService extends Service {
             //调试
             log("load");
 
-            mListName = listName;
-            mMusicList = mMusicStorage.getMusicList(mListName);
+            mCurrentListName = listName;
+            mMusicList = mMusicStorage.getMusicList(mCurrentListName);
             mMusicPosition = musicPosition;
             mLooping = looping;
 
             if (mMusicList.size() > 0) {
                 mPlayingMusic = mMusicList.get(mMusicPosition);
                 mNotifyView.setTextViewText(R.id.tvTitle, mPlayingMusic.getSongName());
-                mNotifyView.setTextViewText(R.id.tvArtist, mPlayingMusic.getArtist());
+                mNotifyView.setTextViewText(R.id.tvItemArtist, mPlayingMusic.getArtist());
                 updateNotifyView();
                 prepare();
             }
@@ -257,7 +260,7 @@ public class PlayerService extends Service {
             if (mMusicList.size() > 0 && mPlayingMusic == null) {
                 mPlayingMusic = mMusicList.get(mMusicPosition);
                 mNotifyView.setTextViewText(R.id.tvTitle, mPlayingMusic.getSongName());
-                mNotifyView.setTextViewText(R.id.tvArtist, mPlayingMusic.getArtist());
+                mNotifyView.setTextViewText(R.id.tvItemArtist, mPlayingMusic.getArtist());
                 updateNotifyView();
                 prepare();
             }
@@ -281,6 +284,11 @@ public class PlayerService extends Service {
         @Override
         public List<Music> getMusicList() {
             return mMusicList;
+        }
+
+        @Override
+        public String getCurrentListName() {
+            return mCurrentListName;
         }
 
         @Override
@@ -380,7 +388,7 @@ public class PlayerService extends Service {
             log("saveState");
 
             mPreferences.edit()
-                    .putString(KEY_LIST_NAME, mListName)
+                    .putString(KEY_LIST_NAME, mCurrentListName)
                     .putInt(KEY_MUSIC_POSITION, mMusicPosition)
                     .putBoolean(KEY_LOOPING, mLooping)
                     .apply();
@@ -442,8 +450,8 @@ public class PlayerService extends Service {
                 mMusicPosition = mMusicList.size() - 1;
             }
             mPlayingMusic = mMusicList.get(mMusicPosition);
-            prepare();
             sendActionBroadcast(ACTION_PREVIOUS);
+            prepare();
             play();
         }
 
@@ -463,8 +471,8 @@ public class PlayerService extends Service {
                 mMusicPosition = 0;
             }
             mPlayingMusic = mMusicList.get(mMusicPosition);
-            prepare();
             sendActionBroadcast(ACTION_NEXT);
+            prepare();
             play();
         }
 
@@ -496,21 +504,35 @@ public class PlayerService extends Service {
                 //更新View
                 mNotifyView.setImageViewResource(R.id.ibPlayPause, R.drawable.btn_pause);
                 mNotifyView.setTextViewText(R.id.tvTitle, mPlayingMusic.getSongName());
-                mNotifyView.setTextViewText(R.id.tvArtist, mPlayingMusic.getArtist());
+                mNotifyView.setTextViewText(R.id.tvItemArtist, mPlayingMusic.getArtist());
                 updateNotifyView();
 
-                if (mRecentPlayList.size() == 0) {
-                    mRecentPlayList.add(mPlayingMusic);
-                } else if (!mRecentPlayList.get(0).equals(mPlayingMusic)) {
-                    if(mRecentPlayList.contains(mPlayingMusic)){
-                        int index = mRecentPlayList.indexOf(mPlayingMusic);
-                        mRecentPlayList.remove(index);
-                    }
+                if (!mRecentPlayList.contains(mPlayingMusic)) {
                     mRecentPlayList.add(0, mPlayingMusic);
                 }
 
                 volumeTransition(0.0F, 1.0F, true, ACTION_PLAY);
                 sendActionBroadcast(ACTION_PLAY);
+            }
+        }
+
+        @Override
+        public void play(int position) {
+            mPlayingMusic = mMusicList.get(position);
+            mMusicPosition = position;
+            prepare();
+            play();
+        }
+
+        @Override
+        public void play(String listName, int position) {
+            if (!listName.equals(mCurrentListName)) {
+                load(listName, position, mLooping);
+                mMusicPosition = position;
+                prepare();
+                play();
+            } else {
+                play(position);
             }
         }
 
@@ -534,8 +556,8 @@ public class PlayerService extends Service {
                 //更新View
                 mNotifyView.setImageViewResource(R.id.ibPlayPause, R.drawable.btn_play);
                 updateNotifyView();
-                volumeTransition(1.0F, 0.0F, true, ACTION_PAUSE);
                 sendActionBroadcast(ACTION_PAUSE);
+                volumeTransition(1.0F, 0.0F, true, ACTION_PAUSE);
 
                 //同时保存状态
                 saveState();
@@ -615,11 +637,9 @@ public class PlayerService extends Service {
         }
 
         @Override
-        public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
+        public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
             //调试
-            log("onError");
-
-            abandonAudioFocus();
+            logE("onError : 出错, 停止播放 : what : " + what + "/extra : " + extra);
 
             //更新View
             mNotifyView.setImageViewResource(R.id.ibPlayPause, R.drawable.btn_play);

@@ -223,6 +223,10 @@ public class DurableList<E> implements List<E>, Durable {
         }.start();
     }
 
+    public boolean isChanged() {
+        return mIsChanged;
+    }
+
     @Override
     protected void finalize() throws Throwable {
         super.finalize();

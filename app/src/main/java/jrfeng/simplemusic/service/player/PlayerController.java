@@ -11,6 +11,9 @@ public interface PlayerController {
 
     void play();
 
+    void play(int position);
+    void play(String listName, int position);
+
     void pause();
 
     void play_pause();
@@ -24,6 +27,8 @@ public interface PlayerController {
     Music getPlayingMusic();
 
     List<Music> getMusicList();
+
+    String getCurrentListName();
 
     void clearRecentPlayList();
 

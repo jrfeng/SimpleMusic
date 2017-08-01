@@ -7,7 +7,6 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,17 +20,17 @@ import com.alibaba.android.vlayout.VirtualLayoutManager;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
-import java.util.Map;
 
 import jrfeng.simplemusic.MyApplication;
 import jrfeng.simplemusic.R;
+import jrfeng.simplemusic.adpter.vlayout.AllMusicTitleAdapter;
 import jrfeng.simplemusic.adpter.vlayout.DividerAdapter;
 import jrfeng.simplemusic.adpter.vlayout.NavigationMenuAdapter;
-import jrfeng.simplemusic.adpter.vlayout.RecentPlayAdapter;
-import jrfeng.simplemusic.adpter.vlayout.RecentPlayTitleAdapter;
+import jrfeng.simplemusic.adpter.vlayout.AllMusicAdapter;
 import jrfeng.simplemusic.data.Music;
 
 public class NavigationFragment extends Fragment implements NavigationContract.View {
+
     private View mContentView;
     private NavigationContract.Presenter mPresenter;
     private Context mContext;
@@ -47,7 +46,7 @@ public class NavigationFragment extends Fragment implements NavigationContract.V
     private SeekBar sbProgress;
 
     private NavigationMenuAdapter mMenuAdapter;
-    private RecentPlayAdapter mRecentPlayAdapter;
+    private AllMusicAdapter mAllMusicAdapter;
 
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -102,12 +101,12 @@ public class NavigationFragment extends Fragment implements NavigationContract.V
         DividerAdapter dividerAdapter = new DividerAdapter(mContext);
         delegateAdapter.addAdapter(dividerAdapter);
 
-        RecentPlayTitleAdapter recentPlayTitleAdapter = new RecentPlayTitleAdapter(mContext, mPresenter);
+        AllMusicTitleAdapter recentPlayTitleAdapter = new AllMusicTitleAdapter(mContext, mPresenter);
         delegateAdapter.addAdapter(recentPlayTitleAdapter);
 
-        List<Music> recentPlay = MyApplication.getInstance().getMusicStorage().getMusicList("最近播放");
-        mRecentPlayAdapter = new RecentPlayAdapter(mContext, recentPlay);
-        delegateAdapter.addAdapter(mRecentPlayAdapter);
+        List<Music> allMusicList = MyApplication.getInstance().getMusicStorage().getMusicList("所有音乐");
+        mAllMusicAdapter = new AllMusicAdapter(mContext, allMusicList, mPresenter);
+        delegateAdapter.addAdapter(mAllMusicAdapter);
     }
 
     private void findViews() {
@@ -200,16 +199,6 @@ public class NavigationFragment extends Fragment implements NavigationContract.V
     }
 
     @Override
-    public void refreshRecentPlayList() {
-        mRecentPlayAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void setAllMusicMenuDesc(String desc) {
-        mMenuAdapter.setAllMusicMenuDesc(desc);
-    }
-
-    @Override
     public void setILoveMenuDesc(String desc) {
         mMenuAdapter.setILoveMenuDesc(desc);
     }
@@ -227,5 +216,15 @@ public class NavigationFragment extends Fragment implements NavigationContract.V
     @Override
     public void setArtistMenuDesc(String desc) {
         mMenuAdapter.setArtistMenuDesc(desc);
+    }
+
+    @Override
+    public void setRecentPlayMenuDesc(String desc) {
+        mMenuAdapter.setRecentPlayMenuDesc(desc);
+    }
+
+    @Override
+    public void updateAllMusicList() {
+        mAllMusicAdapter.notifyDataSetChanged();
     }
 }

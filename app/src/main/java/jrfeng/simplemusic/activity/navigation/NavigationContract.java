@@ -22,10 +22,6 @@ public interface NavigationContract {
 
         void setCtlImage(byte[] imageData);
 
-        void refreshRecentPlayList();
-
-        void setAllMusicMenuDesc(String desc);
-
         void setILoveMenuDesc(String desc);
 
         void setMusicListMenuDesc(String desc);
@@ -33,6 +29,10 @@ public interface NavigationContract {
         void setAlbumMenuDesc(String desc);
 
         void setArtistMenuDesc(String desc);
+
+        void setRecentPlayMenuDesc(String desc);
+
+        void updateAllMusicList();
     }
 
     interface Presenter extends BasePresenter {
@@ -44,12 +44,12 @@ public interface NavigationContract {
 
         void onCtlMenuClicked();
 
-        void onClearRecentPlayClicked();
-
         void onSeekBarStartSeeking();
 
         void onSeekBarStopSeeking(int progress);
 
         void onMenuItemCreated(int which);
+
+        void onListItemClicked(String listName, int position);
     }
 }

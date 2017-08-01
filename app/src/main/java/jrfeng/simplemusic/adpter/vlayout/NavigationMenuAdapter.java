@@ -20,7 +20,7 @@ import java.util.Map;
 import jrfeng.simplemusic.MyApplication;
 import jrfeng.simplemusic.R;
 import jrfeng.simplemusic.activity.album.AlbumActivity;
-import jrfeng.simplemusic.activity.allmusic.AllMusicActivity;
+import jrfeng.simplemusic.activity.recentplay.RecentPlayActivity;
 import jrfeng.simplemusic.activity.artist.ArtistActivity;
 import jrfeng.simplemusic.activity.lovemusic.LoveMusicActivity;
 import jrfeng.simplemusic.activity.musiclist.MusicListActivity;
@@ -31,11 +31,11 @@ public class NavigationMenuAdapter extends DelegateAdapter.Adapter<NavigationMen
     private Context mContext;
     private NavigationContract.Presenter mPresenter;
 
-    private int[] imageIds = {R.mipmap.ic_all_music, R.mipmap.ic_love, R.mipmap.ic_music_list, R.mipmap.ic_album, R.mipmap.ic_artist, R.mipmap.ic_scan};
-    private String[] titles = {"所有音乐", "我喜欢", "歌单", "专辑", "歌手", "扫描"};
-    private String[] descriptions = {"暂无音乐", "暂无音乐", "暂无歌单", "暂无专辑", "暂无歌手", "扫描本地音乐"};
-    private Class[] classes = {AllMusicActivity.class, LoveMusicActivity.class, MusicListActivity.class,
-            AlbumActivity.class, ArtistActivity.class, ScanActivity.class};
+    private int[] imageIds = {R.mipmap.ic_love, R.mipmap.ic_music_list, R.mipmap.ic_album, R.mipmap.ic_artist, R.mipmap.ic_recent_play, R.mipmap.ic_scan};
+    private String[] titles = {"我喜欢", "歌单", "专辑", "歌手", "最近播放", "扫描"};
+    private String[] descriptions = {"暂无音乐", "暂无歌单", "暂无专辑", "暂无歌手", "暂无记录", "扫描本地音乐"};
+    private Class[] classes = {LoveMusicActivity.class, MusicListActivity.class,
+            AlbumActivity.class, ArtistActivity.class, RecentPlayActivity.class, ScanActivity.class};
 
     private Map<String, TextView> mMenuDescription;
 
@@ -87,10 +87,6 @@ public class NavigationMenuAdapter extends DelegateAdapter.Adapter<NavigationMen
         return 6;
     }
 
-    public void setAllMusicMenuDesc(String desc) {
-        mMenuDescription.get("所有音乐").setText(desc);
-    }
-
     public void setILoveMenuDesc(String desc) {
         mMenuDescription.get("我喜欢").setText(desc);
     }
@@ -105,6 +101,10 @@ public class NavigationMenuAdapter extends DelegateAdapter.Adapter<NavigationMen
 
     public void setArtistMenuDesc(String desc) {
         mMenuDescription.get("歌手").setText(desc);
+    }
+
+    public void setRecentPlayMenuDesc(String desc) {
+        mMenuDescription.get("最近播放").setText(desc);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

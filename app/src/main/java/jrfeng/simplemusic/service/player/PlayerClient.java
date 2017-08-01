@@ -70,6 +70,16 @@ public class PlayerClient implements ServiceConnection, PlayerController {
     }
 
     @Override
+    public void play(int position) {
+        mController.play(position);
+    }
+
+    @Override
+    public void play(String listName, int position) {
+        mController.play(listName, position);
+    }
+
+    @Override
     public void pause() {
         mController.pause();
     }
@@ -102,6 +112,11 @@ public class PlayerClient implements ServiceConnection, PlayerController {
     @Override
     public List<Music> getMusicList() {
         return mController.getMusicList();
+    }
+
+    @Override
+    public String getCurrentListName() {
+        return mController.getCurrentListName();
     }
 
     @Override

@@ -13,6 +13,8 @@ public class Music implements Serializable, Cloneable {
 
     private String belongMusicList = "所有音乐";    //所属歌单，默认为“所有音乐”
 
+    private long addTimeMsec;
+
     public Music(String path, String songName, String artist,
                  String album, String year, String comment) {
         this.path = path;
@@ -21,6 +23,8 @@ public class Music implements Serializable, Cloneable {
         this.album = album;
         this.year = year;
         this.comment = comment;
+
+        addTimeMsec = System.currentTimeMillis();
     }
 
     public String getPath() {
@@ -77,6 +81,10 @@ public class Music implements Serializable, Cloneable {
 
     public void setBelongMusicList(String musicList) {
         this.belongMusicList = musicList;
+    }
+
+    public long getAddTimeMsec() {
+        return addTimeMsec;
     }
 
     @Override
