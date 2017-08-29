@@ -22,6 +22,7 @@ public class DurableList<E> implements List<E>, Durable {
     private File mFile;
     private List<E> mList;
     private boolean mIsChanged;
+    private boolean mIsSaved;
 
     //**********************Constructor*********************
 
@@ -70,41 +71,49 @@ public class DurableList<E> implements List<E>, Durable {
 
     @Override
     public boolean add(E e) {
+        mIsSaved = false;
         return mIsChanged = mList.add(e);
     }
 
     @Override
     public boolean remove(Object o) {
+        mIsSaved = false;
         return mIsChanged = mList.remove(o);
     }
 
     @Override
     public boolean containsAll(@NonNull Collection<?> c) {
+        mIsSaved = false;
         return mList.containsAll(c);
     }
 
     @Override
     public boolean addAll(@NonNull Collection<? extends E> c) {
+        mIsSaved = false;
         return mIsChanged = mList.addAll(c);
     }
 
     @Override
     public boolean addAll(int index, @NonNull Collection<? extends E> c) {
+        mIsSaved = false;
         return mIsChanged = mList.addAll(index, c);
     }
 
     @Override
     public boolean removeAll(@NonNull Collection<?> c) {
+        mIsSaved = false;
         return mIsChanged = mList.removeAll(c);
     }
 
     @Override
     public boolean retainAll(@NonNull Collection<?> c) {
+        mIsSaved = false;
         return mIsChanged = mList.removeAll(c);
     }
 
     @Override
     public void clear() {
+        mIsSaved = false;
         mIsChanged = true;
         mList.clear();
     }
@@ -116,18 +125,21 @@ public class DurableList<E> implements List<E>, Durable {
 
     @Override
     public E set(int index, E element) {
+        mIsSaved = false;
         mIsChanged = true;
         return mList.set(index, element);
     }
 
     @Override
     public void add(int index, E element) {
+        mIsSaved = false;
         mIsChanged = true;
         mList.add(index, element);
     }
 
     @Override
     public E remove(int index) {
+        mIsSaved = false;
         mIsChanged = true;
         return mList.remove(index);
     }
@@ -195,6 +207,12 @@ public class DurableList<E> implements List<E>, Durable {
             return;
         }
 
+        if (mIsSaved) {
+            //调试
+            log("已保存过 : " + mFile.getName());
+            return;
+        }
+
         try {
             //调试
             log("开始保存 : " + mFile.getName());
@@ -210,6 +228,8 @@ public class DurableList<E> implements List<E>, Durable {
         } catch (IOException e) {
             //调试
             log("保存失败 : " + mFile.getAbsolutePath() + " : " + e);
+        } finally {
+            mIsSaved = true;
         }
     }
 

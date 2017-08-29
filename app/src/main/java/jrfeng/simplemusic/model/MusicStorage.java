@@ -6,7 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import jrfeng.simplemusic.MyApplication;
-import jrfeng.simplemusic.data.Music;
+import jrfeng.musicplayer.data.Music;
+import jrfeng.musicplayer.player.MusicProvider;
 import jrfeng.simplemusic.utils.durable.Durable;
 import jrfeng.simplemusic.utils.durable.DurableList;
 import jrfeng.simplemusic.utils.log.L;
@@ -14,7 +15,7 @@ import jrfeng.simplemusic.utils.log.L;
 /**
  * 音乐存储器。用于保存简单的音乐列表信息。
  */
-public class MusicStorage implements Durable {
+public class MusicStorage implements Durable, MusicProvider {
     private static final String LIST_NAMES = "list_names.dat";
     private String mFileDir;
     //MusicStorage分为以下2部分
@@ -24,15 +25,15 @@ public class MusicStorage implements Durable {
     private boolean mAutoSave = false;              //自动保存。默认不自动保存
     private boolean mIsRestored = false;
 
-    /**
-     * 创建以 MusicStorage。注意！创建对象后，一定要记得
-     * 调用 MusicStorage 的 @see #restoreAsync() 方法，
-     *
-     * @param context Context对象。
-     * @see #restore() 方法会尝试从本地恢复上一次保存的信息。
-     */
-    public MusicStorage(Context context) {
+    @Override
+    public void initDataSet(Context context) {
         mFileDir = context.getFilesDir().getAbsolutePath() + "/";
+        restore();
+    }
+
+    @Override
+    public void saveDataSet() {
+        save();
     }
 
     //*********************Durable************************
@@ -300,7 +301,12 @@ public class MusicStorage implements Durable {
      * @param listName 列表的名称。
      * @return 如果获取成功则返回 true，否则返回 false。
      */
+    @Override
     public DurableList<Music> getMusicList(String listName) {
+        if(listName.equals(MusicProvider.DEFAULT_MUSIC_LIST)) {
+            return mMusicLists.get(0);
+        }
+
         if (!isListExist(listName)) {
             //调试
             log("getMusicList : 失败 : " + listName + " [不存在]");

@@ -2,16 +2,13 @@ package jrfeng.simplemusic;
 
 import android.app.Application;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import jrfeng.simplemusic.base.BaseActivity;
 import jrfeng.simplemusic.model.MusicDBHelper;
-import jrfeng.simplemusic.model.MusicStorage;
-import jrfeng.simplemusic.service.player.PlayerClient;
-import jrfeng.simplemusic.utils.durable.Durable;
+import jrfeng.musicplayer.player.MusicPlayerClient;
 import jrfeng.simplemusic.utils.log.L;
 
 public class MyApplication extends Application {
@@ -20,25 +17,24 @@ public class MyApplication extends Application {
     private static MyApplication mMyApplication;
     private static List<BaseActivity> mActivityStack;
 
-    private PlayerClient mPlayerClient;
+    private MusicPlayerClient mPlayerClient;
 
     private SQLiteDatabase mMusicDB;
-    private MusicStorage mMusicStorage;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        //调试
+        L.d("App", "【************Application : onCreate****************】");
         if (mMyApplication == null) {
             mMyApplication = this;
             mActivityStack = new LinkedList<>();
-            mPlayerClient = new PlayerClient(this);
-            mMusicStorage = new MusicStorage(this);
+
+            mPlayerClient = MusicPlayerClient.getInstance();
 
             MusicDBHelper dBHelper = new MusicDBHelper(this, MusicDBHelper.DB_NAME, null, MusicDBHelper.DB_VERSION);
             mMusicDB = dBHelper.getWritableDatabase();
         }
-
-        Log.d("SimpleMusic", "Application onCreate");
     }
 
     public static MyApplication getInstance() {
@@ -64,12 +60,8 @@ public class MyApplication extends Application {
         mActivityStack.clear();
     }
 
-    public PlayerClient getPlayerClient() {
+    public MusicPlayerClient getPlayerClient() {
         return mPlayerClient;
-    }
-
-    public MusicStorage getMusicStorage() {
-        return mMusicStorage;
     }
 
     public SQLiteDatabase getMusicDB() {

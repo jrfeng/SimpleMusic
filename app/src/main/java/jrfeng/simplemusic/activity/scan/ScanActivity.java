@@ -7,11 +7,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import jrfeng.simplemusic.MyApplication;
 import jrfeng.simplemusic.R;
 import jrfeng.simplemusic.model.MusicStorage;
+import jrfeng.musicplayer.player.MusicPlayerClient;
 import jrfeng.simplemusic.utils.scanner.MusicScanner;
 
 public class ScanActivity extends AppCompatActivity {
@@ -26,7 +26,7 @@ public class ScanActivity extends AppCompatActivity {
         btnScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MusicStorage musicStorage = MyApplication.getInstance().getMusicStorage();
+                MusicStorage musicStorage = (MusicStorage) MusicPlayerClient.getInstance().getMusicProvider();
                 SQLiteDatabase musicDB = MyApplication.getInstance().getMusicDB();
                 final MusicScanner musicScanner = new MusicScanner(musicStorage, musicDB);
                 new Thread(){

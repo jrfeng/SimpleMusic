@@ -24,7 +24,7 @@ import jrfeng.simplemusic.activity.recentplay.RecentPlayActivity;
 import jrfeng.simplemusic.activity.artist.ArtistActivity;
 import jrfeng.simplemusic.activity.lovemusic.LoveMusicActivity;
 import jrfeng.simplemusic.activity.musiclist.MusicListActivity;
-import jrfeng.simplemusic.activity.navigation.NavigationContract;
+import jrfeng.simplemusic.activity.main.NavigationContract;
 import jrfeng.simplemusic.activity.scan.ScanActivity;
 
 public class NavigationMenuAdapter extends DelegateAdapter.Adapter<NavigationMenuAdapter.ViewHolder> {
@@ -88,23 +88,38 @@ public class NavigationMenuAdapter extends DelegateAdapter.Adapter<NavigationMen
     }
 
     public void setILoveMenuDesc(String desc) {
-        mMenuDescription.get("我喜欢").setText(desc);
+        TextView tvDesc = mMenuDescription.get("我喜欢");
+        if(tvDesc != null){
+            tvDesc.setText(desc);
+        }
     }
 
     public void setMusicListMenuDesc(String desc) {
-        mMenuDescription.get("歌单").setText(desc);
+        TextView tvDesc = mMenuDescription.get("歌单");
+        if(tvDesc != null){
+            tvDesc.setText(desc);
+        }
     }
 
     public void setAlbumMenuDesc(String desc) {
-        mMenuDescription.get("专辑").setText(desc);
+        TextView tvDesc = mMenuDescription.get("专辑");
+        if(tvDesc != null){
+            tvDesc.setText(desc);
+        }
     }
 
     public void setArtistMenuDesc(String desc) {
-        mMenuDescription.get("歌手").setText(desc);
+        TextView tvDesc = mMenuDescription.get("歌手");
+        if(tvDesc != null){
+            tvDesc.setText(desc);
+        }
     }
 
     public void setRecentPlayMenuDesc(String desc) {
-        mMenuDescription.get("最近播放").setText(desc);
+        TextView tvDesc = mMenuDescription.get("最近播放");
+        if(tvDesc != null){
+            tvDesc.setText(desc);
+        }
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

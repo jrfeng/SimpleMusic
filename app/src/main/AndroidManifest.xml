@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="jrfeng.simplemusic">
 
+    <permission android:name="jrfeng.simplemusic.permission.MUSIC_PLAYER_ACTION"/>
+
+    <uses-permission android:name="jrfeng.simplemusic.permission.MUSIC_PLAYER_ACTION"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -23,25 +26,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.navigation.NavigationActivity"
+            android:name=".activity.main.NavigationActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
 
-        <service android:name=".service.player.PlayerService"/>
-
-        <receiver
-            android:name=".service.player.MediaButtonControlReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="jrfeng.simplemusic.action.PLAYER_PREVIOUS"/>
-                <action android:name="jrfeng.simplemusic.action.PLAYER_PLAY_PAUSE"/>
-                <action android:name="jrfeng.simplemusic.action.PLAYER_NEXT"/>
-                <action android:name="jrfeng.simplemusic.action.PLAYER_SHUTDOWN"/>
-                <action android:name="android.media.AUDIO_BECOMING_NOISY"/>
-                <action android:name="android.intent.action.MEDIA_BUTTON"/>
-            </intent-filter>
-        </receiver>
+        <service android:name="jrfeng.musicplayer.player.MusicPlayerService"/>
 
         <activity android:name=".activity.scan.ScanActivity">
         </activity>
@@ -55,6 +44,32 @@
         </activity>
         <activity android:name=".activity.artist.ArtistActivity">
         </activity>
+
+        <receiver
+            android:name="jrfeng.musicplayer.player.MediaButtonReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="jrfeng.simplemusic.action.PLAYER_PREVIOUS"/>
+                <action android:name="jrfeng.simplemusic.action.PLAYER_PLAY_PAUSE"/>
+                <action android:name="jrfeng.simplemusic.action.PLAYER_NEXT"/>
+                <action android:name="jrfeng.simplemusic.action.PLAYER_SHUTDOWN"/>
+                <action android:name="android.media.AUDIO_BECOMING_NOISY"/>
+                <action android:name="android.intent.action.MEDIA_BUTTON"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".receiver.ShutdownActionReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="jrfeng.simplemusic.action.SHUTDOWN"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

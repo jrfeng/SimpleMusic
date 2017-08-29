@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.io.File;
 import java.io.FileFilter;
 
-import jrfeng.simplemusic.data.Music;
+import jrfeng.musicplayer.data.Music;
 import jrfeng.simplemusic.model.MusicDBHelper;
 import jrfeng.simplemusic.model.MusicStorage;
 import jrfeng.simplemusic.utils.mp3info.BaseInfo;

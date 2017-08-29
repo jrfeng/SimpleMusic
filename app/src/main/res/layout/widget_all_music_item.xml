@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/musicListItem"
     android:layout_width="match_parent"
     android:layout_height="56dp"
     android:background="@drawable/btn_normal_button"
-    android:orientation="vertical"
     android:clickable="true"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
         android:orientation="vertical">
 
         <TextView
@@ -38,12 +38,22 @@
 
     </LinearLayout>
 
+    <jrfeng.simplemusic.widget.Divider
+        android:id="@+id/dvMark"
+        android:layout_width="4dp"
+        android:layout_height="match_parent"
+        android:background="@color/colorBlue"
+        android:visibility="gone"
+        tools:visibility="visible"/>
+
     <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/ibMenu"
+        android:layout_width="48dp"
+        android:layout_height="match_parent"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:background="@color/colorTransparent"
+        android:scaleType="centerInside"
         android:src="@drawable/btn_list_item_menu"/>
 
     <jrfeng.simplemusic.widget.Divider
@@ -52,5 +62,4 @@
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
         android:background="@color/colorGrey300"/>
-
 </RelativeLayout>
