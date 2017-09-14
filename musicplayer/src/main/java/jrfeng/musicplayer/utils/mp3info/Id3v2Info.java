@@ -1,4 +1,4 @@
-package jrfeng.simplemusic.utils.mp3info;
+package jrfeng.musicplayer.utils.mp3info;
 
 import java.io.UnsupportedEncodingException;
 

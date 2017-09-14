@@ -19,7 +19,7 @@ import jrfeng.musicplayer.data.Music;
 import jrfeng.simplemusic.model.MusicDBHelper;
 import jrfeng.simplemusic.model.MusicStorage;
 import jrfeng.musicplayer.player.MusicPlayerClient;
-import jrfeng.musicplayer.player.MusicPlayerService;
+//import jrfeng.musicplayer.player.MusicPlayerService;
 import jrfeng.simplemusic.utils.durable.DurableList;
 
 public class NavigationPresenter extends BroadcastReceiver implements NavigationContract.Presenter {
@@ -33,7 +33,7 @@ public class NavigationPresenter extends BroadcastReceiver implements Navigation
 
     private List<Music> mAllMusicList;
 
-    private MusicPlayerService.MusicProgressListener mProgressListener = new MusicPlayerService.MusicProgressListener() {
+    private MusicPlayerClient.MusicProgressListener mProgressListener = new MusicPlayerClient.MusicProgressListener() {
         @Override
         public void onProgressUpdated(int progress) {
             mView.setProgress(progress);
@@ -104,20 +104,25 @@ public class NavigationPresenter extends BroadcastReceiver implements Navigation
     public void onReceive(Context context, Intent intent) {
         Log.d(MyApplication.TAG, "接收广播 : " + intent.getAction());
         switch (intent.getAction()) {
-            case MusicPlayerService.ACTION_ERROR:
+            case MusicPlayerClient.Action.ACTION_ERROR:
                 Toast.makeText(mContext, "Sorry!发生了异常", Toast.LENGTH_SHORT).show();
                 break;
-            case MusicPlayerService.ACTION_NEXT:
-            case MusicPlayerService.ACTION_PREVIOUS:
-                Music playingMusic = (Music) intent.getSerializableExtra(MusicPlayerService.KEY_PLAYING_MUSIC);
+            case MusicPlayerClient.Action.ACTION_PREPARED:
+                refreshControllerView();
+                break;
+            case MusicPlayerClient.Action.ACTION_MUSIC_NOT_EXIST:
+            case MusicPlayerClient.Action.ACTION_PLAY:
+                Music playingMusic = (Music) intent.getSerializableExtra(MusicPlayerClient.Key.KEY_PLAYING_MUSIC);
                 int position = mAllMusicList.indexOf(playingMusic);
                 mView.setChoice(position);
                 mView.scrollTo(position);     //发生歌曲切换时自动跳转到列表的指定位置
                 Log.d("Position", "" + position);
+                refreshControllerView();
+                break;
+            case MusicPlayerClient.Action.ACTION_PAUSE:
+                refreshControllerView();
                 break;
         }
-
-        refreshControllerView();
 
         MusicStorage musicStorage = (MusicStorage) mClient.getMusicProvider();
         int count_RecentPlay = musicStorage.getListCount("最近播放");
@@ -205,6 +210,7 @@ public class NavigationPresenter extends BroadcastReceiver implements Navigation
 
     @Override
     public void onListItemClicked(String listName, int position) {
+        refreshControllerView();
         if (mClient.getPlayingMusicIndex() == position) {
             mClient.play_pause();
         } else {
@@ -251,14 +257,21 @@ public class NavigationPresenter extends BroadcastReceiver implements Navigation
             return;
         }
 
+        Log.d("Navigation", "刷新ControllerView");
+
         if (mClient.isPlaying()) {
             mView.toggleToPlay();
         } else {
             mView.toggleToPause();
         }
 
-        mView.setProgressMax(mClient.getMusicLength());
-        mView.setProgress(mClient.getMusicProgress());
+        if (mClient.isPrepared()) {
+            mView.setProgressMax(mClient.getMusicLength());
+            mView.setProgress(mClient.getMusicProgress());
+        }else {
+            mView.setProgressMax(100);
+            mView.setProgress(0);
+        }
 
         if (!music.equals(mPlayingMusic)) {
             mPlayingMusic = music;
@@ -286,7 +299,7 @@ public class NavigationPresenter extends BroadcastReceiver implements Navigation
     }
 
     private void refreshAllMusicList() {
-        if (((DurableList)mAllMusicList).isChanged()) {
+        if (((DurableList) mAllMusicList).isChanged()) {
             mView.updateAllMusicList();
             mView.updateAllMusicListTitle();
             //同时更新 mAlbumCount 和 mArtistCount

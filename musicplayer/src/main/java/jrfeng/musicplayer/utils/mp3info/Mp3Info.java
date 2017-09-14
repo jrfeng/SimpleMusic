@@ -1,4 +1,4 @@
-package jrfeng.simplemusic.utils.mp3info;
+package jrfeng.musicplayer.utils.mp3info;
 
 import android.util.Log;
 
@@ -10,8 +10,6 @@ import org.jaudiotagger.tag.TagException;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-
-import jrfeng.simplemusic.MyApplication;
 
 public class Mp3Info {
     private byte[] id3v1;
@@ -55,14 +53,14 @@ public class Mp3Info {
             MP3File mp3File = new MP3File(file);
             lengthMesc = mp3File.getMP3AudioHeader().getTrackLength();
         } catch (IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException e) {
-            Log.e(MyApplication.TAG, e.toString());
+            Log.e("Mp3Info", e.toString());
         } finally {
             try {
                 if (rf != null) {
                     rf.close();
                 }
             } catch (IOException e) {
-                Log.e(MyApplication.TAG, e.toString());
+                Log.e("Mp3Info", e.toString());
             }
         }
     }

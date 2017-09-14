@@ -1,5 +1,6 @@
 package jrfeng.musicplayer.player;
 
+import android.app.Notification;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -42,30 +43,6 @@ public class MusicPlayerClient implements ServiceConnection, MusicPlayerControll
         return mInstance;
     }
 
-    public MusicProvider initMusicListProvider(Context context) {
-        //从配置文件解析
-        Class cl = decodeMusicProviderClass(context.getApplicationContext());
-        MusicProvider provider = null;
-        try {
-            if (cl != null) {
-                provider = (MusicProvider) cl.newInstance();
-                provider.initDataSet(context);
-            } else {
-                throw new NullPointerException("Class object is null. please check your \"music_player.xml\" file.");
-            }
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return provider;
-    }
-
-    public void disconnect(Context context) {
-        isConnect = false;
-        context.unbindService(this);
-    }
-
     public boolean isConnect() {
         return isConnect;
     }
@@ -74,8 +51,7 @@ public class MusicPlayerClient implements ServiceConnection, MusicPlayerControll
     public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
         isConnect = true;
         mController = (MusicPlayerService.Controller) iBinder;
-        mController.setMusicProvider(mMusicProvider);
-        mController.load();
+        mController.load(mMusicProvider);
         if (mConnectedListener != null) {
             mConnectedListener.onConnected();
             mConnectedListener = null;
@@ -138,6 +114,11 @@ public class MusicPlayerClient implements ServiceConnection, MusicPlayerControll
     }
 
     @Override
+    public boolean isPrepared() {
+        return mController.isPrepared();
+    }
+
+    @Override
     public Music getPlayingMusic() {
         return mController.getPlayingMusic();
     }
@@ -178,27 +159,17 @@ public class MusicPlayerClient implements ServiceConnection, MusicPlayerControll
     }
 
     @Override
-    public void reload() {
-        mController.reload();
-    }
-
-    @Override
-    public void setMusicProvider(MusicProvider musicProvider) {
-        mController.setMusicProvider(musicProvider);
-    }
-
-    @Override
     public MusicProvider getMusicProvider() {
         return mController.getMusicProvider();
     }
 
     @Override
-    public void addMusicProgressListener(MusicPlayerService.MusicProgressListener listener) {
+    public void addMusicProgressListener(MusicProgressListener listener) {
         mController.addMusicProgressListener(listener);
     }
 
     @Override
-    public void removeMusicProgressListener(MusicPlayerService.MusicProgressListener listener) {
+    public void removeMusicProgressListener(MusicProgressListener listener) {
         mController.removeMusicProgressListener(listener);
     }
 
@@ -209,6 +180,25 @@ public class MusicPlayerClient implements ServiceConnection, MusicPlayerControll
     }
 
     //***********************private********************
+
+    private MusicProvider initMusicListProvider(Context context) {
+        //从配置文件解析
+        Class cl = decodeMusicProviderClass(context.getApplicationContext());
+        MusicProvider provider = null;
+        try {
+            if (cl != null) {
+                provider = (MusicProvider) cl.newInstance();
+                provider.initDataSet(context);
+            } else {
+                throw new NullPointerException("Class object is null. please check your \"music_player.xml\" file.");
+            }
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return provider;
+    }
 
     private Class decodeMusicProviderClass(Context context) {
         //从配置文件解析
@@ -246,9 +236,46 @@ public class MusicPlayerClient implements ServiceConnection, MusicPlayerControll
         return cl;
     }
 
+    private void disconnect(Context context) {
+        isConnect = false;
+        context.unbindService(this);
+    }
+
     //**********************listener********************
 
     public interface OnConnectedListener {
         void onConnected();
+    }
+
+    public interface MusicProgressListener {
+        void onProgressUpdated(int progress);
+    }
+
+    public interface NotifyControllerView {
+        Notification getNotification(Context context, int notifyId);
+
+        void play();
+
+        void pause();
+
+        void updateText(String songName, String artist);
+    }
+
+    //**********************静态成员类****************
+
+    public static class Action {
+        public static final String ACTION_PLAY = "jrfeng.simplemusic.action.PLAY";
+        public static final String ACTION_PAUSE = "jrfeng.simplemusic.action.PAUSE";
+        public static final String ACTION_NEXT = "jrfeng.simplemusic.action.NEXT";
+        public static final String ACTION_PREVIOUS = "jrfeng.simplemusic.action.PREVIOUS";
+        public static final String ACTION_STOP = "jrfeng.simplemusic.action.STOP";
+        public static final String ACTION_PREPARED = "jrfeng.simplemusic.action.PREPARED";
+        public static final String ACTION_ERROR = "jrfeng.simplemusic.action.ERROR";
+        public static final String ACTION_SHUTDOWN = "jrfeng.simplemusic.action.SHUTDOWN";
+        public static final String ACTION_MUSIC_NOT_EXIST = "jrfeng.simplemusic.action.MUSIC_NOT_EXIST";
+    }
+
+    public static class Key {
+        public static final String KEY_PLAYING_MUSIC = "playing_music";
     }
 }

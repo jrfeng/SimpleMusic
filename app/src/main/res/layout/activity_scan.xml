@@ -1,14 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btnScan"
-        android:text="扫描本地音乐"
-        android:layout_centerInParent="true"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tbScan"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@color/colorBlue"
+        android:paddingTop="24dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+    </android.support.v7.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/tvMessage"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="扫描本地音文件"
+        android:textColor="@color/colorGrey800"
+        android:textSize="20sp"/>
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_above="@id/tvMessage"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="24dp"
+        android:src="@mipmap/ic_scan_big"/>
+
+    <Button
+        android:id="@+id/btnBeginScan"
+        android:layout_width="176dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="80dp"
+        android:background="@drawable/btn_scan"
+        android:text="开始扫描"
+        android:textColor="@color/colorWhite"
+        android:textSize="16sp"/>
+
+    <!--<TextView-->
+        <!--android:id="@+id/btnCustomScan"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_margin="16dp"-->
+        <!--android:text="@string/scan_custom"-->
+        <!--android:textColor="@color/colorBlueLight"-->
+        <!--android:textSize="12sp"/>-->
 
 </RelativeLayout>

@@ -6,7 +6,8 @@ import java.util.List;
 
 import jrfeng.musicplayer.data.Music;
 
-public interface MusicPlayerController {
+interface MusicPlayerController {
+
     void previous();
 
     void next();
@@ -27,6 +28,8 @@ public interface MusicPlayerController {
 
     boolean isLooping();
 
+    boolean isPrepared();
+
     Music getPlayingMusic();
 
     int getPlayingMusicIndex();
@@ -45,13 +48,9 @@ public interface MusicPlayerController {
 
     void shutdown(Context context);
 
-    void reload();
-
-    void setMusicProvider(MusicProvider musicProvider);
-
     MusicProvider getMusicProvider();
 
-    void addMusicProgressListener(MusicPlayerService.MusicProgressListener listener);
+    void addMusicProgressListener(MusicPlayerClient.MusicProgressListener listener);
 
-    void removeMusicProgressListener(MusicPlayerService.MusicProgressListener listener);
+    void removeMusicProgressListener(MusicPlayerClient.MusicProgressListener listener);
 }

@@ -13,6 +13,7 @@
     <color name="colorGrey800">#424242</color>
     <color name="colorBlack">#0B0B0B</color>
     <color name="colorBlue">#2196F3</color>
+    <color name="colorBlueLight">#64B5F6</color>
     <color name="colorBlueDark">#0D47A1</color>
     <color name="colorWhite">#FFF</color>
     <color name="colorTransparent">#0FFF</color>

@@ -18,7 +18,7 @@ import java.util.Scanner;
 
 import jrfeng.musicplayer.R;
 
-public class DefaultNotifyControllerView implements MusicPlayerService.NotifyControllerView {
+class DefaultNotifyControllerView implements MusicPlayerClient.NotifyControllerView {
     private RemoteViews mView;
     private Context mContext;
     private int mNotifyId;
