@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Theme Color -->
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <!--<color name="colorAccent">#2196F3</color>-->
 
+    <!-- Base Color -->
     <color name="colorGrey">#9E9E9E</color>
     <color name="colorGrey100">#F5F5F5</color>
     <color name="colorGrey200">#EEE</color>
@@ -17,4 +18,13 @@
     <color name="colorBlueDark">#0D47A1</color>
     <color name="colorWhite">#FFF</color>
     <color name="colorTransparent">#0FFF</color>
+
+    <!-- Text Color -->
+    <color name="textColorGrey">@color/colorGrey800</color>
+    <color name="textColorLightGrey">@color/colorGrey700</color>
+    <color name="textColorBlack">@color/colorBlack</color>
+    <color name="textColorWhite">@color/colorWhite</color>
+
+    <!-- Action Bar Color-->
+    <color name="actionBarColor">@color/colorBlue</color>
 </resources>

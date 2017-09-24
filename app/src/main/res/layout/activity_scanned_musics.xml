@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="264dp">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="216dp"
+            android:background="@color/colorBlue"
+            app:contentScrim="@color/colorBlue"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingTop="56dp"
+                app:layout_collapseMode="parallax">
+
+                <TextView
+                    android:id="@+id/tvNewMusicCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0首新歌曲"
+                    android:textColor="@color/textColorWhite"
+                    android:textSize="@dimen/textSizeLarge"
+                    tools:text="16首新歌曲"/>
+
+                <TextView
+                    android:id="@+id/tvScannedMusicCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="扫描到0首歌曲"
+                    android:textColor="@color/textColorWhite"
+                    android:textSize="@dimen/textSizeMedium"
+                    tools:text="扫描到316首歌曲"/>
+
+            </LinearLayout>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/tbScanned"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/actionBarHeightWithStatus"
+                android:background="@color/colorBlue"
+                android:paddingTop="@dimen/statusBarHeight"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:layout_collapseMode="pin">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="添加"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/textSizeLarge"/>
+
+            </android.support.v7.widget.Toolbar>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+        <include
+            android:id="@+id/scannedMusicsTitle"
+            layout="@layout/widget_scanned_musics_title_menu"/>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvScannedMusics"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+</android.support.design.widget.CoordinatorLayout>

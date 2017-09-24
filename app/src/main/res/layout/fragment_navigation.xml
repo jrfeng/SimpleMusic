@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/widget_action_bar"/>
+    <include layout="@layout/widget_seach_action_bar"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvNavMenu"
@@ -15,5 +15,5 @@
         android:background="@color/colorWhite"
         android:overScrollMode="ifContentScrolls"/>
 
-    <include layout="@layout/widget_controller"/>
+    <include layout="@layout/widget_control"/>
 </LinearLayout>

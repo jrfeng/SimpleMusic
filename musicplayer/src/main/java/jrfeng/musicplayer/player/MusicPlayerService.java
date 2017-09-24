@@ -403,7 +403,7 @@ public class MusicPlayerService extends Service {
 
             if (mPlayingMusic == null) {
                 //调试
-                logE("PlayingMusic is Null");
+                logE("PlayingMusic is Null, Not prepare");
                 return;
             }
 
@@ -554,7 +554,7 @@ public class MusicPlayerService extends Service {
 
             if (mPlayingMusic == null) {
                 //调试
-                logE("PlayingMusic is Null");
+                logE("PlayingMusic is Null, Not previous");
                 return;
             }
 
@@ -575,7 +575,7 @@ public class MusicPlayerService extends Service {
 
             if (mPlayingMusic == null) {
                 //调试
-                logE("PlayingMusic is Null");
+                logE("PlayingMusic is Null, Not next");
                 return;
             }
 
@@ -596,7 +596,7 @@ public class MusicPlayerService extends Service {
 
             if (mPlayingMusic == null) {
                 //调试
-                logE("PlayingMusic is Null");
+                logE("PlayingMusic is Null, Not play");
                 return;
             }
 
@@ -649,7 +649,7 @@ public class MusicPlayerService extends Service {
 
             if (mPlayingMusic == null) {
                 //调试
-                logE("PlayingMusic is Null");
+                logE("PlayingMusic is Null, Not pause");
                 return;
             }
 
@@ -683,7 +683,7 @@ public class MusicPlayerService extends Service {
             log("stop");
             if (mPlayingMusic == null) {
                 //调试
-                logE("PlayingMusic is Null");
+                logE("PlayingMusic is Null, Not stop");
                 return;
             }
             //更新View
@@ -722,6 +722,9 @@ public class MusicPlayerService extends Service {
 
             //发送结束应用程序的广播
             sendActionBroadcast(MusicPlayerClient.Action.ACTION_SHUTDOWN);
+            Log.d("App", "【发送广播】 : " + MusicPlayerClient.Action.ACTION_SHUTDOWN);
+            Intent intent = new Intent(MusicPlayerClient.Action.ACTION_SHUTDOWN);
+            sendBroadcast(intent);
             release();
             stopSelf();
         }

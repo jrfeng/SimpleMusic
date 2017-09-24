@@ -44,13 +44,13 @@ public class NavigationActivity extends BaseActivity {
         intentFilter.addAction(MusicPlayerClient.Action.ACTION_ERROR);
         intentFilter.addAction(MusicPlayerClient.Action.ACTION_MUSIC_NOT_EXIST);
         registerReceiver((BroadcastReceiver) mPresenter, intentFilter);
-        mPresenter.start();
+        mPresenter.begin();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         unregisterReceiver((BroadcastReceiver) mPresenter);
-        mPresenter.stop();
+        mPresenter.end();
     }
 }

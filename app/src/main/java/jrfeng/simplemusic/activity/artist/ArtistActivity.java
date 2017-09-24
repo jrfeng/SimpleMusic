@@ -1,11 +1,11 @@
 package jrfeng.simplemusic.activity.artist;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import jrfeng.simplemusic.R;
+import jrfeng.simplemusic.base.BaseActivity;
 
-public class ArtistActivity extends AppCompatActivity {
+public class ArtistActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

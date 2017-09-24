@@ -1,4 +1,4 @@
-package jrfeng.simplemusic.adpter.vlayout;
+package jrfeng.simplemusic.activity.main.adpter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -42,7 +42,7 @@ public class AllMusicAdapter extends DelegateAdapter.Adapter<AllMusicAdapter.Vie
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.widget_all_music_item, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.widget_music_list_item, parent, false);
         return new ViewHolder(view);
     }
 

@@ -1,29 +1,34 @@
 package jrfeng.musicplayer.utils.scanner;
 
-import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FileNotFoundException;
 import java.util.LinkedList;
 import java.util.List;
 
 import jrfeng.musicplayer.data.Music;
 import jrfeng.musicplayer.utils.mp3info.BaseInfo;
-import jrfeng.musicplayer.utils.mp3info.Id3v2Info;
 import jrfeng.musicplayer.utils.mp3info.Mp3Info;
 
 public class MusicScanner {
+    private static final String TAG = "MusicScanner";
+    private static final int DIR_DEEP = 3; //目录的深度默认为3。如果需要更深的目录，将该值增大即可。
+    private List<File> mDirs;
     private List<Music> mMusicTemp;
-    private List<Music> mHasMusic;
     private Mp3Info mMp3Info;
 
     private FileFilter mFileFilter;
     private FileFilter mDirFilter;
 
+    private Thread mScanThread;
+
     private OnScanListener mListener;
 
+    private int mScanPercent;
+
     public MusicScanner() {
+        mDirs = new LinkedList<>();
         mMusicTemp = new LinkedList<>();
         mFileFilter = new FileFilter() {
             @Override
@@ -41,82 +46,101 @@ public class MusicScanner {
         };
     }
 
-    /**
-     * 扫描单个目录下的 mp3 音乐。
-     * @param targetDir  要扫描的目录。
-     * @param has        已经有的音乐，用来过滤已有的音乐（为 null 时则不过滤任何音乐）。
-     * @param listener   扫描监听器，它会在扫描开始时、扫描时、扫描接收时接收到通知。
-     * @throws FileNotFoundException 指定目录不存在时会抛出该异常。
-     */
-    public void scan(File targetDir, List<Music> has, @NonNull OnScanListener listener) throws FileNotFoundException {
-        scan(new File[]{targetDir}, has, listener);
+    public void scan(File targetDir, OnScanListener listener) {
+        scan(new File[]{targetDir}, listener);
     }
 
-    /**
-     * 扫描一系列指定目录下的 mp3 音乐。
-     * @param dirs      要扫描的目录。
-     * @param has       已经有的音乐，用来过滤已有的音乐（为 null 时则不过滤任何音乐）。
-     * @param listener  扫描监听器，它会在扫描开始时、扫描时、扫描接收时接收到通知。
-     */
-    public void scan(final File[] dirs, List<Music> has, @NonNull OnScanListener listener) {
-        mHasMusic = has;
+    public void scan(final File[] dirs, OnScanListener listener) {
+        mScanPercent = 0;
+        mMusicTemp.clear();
         mMp3Info = new Mp3Info();
         mListener = listener;
         mListener.onStart();
-        new Thread() {
+        mScanThread = new Thread() {
             @Override
             public void run() {
-                try {
-                    for (File f : dirs) {
-                        scan(f);
-                    }
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+                //调试
+                Log.d(TAG, "开始扫描");
+
+                for (File dir : dirs) {
+                    getDirs(dir, 0);
+                }
+                scan();
+                if (!Thread.currentThread().isInterrupted() && mListener != null) {
+                    mListener.onFinished(mMusicTemp);
                 }
                 mMp3Info.release();
-                mListener.onFinished(mMusicTemp);
+                mDirs.clear();
                 mListener = null;
-                if (mHasMusic != null) {
-                    mHasMusic = null;
-                }
+
+                //调试
+                Log.d(TAG, "结束扫描");
             }
-        }.start();
+        };
+        mScanThread.start();
+    }
+
+    public void stopScan() {
+        //调试
+        Log.d(TAG, "终止扫描");
+        mScanThread.interrupt();
     }
 
     //********************private******************
 
-    private void scan(File targetDir) throws FileNotFoundException {
-        if (!targetDir.exists()) {
-            throw new FileNotFoundException(targetDir.getAbsolutePath() + " not exist.");
+    private void scan() {
+        for (int i = 0; i < mDirs.size(); i++) {
+            if (Thread.currentThread().isInterrupted()) {
+                return;
+            }
+            mScanPercent = (int) Math.round(((double) i / mDirs.size()) * 100);
+            if (mListener != null) {
+                mListener.onScan(mScanPercent,
+                        mDirs.get(i).getAbsolutePath(),
+                        mMusicTemp.size());
+            }
+            File[] musicFiles = mDirs.get(i).listFiles(mFileFilter);
+            addToTemp(musicFiles);
+        }
+    }
+
+    private void getDirs(File dir, int currentDeep) {
+        if (Thread.currentThread().isInterrupted()) {
+            return;
         }
 
-        if (!targetDir.isDirectory()) {
-            throw new IllegalArgumentException(targetDir.getAbsolutePath() + " not a directory");
+        //调试
+        Log.d(TAG, "获取目录 : " + dir);
+
+        mDirs.add(dir);
+        if (mListener != null) {
+            mListener.onScan(mScanPercent,
+                    dir.getAbsolutePath(),
+                    mMusicTemp.size());
         }
-
-        File[] musicFiles = targetDir.listFiles(mFileFilter);
-
-        addToTemp(musicFiles);
-
-        File[] dirs = targetDir.listFiles(mDirFilter);
-
-        if (dirs != null) {
-            for (File dir : dirs) {
-                scan(dir);
+        File[] subDirs = dir.listFiles(mDirFilter);
+        if (subDirs != null && currentDeep < DIR_DEEP) {
+            for (File d : subDirs) {
+                getDirs(d, currentDeep + 1);
             }
         }
     }
 
     private void addToTemp(File[] musicFiles) {
-        if (musicFiles == null) {
+        if (musicFiles == null || Thread.currentThread().isInterrupted()) {
             return;
         }
 
         String name;
-        for (File f : musicFiles) {
+        for (int i = 0; i < musicFiles.length; i++) {
+            File f = musicFiles[i];
+            if (mListener != null) {
+                mListener.onScan(mScanPercent,
+                        f.getAbsolutePath(),
+                        mMusicTemp.size());
+            }
             name = f.getName();
             String songName = name.substring(0, name.lastIndexOf("."));
-            mListener.onScan(name);
             if (name.endsWith(".mp3")) {
                 mMp3Info.load(f);
                 //过滤小于60秒的文件
@@ -125,6 +149,23 @@ public class MusicScanner {
                 }
 
                 BaseInfo baseInfo;
+
+                //ID3V1 信息优先
+//                if (mMp3Info.hasId3v1()) {
+//                    baseInfo = mMp3Info.getId3v1Info();
+//                } else if (mMp3Info.hasId3v2()) {
+//                    baseInfo = mMp3Info.getId3v2Info();
+//                } else {
+//                    addMusic(new Music(f.getAbsolutePath(),
+//                            songName,
+//                            "未知",
+//                            "未知",
+//                            "未知",
+//                            "未知"));
+//                    continue;
+//                }
+
+                //ID3V2 信息优先
                 if (mMp3Info.hasId3v2()) {
                     baseInfo = mMp3Info.getId3v2Info();
                 } else if (mMp3Info.hasId3v1()) {
@@ -150,13 +191,10 @@ public class MusicScanner {
     }
 
     private void addMusic(Music music) {
-        if (mHasMusic != null) {
-            if (!mHasMusic.contains(music)) {
-                mMusicTemp.add(music);
-            }
-        } else {
-            mMusicTemp.add(music);
-        }
+        //调试
+        Log.d(TAG, "添加音乐 : " + music.getSongName());
+
+        mMusicTemp.add(music);
     }
 
     //******************interface*******************
@@ -164,7 +202,7 @@ public class MusicScanner {
     public interface OnScanListener {
         void onStart();
 
-        void onScan(String file);
+        void onScan(int percent, String path, int count);
 
         void onFinished(List<Music> musics);
     }

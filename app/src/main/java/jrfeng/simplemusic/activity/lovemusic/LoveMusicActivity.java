@@ -1,11 +1,11 @@
 package jrfeng.simplemusic.activity.lovemusic;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import jrfeng.simplemusic.R;
+import jrfeng.simplemusic.base.BaseActivity;
 
-public class LoveMusicActivity extends AppCompatActivity {
+public class LoveMusicActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

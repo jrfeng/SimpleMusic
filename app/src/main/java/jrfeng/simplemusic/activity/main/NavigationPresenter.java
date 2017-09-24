@@ -88,7 +88,7 @@ public class NavigationPresenter extends BroadcastReceiver implements Navigation
     }
 
     @Override
-    public void start() {
+    public void begin() {
         refreshControllerView();
         refreshAllMusicList();
         mView.setChoice(mClient.getPlayingMusicIndex());
@@ -96,7 +96,7 @@ public class NavigationPresenter extends BroadcastReceiver implements Navigation
     }
 
     @Override
-    public void stop() {
+    public void end() {
         mClient.removeMusicProgressListener(mProgressListener);
     }
 

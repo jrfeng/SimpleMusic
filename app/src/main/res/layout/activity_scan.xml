@@ -2,14 +2,17 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/tbScan"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@color/colorBlue"
+        android:layout_height="@dimen/actionBarHeightWithStatus"
+        android:background="@color/actionBarColor"
         android:paddingTop="24dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
@@ -21,9 +24,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="扫描本地音文件"
-        android:textColor="@color/colorGrey800"
-        android:textSize="20sp"/>
+        android:text="扫描本地音乐"
+        android:textColor="@color/textColorGrey"
+        android:textSize="@dimen/textSizeMedium"/>
 
     <ImageView
         android:layout_width="120dp"
@@ -31,10 +34,78 @@
         android:layout_above="@id/tvMessage"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="24dp"
+        android:scaleType="fitCenter"
         android:src="@mipmap/ic_scan_big"/>
 
+    <TextView
+        android:id="@+id/tvScanningHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvMessage"
+        android:layout_marginLeft="64dp"
+        android:layout_marginTop="18dp"
+        android:text="正在扫描:"
+        android:textColor="@color/textColorLightGrey"
+        android:textSize="@dimen/textSizeSmall"
+        android:visibility="invisible"
+        tools:visibility="visible"/>
+
+    <TextView
+        android:id="@+id/tvScannedPathHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvMessage"
+        android:layout_marginTop="18dp"
+        android:layout_toRightOf="@id/tvScanningHint"
+        android:ellipsize="start"
+        android:maxEms="12"
+        android:singleLine="true"
+        android:textColor="@color/textColorLightGrey"
+        android:textSize="@dimen/textSizeSmall"
+        android:visibility="invisible"
+        tools:text="asasdsasdadaasdad/kugou/music/crazy.mp3"
+        tools:visibility="visible"/>
+
+    <TextView
+        android:id="@+id/tvScanCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvScannedPathHint"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text="0"
+        android:textColor="@color/colorBlue"
+        android:textSize="34sp"
+        android:visibility="invisible"
+        tools:text="216"
+        tools:visibility="visible"/>
+
+    <TextView
+        android:id="@+id/tvScanCountHint1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/tvScanCount"
+        android:layout_toLeftOf="@id/tvScanCount"
+        android:text="扫描到"
+        android:textColor="@color/colorGrey800"
+        android:textSize="16sp"
+        android:visibility="invisible"
+        tools:visibility="visible"/>
+
+    <TextView
+        android:id="@+id/tvScanCountHint2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/tvScanCount"
+        android:layout_toRightOf="@id/tvScanCount"
+        android:text="首音乐"
+        android:textColor="@color/colorGrey800"
+        android:textSize="16sp"
+        android:visibility="invisible"
+        tools:visibility="visible"/>
+
     <Button
-        android:id="@+id/btnBeginScan"
+        android:id="@+id/btnScanSwitch"
         android:layout_width="176dp"
         android:layout_height="40dp"
         android:layout_alignParentBottom="true"
@@ -45,15 +116,15 @@
         android:textColor="@color/colorWhite"
         android:textSize="16sp"/>
 
-    <!--<TextView-->
-        <!--android:id="@+id/btnCustomScan"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_margin="16dp"-->
-        <!--android:text="@string/scan_custom"-->
-        <!--android:textColor="@color/colorBlueLight"-->
-        <!--android:textSize="12sp"/>-->
+    <TextView
+        android:id="@+id/tvCustomScan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="16dp"
+        android:text="@string/scan_custom"
+        android:textColor="@color/colorBlueLight"
+        android:textSize="12sp"/>
 
 </RelativeLayout>

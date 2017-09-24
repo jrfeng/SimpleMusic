@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lyActionBar"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
-    android:background="@color/colorBlue"
+    android:layout_height="@dimen/actionBarHeightWithStatus"
+    android:background="@color/actionBarColor"
     android:orientation="vertical"
     android:paddingLeft="12dp"
-    android:paddingRight="12dp"
-    android:id="@+id/lyActionBar">
+    android:paddingRight="12dp">
 
     <TextView
         android:id="@+id/tvSearch"

@@ -1,4 +1,4 @@
-package jrfeng.simplemusic.adpter.vlayout;
+package jrfeng.simplemusic.activity.main.adpter;
 
 import android.content.Context;
 import android.content.Intent;

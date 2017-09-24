@@ -107,10 +107,13 @@ public class MusicStorage implements Durable, MusicProvider {
      * 调用该方法以保存当前 Activity/Service 所做的修改。
      */
     @Override
-    public synchronized void saveAsync() {
-        mListNames.saveAsync();
+    public synchronized void saveAsync(OnSavedListener listener) {
+        mListNames.saveAsync(null);
         for (int i = 0; i < mMusicLists.size(); i++) {
-            mMusicLists.get(i).saveAsync();
+            mMusicLists.get(i).saveAsync(null);
+        }
+        if(listener != null) {
+            listener.onSaved();
         }
     }
 
@@ -165,7 +168,7 @@ public class MusicStorage implements Durable, MusicProvider {
         }
 
         if (mAutoSave) {  //是否自动保存
-            saveAsync();
+            saveAsync(null);
         }
 
         //调试
@@ -192,7 +195,7 @@ public class MusicStorage implements Durable, MusicProvider {
         mMusicLists.add(new DurableList<Music>(mFileDir + listName + ".dat"));
 
         if (mAutoSave) {  //是否自动保存
-            saveAsync();
+            saveAsync(null);
         }
 
         //调试
@@ -222,7 +225,7 @@ public class MusicStorage implements Durable, MusicProvider {
             mMusicLists.get(i).remove(music);
         }
 
-        saveAsync();  //保存修改
+        saveAsync(null);  //保存修改
 
         //调试
         log("removeMusicFromAllList : 从所有列表移除 : " + music.getSongName() + " : 成功");
@@ -254,7 +257,7 @@ public class MusicStorage implements Durable, MusicProvider {
 
         mMusicLists.get(index).remove(music);
 
-        saveAsync();  //保存修改
+        saveAsync(null);  //保存修改
         //调试
         log("removeMusic : 成功 : " + listName + " : " + music.getSongName());
         return true;
@@ -285,7 +288,7 @@ public class MusicStorage implements Durable, MusicProvider {
         mListNames.remove(listName);
 
         if (mAutoSave) {  //是否自动保存
-            saveAsync();
+            saveAsync(null);
         }
 
         //调试

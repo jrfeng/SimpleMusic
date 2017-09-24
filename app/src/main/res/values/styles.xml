@@ -8,4 +8,15 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="TextViewStyle">
+        <item name="android:textSize">@dimen/textSizeNormal</item>
+        <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
+    <style name="TextViewStyle.Normal"/>
+
+    <style name="TextViewStyle.Normal_Grey">
+        <item name="android:textSize">@dimen/textSizeNormal</item>
+        <item name="android:textColor">@color/textColorGrey</item>
+    </style>
 </resources>

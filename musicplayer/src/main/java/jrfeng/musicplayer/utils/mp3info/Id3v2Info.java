@@ -95,8 +95,9 @@ public class Id3v2Info implements BaseInfo {
         int charsetType = buf[index + 10];
         String charset = decodeCharset(charsetType);
         try {
-            return new String(buf, index + 11, size - 1, charset);
-        } catch (UnsupportedEncodingException e) {
+            String msg = new String(buf, index + 11, size - 1, charset);
+            return msg.length() > 1 ? msg : "未知";
+        } catch (UnsupportedEncodingException | StringIndexOutOfBoundsException e) {
             e.printStackTrace();
             return "未知";
         }

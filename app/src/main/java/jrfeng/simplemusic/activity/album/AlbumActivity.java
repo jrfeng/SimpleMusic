@@ -1,11 +1,11 @@
 package jrfeng.simplemusic.activity.album;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import jrfeng.simplemusic.R;
+import jrfeng.simplemusic.base.BaseActivity;
 
-public class AlbumActivity extends AppCompatActivity {
+public class AlbumActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

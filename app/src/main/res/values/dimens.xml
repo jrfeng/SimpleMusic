@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Action Bar Dimen-->
+    <dimen name="statusBarHeight">24dp</dimen>
+    <dimen name="actionBarHeight">56dp</dimen>
+    <dimen name="actionBarHeightWithStatus">80dp</dimen>
+
+    <!-- Text Dimen -->
+    <dimen name="textSizeSmall">12sp</dimen>
+    <dimen name="textSizeNormal">14sp</dimen>
+    <dimen name="textSizeMedium">16sp</dimen>
+    <dimen name="textSizeLarge">20sp</dimen>
+    <dimen name="textSizeLarger">24sp</dimen>
+    <dimen name="textSizeLargerX">34sp</dimen>
+    <dimen name="textSizeLargerXX">45sp</dimen>
+    <dimen name="textSizeLargerXXX">56sp</dimen>
+    <dimen name="textSizeLargerXXXX">112sp</dimen>
+</resources>

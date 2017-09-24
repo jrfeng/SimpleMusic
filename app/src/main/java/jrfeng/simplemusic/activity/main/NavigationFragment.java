@@ -22,10 +22,10 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import jrfeng.simplemusic.R;
-import jrfeng.simplemusic.adpter.vlayout.AllMusicTitleAdapter;
+import jrfeng.simplemusic.activity.main.adpter.AllMusicTitleAdapter;
 import jrfeng.simplemusic.adpter.vlayout.DividerAdapter;
-import jrfeng.simplemusic.adpter.vlayout.NavigationMenuAdapter;
-import jrfeng.simplemusic.adpter.vlayout.AllMusicAdapter;
+import jrfeng.simplemusic.activity.main.adpter.NavigationMenuAdapter;
+import jrfeng.simplemusic.activity.main.adpter.AllMusicAdapter;
 import jrfeng.musicplayer.data.Music;
 
 public class NavigationFragment extends Fragment implements NavigationContract.View {

@@ -1,6 +1,7 @@
 package jrfeng.simplemusic.activity.welcome;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.WindowManager;
 
@@ -12,6 +13,7 @@ import jrfeng.simplemusic.R;
 import jrfeng.simplemusic.activity.main.NavigationActivity;
 import jrfeng.simplemusic.base.BaseActivity;
 import jrfeng.musicplayer.player.MusicPlayerClient;
+import jrfeng.simplemusic.receiver.ShutdownActionReceiver;
 
 public class WelcomeActivity extends BaseActivity {
     private boolean mIsActive = true;
@@ -36,7 +38,7 @@ public class WelcomeActivity extends BaseActivity {
             client.connect(getApplicationContext());
         }
 
-        //启动定时器, 延时2秒
+        //启动定时器, 延时1秒
         final Timer timer = new Timer(true);
         timer.schedule(new TimerTask() {
             @Override
@@ -48,7 +50,7 @@ public class WelcomeActivity extends BaseActivity {
                 }
                 timer.cancel();
             }
-        }, 2000);
+        }, 1000);
     }
 
 
