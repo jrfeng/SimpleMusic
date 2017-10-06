@@ -5,6 +5,7 @@ import android.content.Context;
 import java.util.List;
 
 import jrfeng.musicplayer.data.Music;
+import jrfeng.musicplayer.mode.MusicStorage;
 
 interface MusicPlayerController {
 
@@ -16,7 +17,7 @@ interface MusicPlayerController {
 
     void play(int position);
 
-    void play(String listName, int position);
+    void playMusicGroup(MusicStorage.GroupType groupType, String groupName, int position);
 
     void pause();
 
@@ -47,8 +48,6 @@ interface MusicPlayerController {
     int getMusicProgress();
 
     void shutdown(Context context);
-
-    MusicProvider getMusicProvider();
 
     void addMusicProgressListener(MusicPlayerClient.MusicProgressListener listener);
 

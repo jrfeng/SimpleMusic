@@ -4,19 +4,19 @@ import android.util.Log;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
 import jrfeng.musicplayer.data.Music;
-import jrfeng.musicplayer.utils.mp3info.BaseInfo;
-import jrfeng.musicplayer.utils.mp3info.Mp3Info;
+import jrfeng.musicplayer.utils.mp3.MP3Info;
+import jrfeng.musicplayer.utils.mp3.MP3Util;
 
 public class MusicScanner {
     private static final String TAG = "MusicScanner";
     private static final int DIR_DEEP = 3; //目录的深度默认为3。如果需要更深的目录，将该值增大即可。
     private List<File> mDirs;
     private List<Music> mMusicTemp;
-    private Mp3Info mMp3Info;
 
     private FileFilter mFileFilter;
     private FileFilter mDirFilter;
@@ -46,14 +46,14 @@ public class MusicScanner {
         };
     }
 
-    public void scan(File targetDir, OnScanListener listener) {
-        scan(new File[]{targetDir}, listener);
-    }
+//    该方法目前用不上
+//    public void scan(File targetDir, OnScanListener listener) {
+//        scan(new File[]{targetDir}, listener);
+//    }
 
     public void scan(final File[] dirs, OnScanListener listener) {
         mScanPercent = 0;
         mMusicTemp.clear();
-        mMp3Info = new Mp3Info();
         mListener = listener;
         mListener.onStart();
         mScanThread = new Thread() {
@@ -69,7 +69,6 @@ public class MusicScanner {
                 if (!Thread.currentThread().isInterrupted() && mListener != null) {
                     mListener.onFinished(mMusicTemp);
                 }
-                mMp3Info.release();
                 mDirs.clear();
                 mListener = null;
 
@@ -132,8 +131,7 @@ public class MusicScanner {
         }
 
         String name;
-        for (int i = 0; i < musicFiles.length; i++) {
-            File f = musicFiles[i];
+        for (File f : musicFiles) {
             if (mListener != null) {
                 mListener.onScan(mScanPercent,
                         f.getAbsolutePath(),
@@ -142,50 +140,21 @@ public class MusicScanner {
             name = f.getName();
             String songName = name.substring(0, name.lastIndexOf("."));
             if (name.endsWith(".mp3")) {
-                mMp3Info.load(f);
-                //过滤小于60秒的文件
-                if (mMp3Info.getLengthSeconds() < 60) {
-                    continue;
-                }
-
-                BaseInfo baseInfo;
-
-                //ID3V1 信息优先
-//                if (mMp3Info.hasId3v1()) {
-//                    baseInfo = mMp3Info.getId3v1Info();
-//                } else if (mMp3Info.hasId3v2()) {
-//                    baseInfo = mMp3Info.getId3v2Info();
-//                } else {
-//                    addMusic(new Music(f.getAbsolutePath(),
-//                            songName,
-//                            "未知",
-//                            "未知",
-//                            "未知",
-//                            "未知"));
-//                    continue;
-//                }
-
-                //ID3V2 信息优先
-                if (mMp3Info.hasId3v2()) {
-                    baseInfo = mMp3Info.getId3v2Info();
-                } else if (mMp3Info.hasId3v1()) {
-                    baseInfo = mMp3Info.getId3v1Info();
-                } else {
+                try {
+                    MP3Info mp3Info = MP3Util.load(f);
+                    //过滤小于60秒的文件
+                    if (mp3Info.getLengthMesc() < 60) {
+                        continue;
+                    }
                     addMusic(new Music(f.getAbsolutePath(),
                             songName,
-                            "未知",
-                            "未知",
-                            "未知",
-                            "未知"));
-                    continue;
+                            mp3Info.getArtist(),
+                            mp3Info.getAlbum(),
+                            mp3Info.getYear(),
+                            mp3Info.getComment()));
+                } catch (IOException e) {
+                    System.err.println(e.toString());
                 }
-
-                addMusic(new Music(f.getAbsolutePath(),
-                        songName,
-                        baseInfo.getArtist(),
-                        baseInfo.getAlbum(),
-                        baseInfo.getYear(),
-                        baseInfo.getComment()));
             }
         }
     }

@@ -13,18 +13,26 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import jrfeng.musicplayer.data.Music;
+import jrfeng.musicplayer.player.MusicPlayerClient;
 import jrfeng.simplemusic.R;
 import jrfeng.simplemusic.activity.scan.scannedmusics.Adapter.ScannedMusicsAdapter;
 import jrfeng.simplemusic.base.BaseActivity;
+import jrfeng.musicplayer.mode.MusicStorageImp;
 
 public class ScannedMusicsActivity extends BaseActivity {
+    private MusicStorageImp mMusicStorageImp;
+    private List<Music> mNewMusic;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanned_musics);
         overridePendingTransition(R.anim.enter_from_bottom, R.anim.exit_no_anim);
+        MusicPlayerClient client = MusicPlayerClient.getInstance();
+        mMusicStorageImp = (MusicStorageImp) client.getMusicStorage();
         init();
     }
 
@@ -45,25 +53,39 @@ public class ScannedMusicsActivity extends BaseActivity {
         RecyclerView rvScannedMusics = (RecyclerView) findViewById(R.id.rvScannedMusics);
         RecyclerView.LayoutManager lm = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rvScannedMusics.setLayoutManager(lm);
-        ScannedMusicsAdapter adapter = new ScannedMusicsAdapter(this, musics, findViewById(R.id.scannedMusicsTitle));
-        rvScannedMusics.setAdapter(adapter);
 
         TextView tvScannedMusicCount = (TextView) findViewById(R.id.tvScannedMusicCount);
         TextView tvNewMusicCount = (TextView) findViewById(R.id.tvNewMusicCount);
 
+        initNewMusic(musics);
+
         tvScannedMusicCount.setText("扫描到" + musics.size() + "首歌曲");
-        //TODO 计算出新歌曲数量
-        tvNewMusicCount.setText(musics.size() + "首新歌曲");
+        tvNewMusicCount.setText(mNewMusic.size() + "首新歌曲");
+
+        final ScannedMusicsAdapter adapter = new ScannedMusicsAdapter(this, mNewMusic, findViewById(R.id.scannedMusicsTitle));
+        rvScannedMusics.setAdapter(adapter);
 
         Button btnCommitAdd = (Button) findViewById(R.id.btnCommitAdd);
         btnCommitAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                boolean[] choice = adapter.getItemsChoiceState();
+                mMusicStorageImp.addMusics(choice, mNewMusic);
                 setResult(RESULT_OK);
                 finish();
-                //TODO 添加到MusicProvider
             }
         });
+    }
+
+    private void initNewMusic(List<Music> scannedMusic) {
+        List<Music> allMusic = mMusicStorageImp.getAllMusic();
+
+        mNewMusic = new LinkedList<>();
+        for (Music music : scannedMusic) {
+            if (!allMusic.contains(music)) {
+                mNewMusic.add(music);
+            }
+        }
     }
 
     @Override

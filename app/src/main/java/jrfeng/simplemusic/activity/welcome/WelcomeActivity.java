@@ -35,22 +35,25 @@ public class WelcomeActivity extends BaseActivity {
         final MusicPlayerClient client = MyApplication.getInstance().getPlayerClient();
 
         if (!client.isConnect()) {
-            client.connect(getApplicationContext());
-        }
-
-        //启动定时器, 延时1秒
-        final Timer timer = new Timer(true);
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (mIsActive) {
-                    //启动MainActivity
-                    Intent intent = new Intent(WelcomeActivity.this, NavigationActivity.class);
-                    startActivity(intent);
+            client.connect(getApplicationContext(), new MusicPlayerClient.OnConnectedListener() {
+                @Override
+                public void onConnected() {
+                    //启动定时器, 延时1秒
+                    final Timer timer = new Timer(true);
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            if (mIsActive) {
+                                //启动MainActivity
+                                Intent intent = new Intent(WelcomeActivity.this, NavigationActivity.class);
+                                startActivity(intent);
+                            }
+                            timer.cancel();
+                        }
+                    }, 1000);
                 }
-                timer.cancel();
-            }
-        }, 1000);
+            });
+        }
     }
 
 

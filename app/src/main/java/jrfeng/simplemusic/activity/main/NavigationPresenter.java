@@ -3,8 +3,6 @@ package jrfeng.simplemusic.activity.main;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -14,13 +12,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import jrfeng.musicplayer.mode.MusicStorage;
 import jrfeng.simplemusic.MyApplication;
 import jrfeng.musicplayer.data.Music;
-import jrfeng.simplemusic.model.MusicDBHelper;
-import jrfeng.simplemusic.model.MusicStorage;
 import jrfeng.musicplayer.player.MusicPlayerClient;
+import jrfeng.musicplayer.mode.MusicStorageImp;
 //import jrfeng.musicplayer.player.MusicPlayerService;
-import jrfeng.simplemusic.utils.durable.DurableList;
+
 
 public class NavigationPresenter extends BroadcastReceiver implements NavigationContract.Presenter {
     private Context mContext;
@@ -83,7 +81,7 @@ public class NavigationPresenter extends BroadcastReceiver implements Navigation
         mContext = context;
         mView = view;
         mClient = MyApplication.getInstance().getPlayerClient();
-        mAllMusicList = mClient.getMusicProvider().getMusicList("所有音乐");
+        mAllMusicList = mClient.getMusicStorage().getMusicGroup(MusicStorage.MUSIC_LIST_DEFAULT);
         updateAlbumCountAndArtistCount();
     }
 
@@ -124,8 +122,8 @@ public class NavigationPresenter extends BroadcastReceiver implements Navigation
                 break;
         }
 
-        MusicStorage musicStorage = (MusicStorage) mClient.getMusicProvider();
-        int count_RecentPlay = musicStorage.getListCount("最近播放");
+        MusicStorageImp musicStorageImp = (MusicStorageImp) mClient.getMusicStorage();
+        int count_RecentPlay = musicStorageImp.getRecentPlay().size();
         if (count_RecentPlay > 0) {
             mView.setRecentPlayMenuDesc(count_RecentPlay + "条记录");
         } else {
@@ -165,10 +163,10 @@ public class NavigationPresenter extends BroadcastReceiver implements Navigation
 
     @Override
     public void onMenuItemCreated(final int which) {
-        MusicStorage musicStorage = (MusicStorage) mClient.getMusicProvider();
+        MusicStorageImp musicStorageImp = (MusicStorageImp) mClient.getMusicStorage();
         switch (which) {
             case 0:
-                int count_ILove = musicStorage.getListCount("我喜欢");
+                int count_ILove = musicStorageImp.getILoveMusics().size();
                 if (count_ILove > 0) {
                     mView.setILoveMenuDesc(count_ILove + "首音乐");
                 } else {
@@ -176,7 +174,7 @@ public class NavigationPresenter extends BroadcastReceiver implements Navigation
                 }
                 break;
             case 1:
-                int count_MusicList = musicStorage.getCustomMusicListCount();
+                int count_MusicList = musicStorageImp.getMusicListCount();
                 if (count_MusicList > 0) {
                     mView.setMusicListMenuDesc(count_MusicList + "首音乐");
                 } else {
@@ -198,7 +196,7 @@ public class NavigationPresenter extends BroadcastReceiver implements Navigation
                 }
                 break;
             case 4:
-                int count_RecentPlay = musicStorage.getListCount("最近播放");
+                int count_RecentPlay = musicStorageImp.getRecentPlay().size();
                 if (count_RecentPlay > 0) {
                     mView.setRecentPlayMenuDesc(count_RecentPlay + "条记录");
                 } else {
@@ -214,7 +212,7 @@ public class NavigationPresenter extends BroadcastReceiver implements Navigation
         if (mClient.getPlayingMusicIndex() == position) {
             mClient.play_pause();
         } else {
-            mClient.play(listName, position);
+            mClient.playMusicGroup(listName, position);
             mView.setChoice(position);
         }
     }
@@ -277,57 +275,19 @@ public class NavigationPresenter extends BroadcastReceiver implements Navigation
             mPlayingMusic = music;
             mView.setCtlSongName(mPlayingMusic.getSongName());
             mView.setCtlArtist(mPlayingMusic.getArtist());
-            //提取歌曲的封面图片
-            new Thread() {
-                @Override
-                public void run() {
-                    SQLiteDatabase musicDB = MyApplication.getInstance().getMusicDB();
-                    Cursor cursor = musicDB.query(MusicDBHelper.TABLE_MUSIC_LIST,
-                            new String[]{MusicDBHelper.COLUMN_IMAGE},
-                            MusicDBHelper.COLUMN_PATH + " = '" + mPlayingMusic.getPath() + "'",
-                            null, null, null, null);
-
-                    byte[] image = null;
-                    if (cursor.moveToFirst()) {
-                        image = cursor.getBlob(cursor.getColumnIndex(MusicDBHelper.COLUMN_IMAGE));
-                    }
-                    cursor.close();
-                    mView.setCtlImage(image);
-                }
-            }.start();
         }
     }
 
     private void refreshAllMusicList() {
-        if (((DurableList) mAllMusicList).isChanged()) {
-            mView.updateAllMusicList();
-            mView.updateAllMusicListTitle();
-            //同时更新 mAlbumCount 和 mArtistCount
-            updateAlbumCountAndArtistCount();
-        }
+        mView.updateAllMusicList();
+        mView.updateAllMusicListTitle();
+        //同时更新 mAlbumCount 和 mArtistCount
+        updateAlbumCountAndArtistCount();
     }
 
     private void updateAlbumCountAndArtistCount() {
-        final SQLiteDatabase musicDB = MyApplication.getInstance().getMusicDB();
-        new Thread() {
-            @Override
-            public void run() {
-                Cursor cursor1 = musicDB.query(MusicDBHelper.TABLE_MUSIC_LIST,
-                        new String[]{MusicDBHelper.COLUMN_ALBUM},
-                        null, null, MusicDBHelper.COLUMN_ALBUM, null, null);
-                mAlbumCount = cursor1.getCount();
-                cursor1.close();
-
-                Cursor cursor2 = musicDB.query(MusicDBHelper.TABLE_MUSIC_LIST,
-                        new String[]{MusicDBHelper.COLUMN_ARTIST},
-                        null, null, MusicDBHelper.COLUMN_ARTIST, null, null);
-                mArtistCount = cursor2.getCount();
-                cursor2.close();
-
-                Message message = handler.obtainMessage();
-                message.what = 1;
-                handler.sendMessage(message);
-            }
-        }.start();
+        MusicStorageImp musicStorageImp = (MusicStorageImp) MusicPlayerClient.getInstance().getMusicStorage();
+        mAlbumCount = musicStorageImp.getAlbumsCount();
+        mArtistCount = musicStorageImp.getArtistsCount();
     }
 }

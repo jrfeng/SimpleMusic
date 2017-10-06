@@ -1,8 +1,10 @@
 package jrfeng.musicplayer.data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Music implements Serializable, Cloneable {
+public class Music implements Serializable {
     private static final long serialVersionUID = 1L;
     private String path;        //路径
     private String songName;    //歌曲名
@@ -11,9 +13,8 @@ public class Music implements Serializable, Cloneable {
     private String year;        //出品年份
     private String comment;     //备注信息
 
-    private String belongMusicList = "所有音乐";    //所属歌单，默认为“所有音乐”
-
-    private long addTimeMsec;
+    private boolean iLove;
+    private ArrayList<String> belongMusicLists;
 
     public Music(String path, String songName, String artist,
                  String album, String year, String comment) {
@@ -23,8 +24,6 @@ public class Music implements Serializable, Cloneable {
         this.album = album;
         this.year = year;
         this.comment = comment;
-
-        addTimeMsec = System.currentTimeMillis();
     }
 
     public String getPath() {
@@ -75,22 +74,41 @@ public class Music implements Serializable, Cloneable {
         this.comment = comment;
     }
 
-    public String getBelongMusicList() {
-        return belongMusicList;
+    public void setILove(boolean love) {
+        iLove = love;
     }
 
-    public void setBelongMusicList(String musicList) {
-        this.belongMusicList = musicList;
+    public boolean isILove() {
+        return iLove;
     }
 
-    public long getAddTimeMsec() {
-        return addTimeMsec;
+    public List<String> getBelongMusicLists() {
+        return belongMusicLists;
     }
 
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        super.clone();
-        return new Music(path, songName, artist, album, year, comment);
+    public boolean belongMusicList(String name) {
+        if (belongMusicLists == null) {
+            return false;
+        }
+        for (String list : belongMusicLists) {
+            if (list.equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void addToMusicList(String name) {
+        if (belongMusicLists == null) {
+            belongMusicLists = new ArrayList<>();
+        }
+        belongMusicLists.add(name);
+    }
+
+    public void removeFromMusicList(String name) {
+        if (belongMusicLists != null) {
+            belongMusicLists.remove(name);
+        }
     }
 
     @Override

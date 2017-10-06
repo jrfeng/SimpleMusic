@@ -104,7 +104,7 @@ public class NavigationFragment extends Fragment implements NavigationContract.V
         mAllMusicTitleAdapter = new AllMusicTitleAdapter(mContext, mPresenter);
         delegateAdapter.addAdapter(mAllMusicTitleAdapter);
 
-        List<Music> allMusicList =mPresenter.getAllMusicList();
+        List<Music> allMusicList = mPresenter.getAllMusicList();
         mAllMusicAdapter = new AllMusicAdapter(mContext, allMusicList, mPresenter);
         delegateAdapter.addAdapter(mAllMusicAdapter);
     }

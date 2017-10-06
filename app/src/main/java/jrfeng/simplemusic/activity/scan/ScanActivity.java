@@ -96,7 +96,6 @@ public class ScanActivity extends BaseActivity implements ScanContract.View {
 
     @Override
     public void showScannedMusic(List<Music> scannedMusics) {
-        //TODO 显示 添加 页面
         //调试
         Log.d("App", "显示 添加 页面");
         Intent intent = new Intent(this, ScannedMusicsActivity.class);

@@ -1,8 +1,6 @@
-package jrfeng.simplemusic.utils.durable;
+package jrfeng.musicplayer.utils.durable;
 
-import java.io.Serializable;
-
-public interface Durable extends Serializable {
+public interface Durable {
     void restore();
 
     void restoreAsync(OnRestoredListener listener);

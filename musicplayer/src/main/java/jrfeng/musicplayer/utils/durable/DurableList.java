@@ -1,4 +1,4 @@
-package jrfeng.simplemusic.utils.durable;
+package jrfeng.musicplayer.utils.durable;
 
 import android.support.annotation.NonNull;
 
@@ -18,7 +18,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * 一个可持久化的 List。所有方法都是线程安全的。
  * @param <E>
  */
-public class DurableList<E> extends Observable implements List<E>, Durable {
+public class DurableList<E> implements List<E>, Durable {
     private File mFile;
     private List<E> mList;
     private boolean mRestored;
@@ -118,12 +118,7 @@ public class DurableList<E> extends Observable implements List<E>, Durable {
     public boolean add(E e) {
         mWriteLock.lock();
         try {
-            if (mList.add(e)) {
-                setChanged();
-                notifyObservers();
-                return true;
-            }
-            return false;
+            return mList.add(e);
         } finally {
             mWriteLock.unlock();
         }
@@ -133,12 +128,7 @@ public class DurableList<E> extends Observable implements List<E>, Durable {
     public boolean remove(Object o) {
         mWriteLock.lock();
         try {
-            if (mList.remove(o)) {
-                setChanged();
-                notifyObservers();
-                return true;
-            }
-            return false;
+            return mList.remove(o);
         } finally {
             mWriteLock.unlock();
         }
@@ -148,12 +138,7 @@ public class DurableList<E> extends Observable implements List<E>, Durable {
     public boolean addAll(@NonNull Collection<? extends E> c) {
         mWriteLock.lock();
         try {
-            if (mList.addAll(c)) {
-                setChanged();
-                notifyObservers();
-                return true;
-            }
-            return false;
+            return mList.addAll(c);
         } finally {
             mWriteLock.unlock();
         }
@@ -163,12 +148,7 @@ public class DurableList<E> extends Observable implements List<E>, Durable {
     public boolean addAll(int index, @NonNull Collection<? extends E> c) {
         mWriteLock.lock();
         try {
-            if (mList.addAll(index, c)) {
-                setChanged();
-                notifyObservers();
-                return true;
-            }
-            return false;
+            return mList.addAll(index, c);
         } finally {
             mWriteLock.unlock();
         }
@@ -178,12 +158,7 @@ public class DurableList<E> extends Observable implements List<E>, Durable {
     public boolean removeAll(@NonNull Collection<?> c) {
         mWriteLock.lock();
         try {
-            if (mList.removeAll(c)) {
-                setChanged();
-                notifyObservers();
-                return true;
-            }
-            return false;
+            return mList.removeAll(c);
         } finally {
             mWriteLock.unlock();
         }
@@ -193,12 +168,7 @@ public class DurableList<E> extends Observable implements List<E>, Durable {
     public boolean retainAll(@NonNull Collection<?> c) {
         mWriteLock.lock();
         try {
-            if (mList.retainAll(c)) {
-                setChanged();
-                notifyObservers();
-                return true;
-            }
-            return false;
+            return mList.retainAll(c);
         } finally {
             mWriteLock.unlock();
         }
@@ -209,8 +179,6 @@ public class DurableList<E> extends Observable implements List<E>, Durable {
         mWriteLock.lock();
         try {
             mList.clear();
-            setChanged();
-            notifyObservers();
         } finally {
             mWriteLock.unlock();
         }
@@ -230,10 +198,7 @@ public class DurableList<E> extends Observable implements List<E>, Durable {
     public E set(int index, E element) {
         mWriteLock.lock();
         try {
-            E e = mList.set(index, element);
-            setChanged();
-            notifyObservers();
-            return e;
+            return mList.set(index, element);
         } finally {
             mWriteLock.unlock();
         }
@@ -244,8 +209,6 @@ public class DurableList<E> extends Observable implements List<E>, Durable {
         mWriteLock.lock();
         try {
             mList.add(index, element);
-            setChanged();
-            notifyObservers();
         } finally {
             mWriteLock.unlock();
         }
@@ -255,10 +218,7 @@ public class DurableList<E> extends Observable implements List<E>, Durable {
     public E remove(int index) {
         mWriteLock.lock();
         try {
-            E e = mList.remove(index);
-            setChanged();
-            notifyObservers();
-            return e;
+            return mList.remove(index);
         } finally {
             mWriteLock.unlock();
         }

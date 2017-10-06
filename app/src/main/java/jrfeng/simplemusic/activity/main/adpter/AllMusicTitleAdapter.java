@@ -73,7 +73,7 @@ public class AllMusicTitleAdapter extends DelegateAdapter.Adapter<AllMusicTitleA
     }
 
     public void updateTitle(){
-        tvTitle.setText("所有音乐（" + mPresenter.getAllMusicListSize() + "首）");
+//        tvTitle.setText("所有音乐（" + mPresenter.getAllMusicListSize() + "首）");
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

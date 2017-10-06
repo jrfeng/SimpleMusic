@@ -96,7 +96,7 @@ public class ScannedMusicsAdapter extends RecyclerView.Adapter<ScannedMusicsAdap
         return mScannedMusicList.size();
     }
 
-    public boolean[] getItemsState() {
+    public boolean[] getItemsChoiceState() {
         return mItemsState;
     }
 

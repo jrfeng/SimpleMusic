@@ -1,13 +1,16 @@
 package jrfeng.simplemusic;
 
 import android.app.Application;
-import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
+import jrfeng.musicplayer.player.Configure;
 import jrfeng.simplemusic.base.BaseActivity;
-import jrfeng.simplemusic.model.MusicDBHelper;
 import jrfeng.musicplayer.player.MusicPlayerClient;
 import jrfeng.simplemusic.utils.log.L;
 
@@ -19,8 +22,6 @@ public class MyApplication extends Application {
 
     private MusicPlayerClient mPlayerClient;
 
-    private SQLiteDatabase mMusicDB;
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -31,9 +32,6 @@ public class MyApplication extends Application {
             mActivityStack = new LinkedList<>();
 
             mPlayerClient = MusicPlayerClient.getInstance();
-
-            MusicDBHelper dBHelper = new MusicDBHelper(this, MusicDBHelper.DB_NAME, null, MusicDBHelper.DB_VERSION);
-            mMusicDB = dBHelper.getWritableDatabase();
         }
     }
 
@@ -62,9 +60,5 @@ public class MyApplication extends Application {
 
     public MusicPlayerClient getPlayerClient() {
         return mPlayerClient;
-    }
-
-    public SQLiteDatabase getMusicDB() {
-        return mMusicDB;
     }
 }

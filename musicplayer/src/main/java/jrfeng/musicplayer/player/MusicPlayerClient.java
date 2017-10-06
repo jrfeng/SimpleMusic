@@ -8,32 +8,56 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.util.Log;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserFactory;
+import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.InputStream;
-import java.io.StringReader;
+import java.io.IOException;
 import java.util.List;
-import java.util.Scanner;
 
 import jrfeng.musicplayer.data.Music;
+import jrfeng.musicplayer.mode.MusicStorage;
 
 public class MusicPlayerClient implements ServiceConnection, MusicPlayerController {
+    private static final String TAG = "MusicPlayerClient";
+
     private static MusicPlayerClient mInstance;
     private MusicPlayerService.Controller mController;
     private boolean isConnect;
     private OnConnectedListener mConnectedListener;
-    private MusicProvider mMusicProvider;
-
-    public void connect(Context context) {
-        connect(context, null);
-    }
+    private MusicStorage mMusicStorage;
 
     public void connect(final Context context, OnConnectedListener listener) {
+        //避免重复连接
+        if (isConnect()) {
+            return;
+        }
+
+        //解析配置文件
+        try {
+            Configure.decode(context.getApplicationContext());
+        } catch (XmlPullParserException e) {
+            Log.e(TAG, "XmlPullParserException : " + e.toString());
+        } catch (IOException e) {
+            Log.e(TAG, "IOException : " + e.toString());
+        } catch (ClassNotFoundException e) {
+            Log.e(TAG, "ClassNotFoundException : " + e.toString());
+        }
         mConnectedListener = listener;
-        mMusicProvider = initMusicListProvider(context);
-        Intent intent = new Intent(context, MusicPlayerService.class);
-        context.bindService(intent, MusicPlayerClient.this, Context.BIND_AUTO_CREATE);
+
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    initMusicStorage(context);
+                    context.bindService(new Intent(context, MusicPlayerService.class),
+                            MusicPlayerClient.this,
+                            Context.BIND_AUTO_CREATE);
+                } catch (IllegalAccessException e) {
+                    System.err.println(e.toString());
+                } catch (InstantiationException e) {
+                    System.err.println(e.toString());
+                }
+            }
+        }.start();
     }
 
     public static synchronized MusicPlayerClient getInstance() {
@@ -47,11 +71,15 @@ public class MusicPlayerClient implements ServiceConnection, MusicPlayerControll
         return isConnect;
     }
 
+    public MusicStorage getMusicStorage() {
+        return mMusicStorage;
+    }
+
     @Override
     public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
         isConnect = true;
         mController = (MusicPlayerService.Controller) iBinder;
-        mController.load(mMusicProvider);
+        mController.init(mMusicStorage);
         if (mConnectedListener != null) {
             mConnectedListener.onConnected();
             mConnectedListener = null;
@@ -84,8 +112,8 @@ public class MusicPlayerClient implements ServiceConnection, MusicPlayerControll
     }
 
     @Override
-    public void play(String listName, int position) {
-        mController.play(listName, position);
+    public void playMusicGroup(MusicStorage.GroupType groupType, String groupName, int position) {
+        mController.playMusicGroup(groupType, groupName, position);
     }
 
     @Override
@@ -159,11 +187,6 @@ public class MusicPlayerClient implements ServiceConnection, MusicPlayerControll
     }
 
     @Override
-    public MusicProvider getMusicProvider() {
-        return mController.getMusicProvider();
-    }
-
-    @Override
     public void addMusicProgressListener(MusicProgressListener listener) {
         mController.addMusicProgressListener(listener);
     }
@@ -181,59 +204,15 @@ public class MusicPlayerClient implements ServiceConnection, MusicPlayerControll
 
     //***********************private********************
 
-    private MusicProvider initMusicListProvider(Context context) {
+    private void initMusicStorage(final Context context) throws IllegalAccessException, InstantiationException {
         //从配置文件解析
-        Class cl = decodeMusicProviderClass(context.getApplicationContext());
-        MusicProvider provider = null;
-        try {
-            if (cl != null) {
-                provider = (MusicProvider) cl.newInstance();
-                provider.initDataSet(context);
-            } else {
-                throw new NullPointerException("Class object is null. please check your \"music_player.xml\" file.");
-            }
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        Class cl = Configure.getMusicStorageClass();
+        if (cl != null) {
+            mMusicStorage = (MusicStorage) cl.newInstance();
+            mMusicStorage.restore(context);
+        } else {
+            throw new NullPointerException("Class object is null. please check your \"music_player.xml\" file.");
         }
-        return provider;
-    }
-
-    private Class decodeMusicProviderClass(Context context) {
-        //从配置文件解析
-        Class cl = null;
-        try {
-            InputStream inputStream = context.getAssets().open("music_player.xml");
-            StringBuilder builder = new StringBuilder(128);
-            Scanner scanner = new Scanner(inputStream);
-            while (scanner.hasNext()) {
-                builder.append(scanner.nextLine());
-            }
-            scanner.close();
-            String content = builder.toString();
-            //解析XML
-            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-            XmlPullParser parser = factory.newPullParser();
-            parser.setInput(new StringReader(content));
-            String str = "";
-            int eventType = parser.getEventType();
-            while (eventType != XmlPullParser.END_DOCUMENT) {
-                String nodeName = parser.getName();
-                if (eventType == XmlPullParser.START_TAG) {
-                    if (nodeName.equals("music-provider")) {
-                        str = parser.nextText();
-                    }
-                }
-                eventType = parser.next();
-            }
-            //调试
-            Log.d("App", "解析的 MusicProvider : " + str);
-            cl = Class.forName(str);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return cl;
     }
 
     private void disconnect(Context context) {

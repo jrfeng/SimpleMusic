@@ -3,7 +3,6 @@ package jrfeng.musicplayer.player;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
-import android.app.Notification;
 import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
@@ -18,41 +17,31 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserFactory;
-
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import jrfeng.musicplayer.data.Music;
+import jrfeng.musicplayer.mode.MusicStorage;
 import jrfeng.musicplayer.player.MusicPlayerClient.NotifyControllerView;
 
 public class MusicPlayerService extends Service {
-    private List<Music> mRecentPlayList;
-    private boolean mRecordRecentPlay;
-
-    private MusicProvider mMusicProvider;
-    private SharedPreferences mPreferences;
-
     private static final int NOTIFY_ID = 1;
-    private static final String PREFERENCES_NAME = "player_state.dat";
 
-    private static final String KEY_LIST_NAME = "listName";
+    private static final String KEY_MUSIC_GROUP_TYPE = "groupType";
+    private static final String KEY_MUSIC_GROUP_NAME = "listName";
     private static final String KEY_MUSIC_POSITION = "musicPosition";
-    private static final String KEY_PLAYING_POSITION = "playingPosition";
+    private static final String KEY_MUSIC_PLAYING_POSITION = "playingPosition";
     private static final String KEY_LOOPING = "looping";
 
-    private boolean mHasMediaButton;
-
+    private MusicStorage mMusicStorage;
     private NotifyControllerView mControllerView;
+
+    private boolean mHasMediaButton;
 
     @Override
     public void onCreate() {
@@ -74,31 +63,17 @@ public class MusicPlayerService extends Service {
         //调试
         log("onBind");
         try {
-            Class cl = decodeNotifyViewClass();
+            Class cl = Configure.getNotificationViewClass();
             mControllerView = (NotifyControllerView) cl.newInstance();
         } catch (Exception e) {
-            e.printStackTrace();
+            logE(e.toString());
         } finally {
             mControllerView = new DefaultNotifyControllerView();
         }
 
         runAsForeground();              //作为前台Service运行
         registerMediaButtonReceiver();  //将应用程序注册为MediaButton的唯一处理程序
-        Controller controller = new Controller();
-
-        mPreferences = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
-        String listName = mPreferences.getString(KEY_LIST_NAME, MusicProvider.DEFAULT_MUSIC_LIST);
-        int musicPosition = mPreferences.getInt(KEY_MUSIC_POSITION, 0);
-        int playingPosition = mPreferences.getInt(KEY_PLAYING_POSITION, 0);
-        boolean looping = mPreferences.getBoolean(KEY_LOOPING, false);
-
-        controller.setState(
-                listName,
-                musicPosition,
-                playingPosition,
-                looping);
-
-        return controller;
+        return new Controller();
     }
 
     @Override
@@ -121,48 +96,6 @@ public class MusicPlayerService extends Service {
 
     private void runAsForeground() {
         startForeground(NOTIFY_ID, mControllerView.getNotification(this, NOTIFY_ID));
-    }
-
-    private Class decodeNotifyViewClass() {
-        //从配置文件解析
-        Context context = getApplicationContext();
-        Class cl;
-        try {
-            InputStream inputStream = context.getAssets().open("music_player.xml");
-            StringBuilder builder = new StringBuilder(128);
-            Scanner scanner = new Scanner(inputStream);
-            while (scanner.hasNext()) {
-                builder.append(scanner.nextLine());
-            }
-            scanner.close();
-            String content = builder.toString();
-            //解析XML
-            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-            XmlPullParser parser = factory.newPullParser();
-            parser.setInput(new StringReader(content));
-            String str = "";
-            int eventType = parser.getEventType();
-            while (eventType != XmlPullParser.END_DOCUMENT) {
-                String nodeName = parser.getName();
-                if (eventType == XmlPullParser.START_TAG) {
-                    if (nodeName.equals("notify-view")) {
-                        str = parser.nextText();
-                    }
-                }
-                eventType = parser.next();
-            }
-            //调试
-            Log.d("App", "解析的 NotifyView : " + str);
-            if (!str.equals("")) {
-                cl = Class.forName(str);
-            } else {
-                cl = DefaultNotifyControllerView.class;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            cl = DefaultNotifyControllerView.class;
-        }
-        return cl;
     }
 
     private void registerMediaButtonReceiver() {
@@ -191,18 +124,25 @@ public class MusicPlayerService extends Service {
             MediaPlayer.OnCompletionListener,
             MediaPlayer.OnSeekCompleteListener,
             MediaPlayer.OnPreparedListener {
+        private static final String PREFERENCES_NAME = "player_state.dat";
+        private SharedPreferences mPreferences;
+
         private MediaPlayer mMediaPlayer;
         private Music mPlayingMusic;
         private boolean mPlaying;
         private List<Music> mMusicList;
 
-        private String mCurrentListName;
+        private MusicStorage.GroupType mMusicGroupType;
+        private String mMusicGroupName;
         private int mMusicPosition;
-        private int mPlayingPosition;
+        private int mMusicPlayingPosition;
         private boolean mLooping;
 
         private boolean mPrepared;
         private boolean mPlayAfterPrepared;
+
+        private List<Music> mRecentPlayList;
+        private boolean mRecordRecentPlay;
 
         private AudioManager mAudioManager;
         private AudioManager.OnAudioFocusChangeListener mAudioFocusChangeListener;
@@ -224,6 +164,8 @@ public class MusicPlayerService extends Service {
             mMediaPlayer.setOnCompletionListener(this);
             mMediaPlayer.setOnSeekCompleteListener(this);
             mMediaPlayer.setWakeMode(getBaseContext(), PowerManager.PARTIAL_WAKE_LOCK);
+
+            mPreferences = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
 
             mProgressListeners = new LinkedList<>();
             mAudioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
@@ -275,22 +217,35 @@ public class MusicPlayerService extends Service {
 
         //**************************public***********************
 
-        void setState(String listName, int musicPosition, int playingPosition, boolean looping) {
-            mCurrentListName = listName;
-            mMusicPosition = musicPosition;
-            mPlayingPosition = playingPosition;
-            mLooping = looping;
-        }
-
-        public MusicProvider getMusicProvider() {
-            return mMusicProvider;
-        }
-
-        void load(MusicProvider provider) {
+        void init(MusicStorage storage) {
             //调试
-            log("load");
-            mMusicProvider = provider;
-            init();
+            log("init");
+
+            mMusicStorage = storage;
+
+            mMusicGroupType = MusicStorage.GroupType.valueOf(mPreferences.getString(KEY_MUSIC_GROUP_TYPE, MusicStorage.GroupType.MUSIC_LIST.name()));
+            mMusicGroupName = mPreferences.getString(KEY_MUSIC_GROUP_NAME, MusicStorage.MUSIC_ALL);
+            mMusicPosition = mPreferences.getInt(KEY_MUSIC_POSITION, 0);
+            mMusicPlayingPosition = mPreferences.getInt(KEY_MUSIC_PLAYING_POSITION, 0);
+            mLooping = mPreferences.getBoolean(KEY_LOOPING, false);
+
+            mMusicList = mMusicStorage.getMusicGroup(
+                    mMusicGroupType,
+                    mMusicGroupName);
+            mRecentPlayList = mMusicStorage.getRecentPlayList();
+            mRecordRecentPlay = mRecentPlayList != null;//是否记录最近播放
+            if (mMusicList == null) {
+                mMusicGroupType = MusicStorage.GroupType.MUSIC_LIST;
+                mMusicGroupName = MusicStorage.MUSIC_ALL;
+                mMusicPosition = 0;
+                mMusicPlayingPosition = 0;
+                mLooping = false;
+                mMusicList = mMusicStorage.getMusicGroup(mMusicGroupType, mMusicGroupName);
+            }
+            if (mMusicList.size() > 0) {
+                mPlayingMusic = mMusicList.get(mMusicPosition);
+                prepare(false);
+            }
         }
 
         @Override
@@ -343,7 +298,7 @@ public class MusicPlayerService extends Service {
 
         @Override
         public String getCurrentListName() {
-            return mCurrentListName;
+            return mMusicGroupName;
         }
 
         @Override
@@ -375,21 +330,23 @@ public class MusicPlayerService extends Service {
 
         //********************private***********************
 
-        private void init() {
-            mMusicList = mMusicProvider.getMusicList(mCurrentListName);
-            mRecentPlayList = mMusicProvider.getMusicList("最近播放");
-            mRecordRecentPlay = mRecentPlayList != null;//是否记录最近播放
-            if (mMusicList.size() > 0) {
-                mPlayingMusic = mMusicList.get(mMusicPosition);
-                prepare(false);
-            }
-        }
-
-        private void release() {
+        private void releaseAndSaveState() {
             //调试
             log("release");
 
-            saveState();
+            if (mPrepared) {
+                mMusicPlayingPosition = mMediaPlayer.getCurrentPosition();
+            } else {
+                mMusicPlayingPosition = 0;
+            }
+
+            mPreferences.edit()
+                    .putString(KEY_MUSIC_GROUP_TYPE, mMusicGroupType.name())
+                    .putString(KEY_MUSIC_GROUP_NAME, mMusicGroupName)
+                    .putInt(KEY_MUSIC_POSITION, mMusicPosition)
+                    .putInt(KEY_MUSIC_PLAYING_POSITION, mMusicPlayingPosition)
+                    .putBoolean(KEY_LOOPING, mLooping)
+                    .apply();
 
             mPlaying = false;
             mMediaPlayer.release();
@@ -397,9 +354,13 @@ public class MusicPlayerService extends Service {
         }
 
         private void prepare(boolean play) {
-            stopProgressGenerator();
             //调试
             log("prepare");
+
+            mPrepared = false;
+            mPlaying = false;
+            mControllerView.pause();
+            stopProgressGenerator();
 
             if (mPlayingMusic == null) {
                 //调试
@@ -408,10 +369,6 @@ public class MusicPlayerService extends Service {
             }
 
             if (!checkFile(mPlayingMusic)) {
-                mPrepared = false;
-                mPlaying = false;
-                mMediaPlayer.reset();
-                mControllerView.pause();
                 mControllerView.updateText(mPlayingMusic.getSongName(), mPlayingMusic.getArtist());
                 Toast.makeText(getApplication(), "文件不存在", Toast.LENGTH_SHORT).show();
                 sendActionBroadcast(MusicPlayerClient.Action.ACTION_MUSIC_NOT_EXIST);
@@ -420,8 +377,6 @@ public class MusicPlayerService extends Service {
 
             try {
                 mPlayAfterPrepared = play;
-                mPrepared = false;
-                mPlaying = false;
                 mMediaPlayer.reset();
                 mControllerView.updateText(mPlayingMusic.getSongName(), mPlayingMusic.getArtist());
                 mMediaPlayer.setDataSource(mPlayingMusic.getPath());
@@ -447,24 +402,6 @@ public class MusicPlayerService extends Service {
         private void abandonAudioFocus() {
             //放弃音频焦点
             mAudioManager.abandonAudioFocus(mAudioFocusChangeListener);
-        }
-
-        private void saveState() {
-            //调试
-            log("saveState");
-
-            if (mPrepared) {
-                mPlayingPosition = mMediaPlayer.getCurrentPosition();
-            } else {
-                mPlayingPosition = 0;
-            }
-
-            mPreferences.edit()
-                    .putString(KEY_LIST_NAME, mCurrentListName)
-                    .putInt(KEY_MUSIC_POSITION, mMusicPosition)
-                    .putInt(KEY_PLAYING_POSITION, mPlayingPosition)
-                    .putBoolean(KEY_LOOPING, mLooping)
-                    .apply();
         }
 
         private boolean checkFile(Music music) {
@@ -552,9 +489,9 @@ public class MusicPlayerService extends Service {
             //调试
             log("previous");
 
-            if (mPlayingMusic == null) {
+            if (mMusicList.size() < 1) {
                 //调试
-                logE("PlayingMusic is Null, Not previous");
+                logE("Music list is empty, Not previous");
                 return;
             }
 
@@ -573,9 +510,9 @@ public class MusicPlayerService extends Service {
             //调试
             log("next");
 
-            if (mPlayingMusic == null) {
+            if (mMusicList.size() < 1) {
                 //调试
-                logE("PlayingMusic is Null, Not next");
+                logE("Music list is empty, Not next");
                 return;
             }
 
@@ -592,13 +529,7 @@ public class MusicPlayerService extends Service {
         @Override
         public void play() {
             //调试
-            log("play");
-
-            if (mPlayingMusic == null) {
-                //调试
-                logE("PlayingMusic is Null, Not play");
-                return;
-            }
+            log("playMusicGroup");
 
             if (!mPlaying && mPrepared) {
                 mPlaying = true;
@@ -619,27 +550,35 @@ public class MusicPlayerService extends Service {
                 //渐隐播放
                 volumeTransition(0.0F, 1.0F, true, MusicPlayerClient.Action.ACTION_PLAY);
                 sendActionBroadcast(MusicPlayerClient.Action.ACTION_PLAY);
-            } else {
-                if (!checkFile(mPlayingMusic)) {
-                    Toast.makeText(getApplicationContext(), "文件不存在", Toast.LENGTH_SHORT).show();
-                }
             }
         }
 
         @Override
         public void play(int position) {
+            if (position > mMusicList.size()) {
+                //调试
+                logE("Position is too big, Not play(int position)");
+                return;
+            }
+
             mMusicPosition = position;
             mPlayingMusic = mMusicList.get(mMusicPosition);
             prepare(true);
         }
 
         @Override
-        public void play(String listName, int position) {
-            if (!listName.equals(mCurrentListName)) {
-                setState(listName, position, 0, mLooping);
-                init();
+        public void playMusicGroup(MusicStorage.GroupType groupType, String groupName, int position) {
+            mMusicGroupType = groupType;
+            mMusicGroupName = groupName;
+            mMusicPosition = position;
+            mMusicPlayingPosition = 0;
+            mMusicList = mMusicStorage.getMusicGroup(mMusicGroupType, mMusicGroupName);
+            if (mMusicList != null && mMusicList.size() < 1) {
+                //调试
+                logE("Music list is empty, Not next");
+                return;
             }
-            play(position);
+            prepare(true);
         }
 
         @Override
@@ -647,12 +586,11 @@ public class MusicPlayerService extends Service {
             //调试
             log("pause");
 
-            if (mPlayingMusic == null) {
+            if (mMusicList.size() < 1) {
                 //调试
-                logE("PlayingMusic is Null, Not pause");
+                logE("Music list is empty, Not pause");
                 return;
             }
-
 
             if (mPlaying) {
                 mPlaying = false;
@@ -716,7 +654,7 @@ public class MusicPlayerService extends Service {
             new Thread() {
                 @Override
                 public void run() {
-                    mMusicProvider.saveDataSet();
+                    mMusicStorage.saveChanges();
                 }
             }.start();
 
@@ -725,7 +663,7 @@ public class MusicPlayerService extends Service {
             Log.d("App", "【发送广播】 : " + MusicPlayerClient.Action.ACTION_SHUTDOWN);
             Intent intent = new Intent(MusicPlayerClient.Action.ACTION_SHUTDOWN);
             sendBroadcast(intent);
-            release();
+            releaseAndSaveState();//释放MediaPlayer，同时保存播放器状态。
             stopSelf();
         }
 
@@ -762,8 +700,8 @@ public class MusicPlayerService extends Service {
             log("Music prepared.");
             mPrepared = true;
             sendActionBroadcast(MusicPlayerClient.Action.ACTION_PREPARED);
-            mMediaPlayer.seekTo(mPlayingPosition);
-            mPlayingPosition = 0;
+            mMediaPlayer.seekTo(mMusicPlayingPosition);
+            mMusicPlayingPosition = 0;
             if (mPlayAfterPrepared) {
                 play();
                 mPlayAfterPrepared = false;
