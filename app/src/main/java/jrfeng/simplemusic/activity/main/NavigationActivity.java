@@ -13,14 +13,13 @@ import jrfeng.simplemusic.base.BaseActivity;
 
 public class NavigationActivity extends BaseActivity {
     private NavigationContract.Presenter mPresenter;
-    private NavigationContract.View mView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
-        mView = new NavigationFragment();
+        NavigationContract.View mView = new NavigationFragment();
         mPresenter = new NavigationPresenter(this, mView);
         mView.setPresenter(mPresenter);
 
@@ -34,23 +33,12 @@ public class NavigationActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(MusicPlayerClient.Action.ACTION_PLAY);
-        intentFilter.addAction(MusicPlayerClient.Action.ACTION_PAUSE);
-        intentFilter.addAction(MusicPlayerClient.Action.ACTION_NEXT);
-        intentFilter.addAction(MusicPlayerClient.Action.ACTION_PREVIOUS);
-        intentFilter.addAction(MusicPlayerClient.Action.ACTION_STOP);
-        intentFilter.addAction(MusicPlayerClient.Action.ACTION_PREPARED);
-        intentFilter.addAction(MusicPlayerClient.Action.ACTION_ERROR);
-        intentFilter.addAction(MusicPlayerClient.Action.ACTION_MUSIC_NOT_EXIST);
-        registerReceiver((BroadcastReceiver) mPresenter, intentFilter);
         mPresenter.begin();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        unregisterReceiver((BroadcastReceiver) mPresenter);
         mPresenter.end();
     }
 }

@@ -1,81 +1,60 @@
 package jrfeng.simplemusic.activity.main;
 
-import android.content.Intent;
-
 import java.util.List;
 
+import jrfeng.musicplayer.mode.MusicStorage;
 import jrfeng.simplemusic.base.BasePresenter;
 import jrfeng.simplemusic.base.BaseView;
 import jrfeng.musicplayer.data.Music;
 
 public interface NavigationContract {
     interface View extends BaseView<Presenter> {
-        void toggleToPlay();
+        void viewPause();
 
-        void toggleToPause();
+        void viewPlay();
 
-        void setProgressMax(int max);
+        void refreshRecentPlay(int count);
 
-        void setProgress(int progress);
+        void disableListItem(int position);
 
-        void setCtlSongName(String songName);
+        void refreshPlayerView(Music music);
 
-        void setCtlArtist(String artist);
+        void refreshPlayingProgress(int progress);
 
-        void setCtlImage(byte[] imageData);
-
-        void setILoveMenuDesc(String desc);
-
-        void setMusicListMenuDesc(String desc);
-
-        void setAlbumMenuDesc(String desc);
-
-        void setArtistMenuDesc(String desc);
-
-        void setRecentPlayMenuDesc(String desc);
-
-        void updateAllMusicList();
-
-        void updateAllMusicListTitle();
-
-        void showSortMenu();
-
-        void showTitleMenu();
-
-        void showListItemMenu(Music music);
-
-        void setChoice(int itemPosition);
-
-        void scrollTo(int position);
+        void refreshMusicListView();
     }
 
     interface Presenter extends BasePresenter {
-        void onMenuClicked(Intent intent);
+        void play();
 
-        void onPlayPauseClicked();
+        void pause();
 
-        void onNextClicked();
+        void next();
 
-        void onCtlMenuClicked();
+        void previous();
 
-        void onSeekBarStartSeeking();
+        void playMusicGroup(MusicStorage.GroupType groupType, String groupName, int position);
 
-        void onSeekBarStopSeeking(int progress);
+        List<Music> getGroupAllMusic();
 
-        void onMenuItemCreated(int which);
+        String getGroupName();
 
-        void onListItemClicked(String listName, int position);
+        int getILoveCount();
 
-        void onListItemMenuClicked(int position);
+        int getMusicListCount();
 
-        void onTitleSortButtonClicked();
+        int getAlbumCount();
 
-        void onTitleMenuButtonClicked();
+        int getArtistCount();
 
-        void onTitleLocateButtonClicked();
+        int getRecentPlayCount();
 
-        List<Music> getAllMusicList();
+        int getAllMusicCount();
 
-        int getAllMusicListSize();
+        List<Music> getAllMusic();
+
+        void sortByName();
+
+        void sortByNameReverse();
     }
 }

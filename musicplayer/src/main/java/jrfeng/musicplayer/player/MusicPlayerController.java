@@ -37,9 +37,17 @@ interface MusicPlayerController {
 
     List<Music> getMusicList();
 
-    String getCurrentListName();
+    String getMusicGroupName();
+
+    List<Music> getRecentPlayList();
+
+    int getRecentPlayCount();
 
     boolean setLooping(boolean looping);
+
+    void setRandomPlay(boolean randomPlay);
+
+    void addTempMusic(Music music);
 
     void seekTo(int msec);
 

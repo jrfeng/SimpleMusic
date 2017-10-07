@@ -162,13 +162,33 @@ public class MusicPlayerClient implements ServiceConnection, MusicPlayerControll
     }
 
     @Override
-    public String getCurrentListName() {
-        return mController.getCurrentListName();
+    public String getMusicGroupName() {
+        return mController.getMusicGroupName();
+    }
+
+    @Override
+    public List<Music> getRecentPlayList() {
+        return mController.getRecentPlayList();
+    }
+
+    @Override
+    public int getRecentPlayCount() {
+        return mController.getRecentPlayCount();
     }
 
     @Override
     public boolean setLooping(boolean looping) {
         return mController.setLooping(looping);
+    }
+
+    @Override
+    public void setRandomPlay(boolean randomPlay) {
+        mController.setRandomPlay(randomPlay);
+    }
+
+    @Override
+    public void addTempMusic(Music music) {
+        mController.addTempMusic(music);
     }
 
     @Override
@@ -252,9 +272,5 @@ public class MusicPlayerClient implements ServiceConnection, MusicPlayerControll
         public static final String ACTION_ERROR = "jrfeng.simplemusic.action.ERROR";
         public static final String ACTION_SHUTDOWN = "jrfeng.simplemusic.action.SHUTDOWN";
         public static final String ACTION_MUSIC_NOT_EXIST = "jrfeng.simplemusic.action.MUSIC_NOT_EXIST";
-    }
-
-    public static class Key {
-        public static final String KEY_PLAYING_MUSIC = "playing_music";
     }
 }

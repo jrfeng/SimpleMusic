@@ -5,15 +5,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/widget_seach_action_bar"/>
+    <include
+        android:id="@+id/abSearch"
+        layout="@layout/widget_action_bar_search"/>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvNavMenu"
+        android:id="@+id/rvNavList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="@color/colorWhite"
         android:overScrollMode="ifContentScrolls"/>
 
-    <include layout="@layout/widget_control"/>
+    <include
+        android:id="@+id/playerController"
+        layout="@layout/widget_control"/>
 </LinearLayout>
