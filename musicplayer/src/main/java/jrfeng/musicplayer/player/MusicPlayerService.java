@@ -15,7 +15,6 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -125,8 +124,7 @@ public class MusicPlayerService extends Service {
         private static final String KEY_MUSIC_GROUP_NAME = "listName";
         private static final String KEY_MUSIC_POSITION = "musicPosition";
         private static final String KEY_MUSIC_PLAYING_POSITION = "playingPosition";
-        private static final String KEY_LOOPING = "looping";
-        private static final String KEY_RANDOM_PLAY = "randomPlay";
+        private static final String KEY_PLAY_MODE = "playMode";
 
         private static final String PREFERENCES_NAME = "player_state.dat";
         private SharedPreferences mPreferences;
@@ -140,10 +138,10 @@ public class MusicPlayerService extends Service {
         private String mMusicGroupName;
         private int mMusicPosition;
         private int mMusicPlayingPosition;
-        private boolean mLooping;
-        private boolean mRandomPlay;
+        private MusicPlayerClient.PlayMode mPlayMode;
 
         private Queue<Music> mTempQueue;    //临时列表
+        private boolean mPlayedTempMusic;
 
         private boolean mPrepared;
         private boolean mPlayAfterPrepared;
@@ -233,11 +231,10 @@ public class MusicPlayerService extends Service {
             mMusicStorage = storage;
 
             mMusicGroupType = MusicStorage.GroupType.valueOf(mPreferences.getString(KEY_MUSIC_GROUP_TYPE, MusicStorage.GroupType.MUSIC_LIST.name()));
-            mMusicGroupName = mPreferences.getString(KEY_MUSIC_GROUP_NAME, MusicStorage.MUSIC_ALL);
+            mMusicGroupName = mPreferences.getString(KEY_MUSIC_GROUP_NAME, MusicStorage.MUSIC_LIST_ALL);
             mMusicPosition = mPreferences.getInt(KEY_MUSIC_POSITION, 0);
             mMusicPlayingPosition = mPreferences.getInt(KEY_MUSIC_PLAYING_POSITION, 0);
-            mLooping = mPreferences.getBoolean(KEY_LOOPING, false);
-            mRandomPlay = mPreferences.getBoolean(KEY_RANDOM_PLAY, false);
+            mPlayMode = MusicPlayerClient.PlayMode.valueOf(mPreferences.getString(KEY_PLAY_MODE, "MODE_ORDER"));
 
             mMusicList = mMusicStorage.getMusicGroup(
                     mMusicGroupType,
@@ -246,7 +243,7 @@ public class MusicPlayerService extends Service {
             mRecordRecentPlay = mRecentPlayList != null;//是否记录最近播放
             if (mMusicList == null) {
                 mMusicGroupType = MusicStorage.GroupType.MUSIC_LIST;
-                mMusicGroupName = MusicStorage.MUSIC_ALL;
+                mMusicGroupName = MusicStorage.MUSIC_LIST_ALL;
                 mMusicPosition = 0;
                 mMusicPlayingPosition = 0;
                 mMusicList = mMusicStorage.getMusicGroup(mMusicGroupType, mMusicGroupName);
@@ -282,7 +279,7 @@ public class MusicPlayerService extends Service {
 
         @Override
         public boolean isLooping() {
-            return mLooping;
+            return mPlayMode == MusicPlayerClient.PlayMode.MODE_LOOP;
         }
 
         @Override
@@ -297,12 +294,20 @@ public class MusicPlayerService extends Service {
 
         @Override
         public int getPlayingMusicIndex() {
+            if (mPlayingMusic == null) {
+                return -1;
+            }
             return mMusicList.indexOf(mPlayingMusic);
         }
 
         @Override
         public List<Music> getMusicList() {
             return mMusicList;
+        }
+
+        @Override
+        public MusicStorage.GroupType getMusicGroupType() {
+            return mMusicGroupType;
         }
 
         @Override
@@ -321,36 +326,45 @@ public class MusicPlayerService extends Service {
         }
 
         @Override
-        public boolean setLooping(boolean looping) {
-            if (mPlayingMusic == null) {
+        public boolean setPlayMode(MusicPlayerClient.PlayMode mode) {
+            if (mPlayingMusic == null || !mPrepared) {
                 return false;
             }
-
-            mLooping = looping;
-            if (mLooping) {
-                mRandomPlay = false;
+            switch (mode) {
+                case MODE_ORDER:
+                    mMediaPlayer.setLooping(false);
+                    break;
+                case MODE_LOOP:
+                    mMediaPlayer.setLooping(true);
+                    break;
+                case MODE_RANDOM:
+                    mMediaPlayer.setLooping(false);
+                    break;
             }
-            mMediaPlayer.setLooping(mLooping);
+            mPlayMode = mode;
+            mPreferences.edit().putString(KEY_PLAY_MODE, mPlayMode.name()).apply();
             return true;
         }
 
         @Override
-        public void setRandomPlay(boolean randomPlay) {
-            mRandomPlay = randomPlay;
-            if (mRandomPlay) {
-                mLooping = false;
-            }
+        public MusicPlayerClient.PlayMode getPlayMode() {
+            return mPlayMode;
         }
 
         @Override
-        public void addTempMusic(Music music) {
+        public void addTempPlayMusic(Music music) {
             mTempQueue.add(music);
         }
 
         @Override
+        public boolean isTempPlay() {
+            return mPlayedTempMusic;
+        }
+
+        @Override
         public int getMusicLength() {
-            if (mPlayingMusic == null && !mPrepared) {
-                return 0;
+            if (mPlayingMusic == null || !mPrepared) {
+                return 100;
             }
             return mMediaPlayer.getDuration();
         }
@@ -375,18 +389,21 @@ public class MusicPlayerService extends Service {
                 mMusicPlayingPosition = 0;
             }
 
+            saveState();
+
+            mPlaying = false;
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+        }
+
+        private void saveState() {
             mPreferences.edit()
                     .putString(KEY_MUSIC_GROUP_TYPE, mMusicGroupType.name())
                     .putString(KEY_MUSIC_GROUP_NAME, mMusicGroupName)
                     .putInt(KEY_MUSIC_POSITION, mMusicPosition)
                     .putInt(KEY_MUSIC_PLAYING_POSITION, mMusicPlayingPosition)
-                    .putBoolean(KEY_LOOPING, mLooping)
-                    .putBoolean(KEY_RANDOM_PLAY, mRandomPlay)
+                    .putString(KEY_PLAY_MODE, mPlayMode.name())
                     .apply();
-
-            mPlaying = false;
-            mMediaPlayer.release();
-            mMediaPlayer = null;
         }
 
         private void prepare(boolean play) {
@@ -406,7 +423,6 @@ public class MusicPlayerService extends Service {
 
             if (!checkFile(mPlayingMusic)) {
                 mControllerView.updateText(mPlayingMusic.getSongName(), mPlayingMusic.getArtist());
-                Toast.makeText(getApplication(), "文件不存在", Toast.LENGTH_SHORT).show();
                 sendActionBroadcast(MusicPlayerClient.Action.ACTION_MUSIC_NOT_EXIST);
                 return;
             }
@@ -416,7 +432,7 @@ public class MusicPlayerService extends Service {
                 mMediaPlayer.reset();
                 mControllerView.updateText(mPlayingMusic.getSongName(), mPlayingMusic.getArtist());
                 mMediaPlayer.setDataSource(mPlayingMusic.getPath());
-                mMediaPlayer.setLooping(mLooping);
+                mMediaPlayer.setLooping(isLooping());
                 mMediaPlayer.prepareAsync();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -526,15 +542,19 @@ public class MusicPlayerService extends Service {
 
             if (mMusicList.size() < 1) {
                 //调试
-                logE("Music list is empty, Not previous");
+                logW("No previous, Music list is empty.");
                 return;
             }
 
-            if (mRandomPlay) {
+            mTempQueue.clear();//清空临时播放队列
+            if (mPlayMode == MusicPlayerClient.PlayMode.MODE_RANDOM) {
                 Random random = new Random();
                 mMusicPosition = random.nextInt(mMusicList.size());
             } else {
-                mMusicPosition = mMusicList.indexOf(mPlayingMusic);
+                if (!mPlayedTempMusic) {
+                    mMusicPosition = mMusicList.indexOf(mPlayingMusic);
+                }
+                mPlayedTempMusic = false;
                 mMusicPosition--;
                 if (mMusicPosition < 0) {
                     mMusicPosition = mMusicList.size() - 1;
@@ -552,19 +572,23 @@ public class MusicPlayerService extends Service {
 
             if (mMusicList.size() < 1) {
                 //调试
-                logE("Music list is empty, Not next");
+                logW("No next, Music list is empty.");
                 return;
             }
 
             //检查临时播放列表
             if (mTempQueue.size() > 0) {
                 mPlayingMusic = mTempQueue.remove();
+                mPlayedTempMusic = true;
             } else {
-                if (mRandomPlay) {
+                if (mPlayMode == MusicPlayerClient.PlayMode.MODE_RANDOM) {
                     Random random = new Random();
                     mMusicPosition = random.nextInt(mMusicList.size());
                 } else {
-                    mMusicPosition = mMusicList.indexOf(mPlayingMusic);
+                    if (!mPlayedTempMusic) {
+                        mMusicPosition = mMusicList.indexOf(mPlayingMusic);
+                    }
+                    mPlayedTempMusic = false;
                     mMusicPosition++;
                     if (mMusicPosition >= mMusicList.size()) {
                         mMusicPosition = 0;
@@ -579,35 +603,41 @@ public class MusicPlayerService extends Service {
         @Override
         public void play() {
             //调试
-            log("playMusicGroup");
+            log("play");
 
-            if (!mPlaying && mPrepared) {
-                mPlaying = true;
-
-                if (!mHasMediaButton) {
-                    registerMediaButtonReceiver();
-                }
-
-                requestAudioFocus();
-
-                //更新View
-                mControllerView.play();
-
-                if (mRecordRecentPlay && !mRecentPlayList.contains(mPlayingMusic)) {
-                    mRecentPlayList.add(0, mPlayingMusic);
-                }
-
-                //渐隐播放
-                volumeTransition(0.0F, 1.0F, true, MusicPlayerClient.Action.ACTION_PLAY);
-                sendActionBroadcast(MusicPlayerClient.Action.ACTION_PLAY);
+            if ((mPlaying || !mPrepared) && mPlayingMusic == null) {
+                logW("Player is playing OR player is not prepared.");
+                logW("Try play default music list.");
+                loadMusicGroup(MusicStorage.GroupType.MUSIC_LIST,
+                        MusicStorage.MUSIC_LIST_ALL,
+                        0, true);
+                return;
             }
+
+            mPlaying = true;
+            if (!mHasMediaButton) {
+                registerMediaButtonReceiver();
+            }
+
+            requestAudioFocus();
+
+            //更新View
+            mControllerView.play();
+
+            if (mRecordRecentPlay) {
+                mMusicStorage.recordRecentPlay(mPlayingMusic);
+            }
+
+            //渐隐播放
+            volumeTransition(0.0F, 1.0F, true, MusicPlayerClient.Action.ACTION_PLAY);
+            sendActionBroadcast(MusicPlayerClient.Action.ACTION_PLAY);
         }
 
         @Override
         public void play(int position) {
             if (position > mMusicList.size()) {
                 //调试
-                logE("Position is too big, Not play(int position)");
+                logW("Position is too big, Not play(int position).");
                 return;
             }
 
@@ -619,19 +649,30 @@ public class MusicPlayerService extends Service {
         }
 
         @Override
-        public void playMusicGroup(MusicStorage.GroupType groupType, String groupName, int position) {
-            mTempQueue.clear();     //清空临时播放列表
-            mMusicGroupType = groupType;
-            mMusicGroupName = groupName;
+        public void loadMusicGroup(MusicStorage.GroupType groupType, String groupName, int position, boolean play) {
+            mTempQueue.clear();//清空临时播放队列
+            mPlayedTempMusic = false;
+            if (mPlayingMusic == null || groupType != mMusicGroupType || !groupName.equals(mMusicGroupName)) {
+                List<Music> musicGroup = mMusicStorage.getMusicGroup(mMusicGroupType, mMusicGroupName);
+                if (musicGroup == null || mMusicList.size() < 1) {
+                    //调试
+                    logW("Music list is null OR empty, No play.");
+                    return;
+                }
+                mTempQueue.clear();     //清空临时播放列表
+                mMusicGroupType = groupType;
+                mMusicGroupName = groupName;
+                mMusicList = musicGroup;
+            }
             mMusicPosition = position;
             mMusicPlayingPosition = 0;
-            mMusicList = mMusicStorage.getMusicGroup(mMusicGroupType, mMusicGroupName);
-            if (mMusicList != null && mMusicList.size() < 1) {
-                //调试
-                logE("Music list is empty, Not next");
-                return;
-            }
-            prepare(true);
+            mPlayingMusic = mMusicList.get(mMusicPosition);
+            prepare(play);
+        }
+
+        @Override
+        public void playMusicGroup(MusicStorage.GroupType groupType, String groupName, int position) {
+            loadMusicGroup(groupType, groupName, position, true);
         }
 
         @Override
@@ -641,7 +682,7 @@ public class MusicPlayerService extends Service {
 
             if (mMusicList.size() < 1) {
                 //调试
-                logE("Music list is empty, Not pause");
+                logW("No pause, Music list is empty.");
                 return;
             }
 
@@ -658,9 +699,9 @@ public class MusicPlayerService extends Service {
         }
 
         @Override
-        public void play_pause() {
+        public void playPause() {
             //调试
-            log("play_pause");
+            log("playPause");
             if (mPlaying) {
                 pause();
             } else {
@@ -674,7 +715,7 @@ public class MusicPlayerService extends Service {
             log("stop");
             if (mPlayingMusic == null) {
                 //调试
-                logE("PlayingMusic is Null, Not stop");
+                logW("PlayingMusic is Null, Not stop");
                 return;
             }
             mControllerView.pause();    //更新View
@@ -753,7 +794,11 @@ public class MusicPlayerService extends Service {
             log("Music prepared.");
             mPrepared = true;
             sendActionBroadcast(MusicPlayerClient.Action.ACTION_PREPARED);
-            mMediaPlayer.seekTo(mMusicPlayingPosition);
+            if (mMusicPlayingPosition > 0) {
+                mMediaPlayer.seekTo(mMusicPlayingPosition);
+            }
+            saveState();
+
             mMusicPlayingPosition = 0;
             if (mPlayAfterPrepared) {
                 play();
@@ -780,5 +825,14 @@ public class MusicPlayerService extends Service {
         }
         s += msg[msg.length > 1 ? msg.length - 1 : 0];
         Log.e("MusicPlayerService", s);
+    }
+
+    private void logW(String... msg) {
+        String s = "";
+        for (int i = 0; i < msg.length - 1; i++) {
+            s += msg[i] + " : ";
+        }
+        s += msg[msg.length > 1 ? msg.length - 1 : 0];
+        Log.w("MusicPlayerService", s);
     }
 }

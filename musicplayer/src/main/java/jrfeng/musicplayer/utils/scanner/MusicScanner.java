@@ -70,8 +70,6 @@ public class MusicScanner {
                     mListener.onFinished(mMusicTemp);
                 }
                 mDirs.clear();
-                mListener = null;
-
                 //调试
                 Log.d(TAG, "结束扫描");
             }

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MusicPlayer</string>
+    <string name="default_text">简单音乐</string>
 </resources>

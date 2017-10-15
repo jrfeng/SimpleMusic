@@ -1,65 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/musicListItem"
     android:layout_width="match_parent"
-    android:layout_height="56dp"
+    android:layout_height="@dimen/ListItemHeight"
     android:background="@drawable/btn_normal_button"
-    android:clickable="true"
-    android:orientation="vertical">
+    android:clickable="true">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="16dp"
-        android:orientation="vertical">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@null"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <jrfeng.simplemusic.widget.Divider
+            android:id="@+id/playingIndicator"
+            android:layout_width="4dp"
+            android:layout_height="56dp"
+            android:background="@color/colorBlue300"
+            android:visibility="gone"
+            tools:visibility="visible"/>
+
+        <ImageButton
+            android:id="@+id/ibTempPlay"
+            android:layout_width="48dp"
+            android:layout_height="56dp"
+            android:background="@null"
+            android:scaleType="centerInside"
+            android:src="@drawable/btn_temp_play"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvSongName"
+                style="@style/TextStyle.ListItemTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                tools:text="@string/app_name"/>
+
+            <TextView
+                android:id="@+id/tvSongArtist"
+                style="@style/TextStyle.ListItemDescribe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                tools:text="@string/app_name"/>
+
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/tvItemSongName"
+            android:id="@+id/tvTempPlayMark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxEms="12"
-            android:maxLines="1"
-            android:textColor="@color/colorGrey800"
-            android:textSize="14sp"/>
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/shape_rect_grey_stroke"
+            android:paddingBottom="2dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:paddingTop="2dp"
+            android:text="临时"
+            android:textColor="@color/colorBlue300"
+            android:textSize="10sp"
+            android:visibility="gone"
+            tools:visibility="visible"/>
 
-        <TextView
-            android:id="@+id/tvItemArtist"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxEms="12"
-            android:maxLines="1"
-            android:textColor="@color/colorGrey"
-            android:textSize="12sp"/>
+        <ImageButton
+            android:id="@+id/ibItemMore"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@null"
+            android:src="@drawable/btn_item_more"/>
 
+        <Space
+            android:layout_width="8dp"
+            android:layout_height="1dp"/>
     </LinearLayout>
-
-    <jrfeng.simplemusic.widget.Divider
-        android:id="@+id/dvMark"
-        android:layout_width="4dp"
-        android:layout_height="match_parent"
-        android:background="@color/colorBlue"
-        android:visibility="gone"
-        tools:visibility="visible"/>
-
-    <ImageButton
-        android:id="@+id/ibMenu"
-        android:layout_width="48dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:background="@color/colorTransparent"
-        android:scaleType="centerInside"
-        android:src="@drawable/btn_list_item_menu"/>
 
     <jrfeng.simplemusic.widget.Divider
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
-        android:background="@color/colorGrey300"/>
-</RelativeLayout>
+        android:layout_marginLeft="48dp"
+        android:background="@color/listDividerColor"/>
+</FrameLayout>

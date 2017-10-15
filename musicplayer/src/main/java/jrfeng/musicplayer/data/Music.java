@@ -83,13 +83,13 @@ public class Music implements Serializable {
     }
 
     public List<String> getBelongMusicLists() {
+        if(belongMusicLists == null) {
+            belongMusicLists = new ArrayList<>();
+        }
         return belongMusicLists;
     }
 
     public boolean belongMusicList(String name) {
-        if (belongMusicLists == null) {
-            return false;
-        }
         for (String list : belongMusicLists) {
             if (list.equals(name)) {
                 return true;

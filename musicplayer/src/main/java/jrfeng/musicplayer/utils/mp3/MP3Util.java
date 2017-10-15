@@ -5,8 +5,11 @@ import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.tag.TagException;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+
+import jrfeng.musicplayer.data.Music;
 
 public class MP3Util {
 
@@ -84,19 +87,44 @@ public class MP3Util {
         }
     }
 
-    //*********************包可见**********************
+    public static byte[] getMp3Image(File mp3File) {
+        byte[] mID3V2Head = new byte[10];
+        RandomAccessFile rf = null;
+        try {
+            rf = new RandomAccessFile(mp3File, "r");
+            rf.read(mID3V2Head);
 
-//    static boolean hasFrame(byte[] data, String frame) {
-//        return frameIndex(data, frame) != -1;
-//    }
-//
-//    static int frameIndex(byte[] data, byte[] frame) {
-//        char[] chars = new char[frame.length];
-//        for (int i = 0; i < frame.length; i++) {
-//            chars[i] = (char) (frame[i] & 0xFF);
-//        }
-//        return frameIndex(data, new String(chars));
-//    }
+            ID3V2Info id3V2Info;
+            //抽取ID3V2信息
+            String id3V2TAG = new String(mID3V2Head, 0, 3);
+            if (id3V2TAG.equals("ID3")) {
+                System.out.println("抽取 ID3V2 信息");
+                int size = (mID3V2Head[6] & 0x7f) * 0x200000
+                        + (mID3V2Head[7] & 0x7f) * 0x4000
+                        + (mID3V2Head[8] & 0x7f) * 0x80
+                        + (mID3V2Head[9] & 0x7f);
+                byte[] mID3V2Data = new byte[size];
+                rf.read(mID3V2Data);
+                id3V2Info = new ID3V2Info(mID3V2Data, 0);
+                return id3V2Info.getImage();
+            } else {
+                return null;
+            }
+        } catch (IOException e) {
+            System.err.println(e.toString());
+            return null;
+        } finally {
+            try {
+                if (rf != null) {
+                    rf.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    //*********************包可见**********************
 
     static int frameIndex(byte[] data, String frame) {
         char[] frameChars = frame.toCharArray();

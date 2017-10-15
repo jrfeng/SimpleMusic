@@ -17,11 +17,13 @@ interface MusicPlayerController {
 
     void play(int position);
 
+    void loadMusicGroup(MusicStorage.GroupType groupType, String groupName, int position, boolean play);
+
     void playMusicGroup(MusicStorage.GroupType groupType, String groupName, int position);
 
     void pause();
 
-    void play_pause();
+    void playPause();
 
     void stop();
 
@@ -37,17 +39,21 @@ interface MusicPlayerController {
 
     List<Music> getMusicList();
 
+    MusicStorage.GroupType getMusicGroupType();
+
     String getMusicGroupName();
 
     List<Music> getRecentPlayList();
 
     int getRecentPlayCount();
 
-    boolean setLooping(boolean looping);
+    boolean setPlayMode(MusicPlayerClient.PlayMode mode);
 
-    void setRandomPlay(boolean randomPlay);
+    MusicPlayerClient.PlayMode getPlayMode();
 
-    void addTempMusic(Music music);
+    void addTempPlayMusic(Music music);
+
+    boolean isTempPlay();
 
     void seekTo(int msec);
 

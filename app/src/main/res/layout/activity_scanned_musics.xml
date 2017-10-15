@@ -8,8 +8,9 @@
     android:background="@color/colorWhite">
 
     <android.support.design.widget.AppBarLayout
+        android:background="@null"
         android:layout_width="match_parent"
-        android:layout_height="264dp">
+        android:layout_height="256dp">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
@@ -32,7 +33,7 @@
                     android:layout_height="wrap_content"
                     android:text="0首新歌曲"
                     android:textColor="@color/textColorWhite"
-                    android:textSize="@dimen/textSizeLarge"
+                    android:textSize="@dimen/textSizeLarger"
                     tools:text="16首新歌曲"/>
 
                 <TextView
@@ -68,13 +69,14 @@
 
         <include
             android:id="@+id/scannedMusicsTitle"
-            layout="@layout/widget_scanned_musics_title_menu"/>
+            layout="@layout/widget_scanned_music_header"/>
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvScannedMusics"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
 </android.support.design.widget.CoordinatorLayout>

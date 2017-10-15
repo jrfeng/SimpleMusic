@@ -15,4 +15,24 @@
     <dimen name="textSizeLargerXX">45sp</dimen>
     <dimen name="textSizeLargerXXX">56sp</dimen>
     <dimen name="textSizeLargerXXXX">112sp</dimen>
+
+    <!-- List Header -->
+    <dimen name="listHeaderHeight">40sp</dimen>
+    <dimen name="listHeaderTextSize">14sp</dimen>
+
+    <!-- List Item -->
+    <dimen name="ListItemHeight">60dp</dimen>
+    <dimen name="ListItemTitleTextSize">15sp</dimen>
+    <dimen name="ListItemDescribeTextSize">13sp</dimen>
+
+    <!-- Effects Size-->
+    <dimen name="EffectsSize">16dp</dimen>
+
+    <!-- Back Top-->
+    <dimen name="BackToTopXOffset">48dp</dimen>
+    <dimen name="BackToTopYOffset">8dp</dimen>
+
+    <!-- Drop Down Menu-->
+    <dimen name="menuWidth">112dp</dimen>
+    <dimen name="menuItemHeight">40dp</dimen>
 </resources>

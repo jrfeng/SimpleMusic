@@ -8,21 +8,21 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import jrfeng.musicplayer.data.Music;
 import jrfeng.simplemusic.R;
-import jrfeng.simplemusic.activity.scan.scannedmusics.ScannedMusicsActivity;
+import jrfeng.simplemusic.activity.scan_result.ScannedMusicsActivity;
 import jrfeng.simplemusic.base.BaseActivity;
 
 public class ScanActivity extends BaseActivity implements ScanContract.View {
+    private static final int REQUEST_CODE_SHOW_SCANNED = 1;
+    private static final int REQUEST_CODE_CUSTOM_SCAN = 2;
+
     private ScanContract.Presenter mPresenter;
     private Toolbar toolbar;
     private TextView tvMessage;
@@ -31,8 +31,8 @@ public class ScanActivity extends BaseActivity implements ScanContract.View {
     private TextView tvScanCount;
     private TextView tvScanCountHint1;
     private TextView tvScanCountHint2;
-    private Button btnScanSwitch;
-    private TextView tvCustomScan;
+    private TextView tvScanSwitch;
+//    private TextView tvCustomScan;//“自定义扫描功能” 的控件（目前暂不提供该功能）
 
     private boolean mScanning;
 
@@ -77,20 +77,28 @@ public class ScanActivity extends BaseActivity implements ScanContract.View {
 
     @Override
     public void resetView() {
-        btnScanSwitch.setText("开始扫描");
+        tvScanSwitch.setText("开始扫描");
         tvMessage.setText("扫描本地音乐");
         tvScanningHint.setVisibility(View.INVISIBLE);
         tvScannedPathHint.setVisibility(View.INVISIBLE);
         tvScanCount.setVisibility(View.INVISIBLE);
         tvScanCountHint1.setVisibility(View.INVISIBLE);
         tvScanCountHint2.setVisibility(View.INVISIBLE);
+//        tvCustomScan.setVisibility(View.VISIBLE);
         mScanning = false;
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-            finish();
+            switch (requestCode) {
+                case REQUEST_CODE_SHOW_SCANNED:
+                    finish();
+                    break;
+                case REQUEST_CODE_CUSTOM_SCAN:
+                    //TODO 开始自定义扫描
+                    break;
+            }
         }
     }
 
@@ -102,7 +110,7 @@ public class ScanActivity extends BaseActivity implements ScanContract.View {
         ArrayList<Music> musicList = new ArrayList<>(scannedMusics.size());
         musicList.addAll(scannedMusics);
         intent.putExtra("musics", musicList);
-        startActivityForResult(intent, 1);
+        startActivityForResult(intent, REQUEST_CODE_SHOW_SCANNED);
     }
 
     private void findViews() {
@@ -113,8 +121,8 @@ public class ScanActivity extends BaseActivity implements ScanContract.View {
         tvScanCount = (TextView) findViewById(R.id.tvScanCount);
         tvScanCountHint1 = (TextView) findViewById(R.id.tvScanCountHint1);
         tvScanCountHint2 = (TextView) findViewById(R.id.tvScanCountHint2);
-        btnScanSwitch = (Button) findViewById(R.id.btnScanSwitch);
-        tvCustomScan = (TextView) findViewById(R.id.tvCustomScan);
+        tvScanSwitch = (TextView) findViewById(R.id.tvScanSwitch);
+//        tvCustomScan = (TextView) findViewById(R.id.tvCustomScan);
     }
 
     private void initViews() {
@@ -127,40 +135,37 @@ public class ScanActivity extends BaseActivity implements ScanContract.View {
     }
 
     private void addViewListener() {
-        btnScanSwitch.setOnClickListener(new View.OnClickListener() {
+        tvScanSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mScanning) {
                     mPresenter.stopScan();
                     resetView();
                 } else {
-                    btnScanSwitch.setText("取消扫描");
+                    tvScanSwitch.setText("取消扫描");
                     tvScanningHint.setVisibility(View.VISIBLE);
                     tvScannedPathHint.setVisibility(View.VISIBLE);
                     tvScanCount.setVisibility(View.VISIBLE);
                     tvScanCountHint1.setVisibility(View.VISIBLE);
                     tvScanCountHint2.setVisibility(View.VISIBLE);
+//                    tvCustomScan.setVisibility(View.INVISIBLE);
                     mScanning = true;
                     mPresenter.startScan();
                 }
             }
         });
 
-        tvCustomScan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mScanning) {
-                    Toast.makeText(getApplicationContext(), "正在扫描...", Toast.LENGTH_SHORT).show();
-                } else {
-                    //TODO 自定义扫描
-                    Toast.makeText(getApplicationContext(), "暂不支持", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+//        tvCustomScan.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //TODO 自定义扫描
+//                Toast.makeText(getApplicationContext(), "暂不支持", Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 
     private void setScanningPercent(int percent) {
-        tvMessage.setText("扫描中  " + percent + "%");
+        tvMessage.setText("扫描目录  " + percent + "%");
     }
 
     @SuppressLint("SetTextI18n")

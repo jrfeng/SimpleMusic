@@ -39,7 +39,7 @@ public class MediaButtonReceiver extends BroadcastReceiver {
                 client.previous();
                 break;
             case PLAYER_PLAY_PAUSE:
-                client.play_pause();
+                client.playPause();
                 break;
             case PLAYER_NEXT:
                 client.next();
@@ -64,7 +64,7 @@ public class MediaButtonReceiver extends BroadcastReceiver {
         if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
             switch (keyEvent.getKeyCode()) {
                 case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
-                    client.play_pause();
+                    client.playPause();
                     break;
                 case KeyEvent.KEYCODE_MEDIA_PLAY:
                     client.play();
@@ -83,7 +83,7 @@ public class MediaButtonReceiver extends BroadcastReceiver {
                     break;
                 case KeyEvent.KEYCODE_HEADSETHOOK:
                     //耳机中间的按键，功能与PLAY_PAUSE一样
-                    client.play_pause();
+                    client.playPause();
                     break;
             }
         }

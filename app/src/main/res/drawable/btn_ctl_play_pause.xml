@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <level-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:drawable="@mipmap/ic_ctl_play"
+        android:drawable="@drawable/btn_ctl_play"
         android:maxLevel="1"/>
     <item
-        android:drawable="@mipmap/ic_ctl_pause"
+        android:drawable="@drawable/btn_ctl_pause"
         android:maxLevel="2"/>
 </level-list>

@@ -45,7 +45,7 @@ class DefaultNotifyControllerView implements MusicPlayerClient.NotifyControllerV
         Notification notify;
         Class cl;
         try {
-            cl = decodeTargetActivityClass(context);
+            cl = Configure.getPendingActivityClass();
             mWelcomeActivityPendingIntent = PendingIntent.getActivity(
                     mContext,
                     0,
@@ -98,37 +98,5 @@ class DefaultNotifyControllerView implements MusicPlayerClient.NotifyControllerV
 
         NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(mNotifyId, notification);
-    }
-
-    private Class decodeTargetActivityClass(Context context) throws Exception {
-        //从配置文件解析
-        Class cl;
-        InputStream inputStream = context.getAssets().open("music_player.xml");
-        StringBuilder builder = new StringBuilder(128);
-        Scanner scanner = new Scanner(inputStream);
-        while (scanner.hasNext()) {
-            builder.append(scanner.nextLine());
-        }
-        scanner.close();
-        String content = builder.toString();
-        //解析XML
-        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-        XmlPullParser parser = factory.newPullParser();
-        parser.setInput(new StringReader(content));
-        String str = "";
-        int eventType = parser.getEventType();
-        while (eventType != XmlPullParser.END_DOCUMENT) {
-            String nodeName = parser.getName();
-            if (eventType == XmlPullParser.START_TAG) {
-                if (nodeName.equals("pending-intent")) {
-                    str = parser.nextText();
-                }
-            }
-            eventType = parser.next();
-        }
-        //调试
-        Log.d("App", "解析的 PendingIntent : " + str);
-        cl = Class.forName(str);
-        return cl;
     }
 }

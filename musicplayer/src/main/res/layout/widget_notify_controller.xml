@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
@@ -9,66 +10,82 @@
     android:paddingRight="16dp">
 
     <ImageView
-        android:scaleType="center"
         android:id="@+id/ivIcon"
         android:layout_width="48dp"
         android:layout_height="72dp"
+        android:scaleType="center"
         android:src="@mipmap/ic_launcher_round"/>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:paddingLeft="16dp">
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
-        <TextView
-            android:id="@+id/tvTitle"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical"
+            android:paddingLeft="16dp">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxEms="10"
+                android:singleLine="true"
+                android:text="@string/default_text"
+                android:textColor="#000"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/tvItemArtist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxEms="5"
+                android:singleLine="true"
+                android:text="@string/default_text"
+                android:textColor="#717475"
+                android:textSize="13sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="@string/app_name"
-            android:textSize="16sp"/>
+            android:layout_gravity="bottom|right">
 
-        <TextView
-            android:id="@+id/tvItemArtist"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="@string/app_name"
-            android:textColor="@color/colorGrey"
-            android:textSize="14sp"/>
+            <ImageButton
+                android:id="@+id/ibPrevious"
+                android:layout_width="36dp"
+                android:layout_height="32dp"
+                android:background="#0FFF"
+                android:src="@drawable/btn_previous"/>
 
-    </LinearLayout>
+            <ImageButton
+                android:id="@+id/ibPlayPause"
+                android:layout_width="36dp"
+                android:layout_height="32dp"
+                android:background="#0FFF"
+                android:src="@drawable/btn_play"/>
 
-    <ImageButton
-        android:id="@+id/ibPrevious"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:background="#0FFF"
-        android:src="@drawable/btn_previous"/>
+            <ImageButton
+                android:id="@+id/ibNext"
+                android:layout_width="36dp"
+                android:layout_height="32dp"
+                android:background="#0FFF"
+                android:src="@drawable/btn_next"/>
 
-    <ImageButton
-        android:id="@+id/ibPlayPause"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:background="#0FFF"
-        android:src="@drawable/btn_play"/>
+            <ImageButton
+                android:layout_marginLeft="4dp"
+                android:id="@+id/ibCancel"
+                android:layout_width="36dp"
+                android:layout_height="32dp"
+                android:background="#0FFF"
+                android:src="@drawable/btn_exit"/>
 
-    <ImageButton
-        android:id="@+id/ibNext"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:background="#0FFF"
-        android:src="@drawable/btn_next"/>
-
-    <ImageButton
-        android:id="@+id/ibCancel"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:background="#0FFF"
-        android:src="@drawable/btn_cancel"/>
-
+        </LinearLayout>
+    </FrameLayout>
 </LinearLayout>

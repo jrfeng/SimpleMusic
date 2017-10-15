@@ -82,7 +82,7 @@ class ID3V2Info implements MP3Info {
         String msg;
         try {
             msg = new String(data, index + 11, size - 1, decodeCharset(data[index + 10])).trim();
-        } catch (UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException | StringIndexOutOfBoundsException e) {
             e.printStackTrace();
             return "未知";
         }

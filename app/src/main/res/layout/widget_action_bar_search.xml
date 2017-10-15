@@ -4,12 +4,12 @@
     android:id="@+id/lyActionBar"
     android:layout_width="match_parent"
     android:layout_height="@dimen/actionBarHeightWithStatus"
-    android:background="@color/actionBarColor"
+    android:background="@color/actionBarBgColor"
     android:orientation="vertical"
     android:paddingLeft="12dp"
     android:paddingRight="12dp">
 
-    <TextView
+    <EditText
         android:id="@+id/tvSearch"
         android:layout_width="match_parent"
         android:layout_height="36dp"
@@ -18,6 +18,7 @@
         android:background="@drawable/shape_rect"
         android:drawableLeft="@mipmap/ic_search"
         android:drawableStart="@mipmap/ic_search"
+        android:editable="false"
         android:gravity="center_vertical"
         android:hint="搜索"
         android:textSize="14sp"/>

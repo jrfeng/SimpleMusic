@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/listHeaderHeight">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <Space
+            android:layout_width="16dp"
+            android:layout_height="1dp"/>
+
+        <TextView
+            android:id="@+id/tvAllMusicDescribe"
+            style="@style/TextStyle.ListHeader"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:text="所有音乐（共0首）"/>
+
+        <ImageButton
+            android:id="@+id/ibPlayMode"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@color/colorWhite"
+            android:src="@drawable/level_play_mode"/>
+
+        <jrfeng.simplemusic.widget.Divider
+            android:layout_width="1px"
+            android:layout_height="12dp"
+            android:background="@color/listDividerColor"/>
+
+        <ImageButton
+            android:id="@+id/ibLocateMusic"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@color/colorWhite"
+            android:src="@drawable/btn_locate"/>
+
+        <jrfeng.simplemusic.widget.Divider
+            android:layout_width="1px"
+            android:layout_height="12dp"
+            android:background="@color/listDividerColor"/>
+
+        <ImageButton
+            android:id="@+id/ibMore"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@color/colorWhite"
+            android:src="@drawable/btn_item_more"/>
+
+        <Space
+            android:layout_width="8dp"
+            android:layout_height="1dp"/>
+
+    </LinearLayout>
+
+    <jrfeng.simplemusic.widget.Divider
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_gravity="bottom"
+        android:background="@color/listDividerColor"/>
+</FrameLayout>

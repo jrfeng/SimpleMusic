@@ -27,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.main.NavigationActivity"
+            android:name=".activity.main.MainActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
 
@@ -35,17 +35,7 @@
 
         <activity android:name=".activity.scan.ScanActivity">
         </activity>
-        <activity android:name=".activity.recentplay.RecentPlayActivity">
-        </activity>
-        <activity android:name=".activity.lovemusic.LoveMusicActivity">
-        </activity>
-        <activity android:name=".activity.musiclist.MusicListActivity">
-        </activity>
-        <activity android:name=".activity.album.AlbumActivity">
-        </activity>
-        <activity android:name=".activity.artist.ArtistActivity">
-        </activity>
-        <activity android:name=".activity.scan.scannedmusics.ScannedMusicsActivity"/>
+        <activity android:name=".activity.scan_result.ScannedMusicsActivity"/>
 
         <receiver
             android:name="jrfeng.musicplayer.player.MediaButtonReceiver"

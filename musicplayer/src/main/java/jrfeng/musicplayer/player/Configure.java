@@ -51,7 +51,7 @@ public class Configure {
         }
         mPendingActivityCL = Class.forName(pendingActivity);
 
-        if (!pendingActivity.equals("")) {
+        if (!musicStorage.equals("")) {
             mMusicStorageCL = Class.forName(musicStorage);
         } else {
             mMusicStorageCL = MusicStorageImp.class;
@@ -68,7 +68,7 @@ public class Configure {
         return mMusicStorageCL;
     }
 
-    public static Class getPendingIntentClass() {
+    public static Class getPendingActivityClass() {
         return mPendingActivityCL;
     }
 

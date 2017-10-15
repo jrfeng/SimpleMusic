@@ -1,7 +1,6 @@
 package jrfeng.simplemusic.activity.welcome;
 
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.WindowManager;
 
@@ -10,10 +9,9 @@ import java.util.TimerTask;
 
 import jrfeng.simplemusic.MyApplication;
 import jrfeng.simplemusic.R;
-import jrfeng.simplemusic.activity.main.NavigationActivity;
+import jrfeng.simplemusic.activity.main.MainActivity;
 import jrfeng.simplemusic.base.BaseActivity;
 import jrfeng.musicplayer.player.MusicPlayerClient;
-import jrfeng.simplemusic.receiver.ShutdownActionReceiver;
 
 public class WelcomeActivity extends BaseActivity {
     private boolean mIsActive = true;
@@ -32,7 +30,7 @@ public class WelcomeActivity extends BaseActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        final MusicPlayerClient client = MyApplication.getInstance().getPlayerClient();
+        final MusicPlayerClient client = MusicPlayerClient.getInstance();
 
         if (!client.isConnect()) {
             client.connect(getApplicationContext(), new MusicPlayerClient.OnConnectedListener() {
@@ -45,7 +43,7 @@ public class WelcomeActivity extends BaseActivity {
                         public void run() {
                             if (mIsActive) {
                                 //启动MainActivity
-                                Intent intent = new Intent(WelcomeActivity.this, NavigationActivity.class);
+                                Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
                                 startActivity(intent);
                             }
                             timer.cancel();
@@ -53,6 +51,20 @@ public class WelcomeActivity extends BaseActivity {
                     }, 1000);
                 }
             });
+        } else {
+            //启动定时器, 延时1秒
+            final Timer timer = new Timer(true);
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    if (mIsActive) {
+                        //启动MainActivity
+                        Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }
+                    timer.cancel();
+                }
+            }, 1000);
         }
     }
 

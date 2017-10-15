@@ -113,11 +113,11 @@ public class MusicStorageImp implements MusicStorage {
         switch (type) {
             case MUSIC_LIST:
                 switch (name) {
-                    case MUSIC_ALL:
+                    case MUSIC_LIST_ALL:
                         return getAllMusic();
-                    case MUSIC_I_LOVE:
+                    case MUSIC_LIST_I_LOVE:
                         return getILove();
-                    case MUSIC_RECENT_PLAY:
+                    case MUSIC_LIST_RECENT_PLAY:
                         return getRecentPlayList();
                 }
                 return getMusicList(name);
@@ -222,6 +222,65 @@ public class MusicStorageImp implements MusicStorage {
         return mArtistMusicLists.get(index);
     }
 
+    @Override
+    public void addMusicToList(Music music, String listName) {
+        if (listName.equals(MUSIC_LIST_ALL)) {
+            mAllMusic.add(music);
+        } else if (listName.equals(MUSIC_LIST_I_LOVE)) {
+            addMusicToILove(music);
+        }
+
+        int index = mMusicListNames.indexOf(listName);
+        if (index != -1) {
+            music.getBelongMusicLists().add(listName);
+            mMusicLists.get(index).add(music);
+        }
+    }
+
+    @Override
+    public void removeMusicFromList(Music music, String listName) {
+        if (listName.equals(MUSIC_LIST_ALL)) {
+            removeMusicFromAllMusicList(music);
+        } else if (listName.equals(MUSIC_LIST_I_LOVE)) {
+            removeMusicFromILove(music);
+        }
+        int index = mMusicListNames.indexOf(listName);
+        if (index != -1) {
+            music.getBelongMusicLists().remove(listName);
+            mMusicLists.get(index).remove(music);
+        }
+    }
+
+    @Override
+    public void addMusicToILove(Music music) {
+        music.setILove(true);
+        mILove.add(music);
+    }
+
+    @Override
+    public void recordRecentPlay(Music music) {
+        if (!mRecentPlay.contains(music)) {
+            mRecentPlay.add(0, music);
+            mRecentPlayIds.clear();
+            for (Music m : mRecentPlay) {
+                mRecentPlayIds.add(m.getPath());
+            }
+            mRecentPlayIds.saveAsync(null);
+        }
+    }
+
+    @Override
+    public void removeMusicFromILove(Music music) {
+        music.setILove(false);
+        mILove.remove(music);
+    }
+
+    @Override
+    public void removeMusicFromAllMusicList(Music music) {
+        mAllMusic.remove(music);
+        updateAll();
+    }
+
     //*************************private**********************
 
     private void updateILove() {
@@ -275,6 +334,12 @@ public class MusicStorageImp implements MusicStorage {
                 mArtistMusicLists.get(index2).add(music);
             }
         }
+    }
+
+    private void updateAll() {
+        updateILove();
+        updateMusicLists();
+        updateAlbumsAndArtists();
     }
 
     //***************************调试************************

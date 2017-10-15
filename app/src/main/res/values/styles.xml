@@ -6,17 +6,25 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowTranslucentStatus">true</item>
     </style>
 
-    <style name="TextViewStyle">
-        <item name="android:textSize">@dimen/textSizeNormal</item>
-        <item name="android:textColor">@color/colorWhite</item>
+    <style name="TextStyle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#000</item>
     </style>
 
-    <style name="TextViewStyle.Normal"/>
+    <style name="TextStyle.ListHeader">
+        <item name="android:textSize">@dimen/listHeaderTextSize</item>
+        <item name="android:textColor">@color/colorListTitle</item>
+    </style>
 
-    <style name="TextViewStyle.Normal_Grey">
-        <item name="android:textSize">@dimen/textSizeNormal</item>
-        <item name="android:textColor">@color/textColorGrey</item>
+    <style name="TextStyle.ListItemTitle">
+        <item name="android:textSize">@dimen/ListItemTitleTextSize</item>
+    </style>
+
+    <style name="TextStyle.ListItemDescribe">
+        <item name="android:textSize">@dimen/ListItemDescribeTextSize</item>
+        <item name="android:textColor">@color/colorListDescribe</item>
     </style>
 </resources>

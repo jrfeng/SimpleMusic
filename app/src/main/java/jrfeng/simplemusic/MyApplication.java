@@ -20,8 +20,6 @@ public class MyApplication extends Application {
     private static MyApplication mMyApplication;
     private static List<BaseActivity> mActivityStack;
 
-    private MusicPlayerClient mPlayerClient;
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -30,8 +28,6 @@ public class MyApplication extends Application {
         if (mMyApplication == null) {
             mMyApplication = this;
             mActivityStack = new LinkedList<>();
-
-            mPlayerClient = MusicPlayerClient.getInstance();
         }
     }
 
@@ -56,9 +52,5 @@ public class MyApplication extends Application {
             }
         }
         mActivityStack.clear();
-    }
-
-    public MusicPlayerClient getPlayerClient() {
-        return mPlayerClient;
     }
 }

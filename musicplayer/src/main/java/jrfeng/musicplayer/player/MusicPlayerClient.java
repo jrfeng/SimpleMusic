@@ -112,6 +112,11 @@ public class MusicPlayerClient implements ServiceConnection, MusicPlayerControll
     }
 
     @Override
+    public void loadMusicGroup(MusicStorage.GroupType groupType, String groupName, int position, boolean play) {
+        mController.loadMusicGroup(groupType, groupName, position, play);
+    }
+
+    @Override
     public void playMusicGroup(MusicStorage.GroupType groupType, String groupName, int position) {
         mController.playMusicGroup(groupType, groupName, position);
     }
@@ -122,8 +127,8 @@ public class MusicPlayerClient implements ServiceConnection, MusicPlayerControll
     }
 
     @Override
-    public void play_pause() {
-        mController.play_pause();
+    public void playPause() {
+        mController.playPause();
     }
 
     @Override
@@ -162,6 +167,11 @@ public class MusicPlayerClient implements ServiceConnection, MusicPlayerControll
     }
 
     @Override
+    public MusicStorage.GroupType getMusicGroupType() {
+        return mController.getMusicGroupType();
+    }
+
+    @Override
     public String getMusicGroupName() {
         return mController.getMusicGroupName();
     }
@@ -177,18 +187,23 @@ public class MusicPlayerClient implements ServiceConnection, MusicPlayerControll
     }
 
     @Override
-    public boolean setLooping(boolean looping) {
-        return mController.setLooping(looping);
+    public boolean setPlayMode(PlayMode mode) {
+        return mController.setPlayMode(mode);
     }
 
     @Override
-    public void setRandomPlay(boolean randomPlay) {
-        mController.setRandomPlay(randomPlay);
+    public PlayMode getPlayMode() {
+        return mController.getPlayMode();
     }
 
     @Override
-    public void addTempMusic(Music music) {
-        mController.addTempMusic(music);
+    public void addTempPlayMusic(Music music) {
+        mController.addTempPlayMusic(music);
+    }
+
+    @Override
+    public boolean isTempPlay() {
+        return mController.isTempPlay();
     }
 
     @Override
@@ -272,5 +287,9 @@ public class MusicPlayerClient implements ServiceConnection, MusicPlayerControll
         public static final String ACTION_ERROR = "jrfeng.simplemusic.action.ERROR";
         public static final String ACTION_SHUTDOWN = "jrfeng.simplemusic.action.SHUTDOWN";
         public static final String ACTION_MUSIC_NOT_EXIST = "jrfeng.simplemusic.action.MUSIC_NOT_EXIST";
+    }
+
+    public enum PlayMode {
+        MODE_ORDER, MODE_RANDOM, MODE_LOOP
     }
 }
