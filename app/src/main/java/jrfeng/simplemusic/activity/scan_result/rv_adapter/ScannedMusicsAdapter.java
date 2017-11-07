@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import jrfeng.musicplayer.data.Music;
+import jrfeng.player.data.Music;
 import jrfeng.simplemusic.R;
 
 public class ScannedMusicsAdapter extends RecyclerView.Adapter<ScannedMusicsAdapter.ViewHolder> {
@@ -57,7 +57,7 @@ public class ScannedMusicsAdapter extends RecyclerView.Adapter<ScannedMusicsAdap
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.tvSongName.setText(mScannedMusicList.get(position).getSongName());
+        holder.tvSongName.setText(mScannedMusicList.get(position).getName());
         holder.tvSongArtist.setText(mScannedMusicList.get(position).getArtist());
         holder.cbChecked.setChecked(mItemsState[position]);
         mViewHolders[position] = holder;
@@ -135,7 +135,7 @@ public class ScannedMusicsAdapter extends RecyclerView.Adapter<ScannedMusicsAdap
         public ViewHolder(View itemView) {
             super(itemView);
             this.itemView = itemView;
-            cbChecked = itemView.findViewById(R.id.cbNeedAdd);
+            cbChecked = itemView.findViewById(R.id.cbChecked);
             tvSongName = itemView.findViewById(R.id.tvSongName);
             tvSongArtist = itemView.findViewById(R.id.tvSongArtist);
         }

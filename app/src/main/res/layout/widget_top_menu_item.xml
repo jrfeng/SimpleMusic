@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:background="@drawable/bg_top_menu_item"
+    android:clickable="true"
+    android:orientation="vertical"
+    android:paddingLeft="32dp"
+    android:paddingRight="32dp">
+
+    <jrfeng.simplemusic.widget.Divider
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/listDividerColor"/>
+
+    <TextView
+        android:id="@+id/tvItem"
+        style="@style/TextStyle.ListItemTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        tools:text="@string/app_name"/>
+
+</FrameLayout>

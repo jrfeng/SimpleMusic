@@ -1,28 +1,33 @@
 package jrfeng.simplemusic.activity.main.controller;
 
 import android.content.Context;
-import android.widget.Toast;
+import android.os.Bundle;
 
 import java.io.File;
 
-import jrfeng.musicplayer.data.Music;
-import jrfeng.musicplayer.mode.MusicStorage;
-import jrfeng.musicplayer.player.MusicPlayerClient;
-import jrfeng.musicplayer.utils.mp3.MP3Util;
+import jrfeng.player.data.Music;
+import jrfeng.player.mode.MusicStorage;
+import jrfeng.player.player.MusicPlayerClient;
+import jrfeng.player.utils.mp3.MP3Util;
+import jrfeng.simplemusic.activity.main.list.MusicListFragment;
+import jrfeng.simplemusic.dialog.PlayingMusicGroupDialog;
+import jrfeng.simplemusic.dialog.TempPlayDialog;
 import jrfeng.simplemusic.receiver.PlayerActionDisposer;
 import jrfeng.simplemusic.receiver.PlayerActionReceiver;
 
 public class ControllerPresenter implements ControllerContract.Presenter, PlayerActionDisposer {
+    private Context mContext;
     private ControllerContract.View mView;
     private MusicPlayerClient mClient;
     private PlayerActionReceiver mPlayerActionReceiver;
 
-    private MusicPlayerClient.MusicProgressListener mProgressListener;
+    private MusicPlayerClient.PlayerProgressListener mProgressListener;
 
     public ControllerPresenter(Context context, ControllerContract.View view) {
+        mContext = context;
         mView = view;
         mClient = MusicPlayerClient.getInstance();
-        mProgressListener = new MusicPlayerClient.MusicProgressListener() {
+        mProgressListener = new MusicPlayerClient.PlayerProgressListener() {
             @Override
             public void onProgressUpdated(int progress) {
                 mView.viewSeekTo(progress);
@@ -37,7 +42,7 @@ public class ControllerPresenter implements ControllerContract.Presenter, Player
         mPlayerActionReceiver.register();
         if (mClient.getPlayingMusic() == null) {
             mClient.loadMusicGroup(MusicStorage.GroupType.MUSIC_LIST,
-                    MusicStorage.MUSIC_LIST_ALL,
+                    MusicStorage.MUSIC_LIST_ALL_MUSIC,
                     0, false);
         }
         notifyViewRefresh();
@@ -83,13 +88,23 @@ public class ControllerPresenter implements ControllerContract.Presenter, Player
     }
 
     @Override
+    public void openPlayingMusicGroup() {
+        if (mClient.isPlayingTempMusic()) {
+            TempPlayDialog.show(mContext);
+        } else {
+            PlayingMusicGroupDialog.show(mContext, mClient.getMusicGroupType(),
+                    mClient.getMusicGroupName(), mClient.getPlayingMusicIndex());
+        }
+    }
+
+    @Override
     public void onPlay() {
-        mView.viewPause();
+        mView.viewPlay();
     }
 
     @Override
     public void onPause() {
-        mView.viewPlay();
+        mView.viewPause();
     }
 
     @Override
@@ -109,6 +124,7 @@ public class ControllerPresenter implements ControllerContract.Presenter, Player
 
     @Override
     public void onPrepared() {
+        mView.viewPause();
         notifyViewRefresh();
     }
 
@@ -141,7 +157,7 @@ public class ControllerPresenter implements ControllerContract.Presenter, Player
             image = null;
             isPLaying = false;
         } else {
-            songName = music.getSongName();
+            songName = music.getName();
             artist = music.getArtist();
             songProgress = mClient.getMusicProgress();
             songLength = mClient.getMusicLength();
@@ -149,6 +165,11 @@ public class ControllerPresenter implements ControllerContract.Presenter, Player
             isPLaying = mClient.isPlaying();
         }
         mView.refreshViews(songName, artist, songProgress, songLength, image, isPLaying);
+        if (mClient.isPlayingTempMusic()) {
+            mView.showTempPlayMark();
+        } else {
+            mView.hideTempPlayMark();
+        }
     }
 
     private boolean isMusicFileExist() {

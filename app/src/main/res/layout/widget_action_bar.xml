@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/vgActionBar"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/actionBarHeightWithStatus"
+    android:background="@color/actionBarBgColor"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingTop="24dp">
+
+    <ImageButton
+        android:id="@+id/ibClose"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@null"
+        android:scaleType="centerInside"
+        android:src="@drawable/btn_close"/>
+
+    <TextView
+        android:id="@+id/tvActionBarTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:singleLine="true"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/actionBarTitleTextSize"
+        android:text="@string/app_name"/>
+
+    <Space
+        android:layout_width="16dp"
+        android:layout_height="0dp"/>
+
+</LinearLayout>

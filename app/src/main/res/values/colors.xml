@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Theme Color -->
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">@color/colorBlue300</color>
+    <color name="colorPrimaryDark">@color/colorBlue</color>
+    <color name="colorAccent">@color/colorGrey300</color>
 
-     <!--Base Color -->
+    <!-- Base Color -->
     <color name="colorGrey500">#9E9E9E</color>
     <color name="colorGrey100">#F5F5F5</color>
     <color name="colorGrey200">#EEE</color>
@@ -13,6 +13,7 @@
     <color name="colorGrey600">#757575</color>
     <color name="colorGrey700">#616161</color>
     <color name="colorGrey800">#424242</color>
+    <color name="colorGrey50">#FAFAFA</color>
     <color name="colorBlack">#0B0B0B</color>
     <color name="colorBlue">#2196F3</color>
     <color name="colorBlue300">#64B5F6</color>
@@ -33,6 +34,12 @@
     <color name="listDividerColor">#E6E6E6</color>
 
     <!-- List -->
-    <color name="colorListTitle">#000</color>
-    <color name="colorListDescribe">#757575</color>
+    <color name="colorListTitle">@color/colorGrey800</color>
+    <color name="colorListDescribe">@color/colorGrey600</color>
+
+    <!-- Alert Dialog -->
+    <color name="colorAlertDialogBackground">#1000</color>
+
+    <!-- Top Menu -->
+    <color name="colorTopMenuBackground">#FFFFFF</color>
 </resources>

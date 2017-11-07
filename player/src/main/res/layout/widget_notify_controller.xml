@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
+
+    <FrameLayout
+        android:layout_width="48dp"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/ivIcon"
+            android:layout_width="@dimen/iconWidthAndHeight"
+            android:layout_height="@dimen/iconWidthAndHeight"
+            android:layout_gravity="center_vertical"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/ic_launcher"/>
+
+        <ImageView
+            android:id="@+id/ivTempPlayMark"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginTop="12dp"
+            android:scaleType="centerInside"
+            android:src="@null"
+            tools:src="@mipmap/ic_temp_play_mark"/>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical"
+            android:paddingLeft="16dp">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxEms="10"
+                android:singleLine="true"
+                android:text="@string/default_text"
+                android:textColor="#424242"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/tvItemArtist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxEms="5"
+                android:singleLine="true"
+                android:text="@string/default_text"
+                android:textColor="#757575"
+                android:textSize="13sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right">
+
+            <ImageButton
+                android:id="@+id/ibPrevious"
+                android:layout_width="36dp"
+                android:layout_height="32dp"
+                android:background="#0FFF"
+                android:src="@drawable/btn_previous"/>
+
+            <ImageButton
+                android:id="@+id/ibPlayPause"
+                android:layout_width="36dp"
+                android:layout_height="32dp"
+                android:background="#0FFF"
+                android:src="@drawable/btn_play"/>
+
+            <ImageButton
+                android:id="@+id/ibNext"
+                android:layout_width="36dp"
+                android:layout_height="32dp"
+                android:background="#0FFF"
+                android:src="@drawable/btn_next"/>
+
+            <ImageButton
+                android:id="@+id/ibCancel"
+                android:layout_width="36dp"
+                android:layout_height="32dp"
+                android:layout_marginLeft="4dp"
+                android:background="#0FFF"
+                android:src="@drawable/btn_exit"/>
+
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>

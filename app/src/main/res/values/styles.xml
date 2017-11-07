@@ -21,10 +21,23 @@
 
     <style name="TextStyle.ListItemTitle">
         <item name="android:textSize">@dimen/ListItemTitleTextSize</item>
+        <item name="android:textColor">@color/colorListTitle</item>
     </style>
 
     <style name="TextStyle.ListItemDescribe">
         <item name="android:textSize">@dimen/ListItemDescribeTextSize</item>
         <item name="android:textColor">@color/colorListDescribe</item>
+    </style>
+
+    <!-- Bottom Dialog Anim -->
+    <style name="BottomDialogAnim">
+        <item name="android:windowEnterAnimation">@anim/slide_in_up</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_down</item>
+    </style>
+
+    <!-- Top Menu Anim -->
+    <style name="TopMenuAnim">
+        <item name="android:windowEnterAnimation">@anim/slide_in_down</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_up</item>
     </style>
 </resources>

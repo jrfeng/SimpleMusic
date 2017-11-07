@@ -1,5 +1,7 @@
 package jrfeng.simplemusic.activity.main.controller;
 
+import android.support.v4.app.Fragment;
+
 import jrfeng.simplemusic.base.BasePresenter;
 import jrfeng.simplemusic.base.BaseView;
 
@@ -16,6 +18,10 @@ public interface ControllerContract {
         void notifyPlayError();
 
         void notifyMusicNotExist();
+
+        void showTempPlayMark();
+
+        void hideTempPlayMark();
     }
 
     interface Presenter extends BasePresenter {
@@ -28,5 +34,7 @@ public interface ControllerContract {
         void seekTo(int progress);
 
         void setSeekingState(boolean seeking);
+
+        void openPlayingMusicGroup();
     }
 }

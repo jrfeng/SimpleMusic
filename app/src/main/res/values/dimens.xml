@@ -4,6 +4,7 @@
     <dimen name="statusBarHeight">24dp</dimen>
     <dimen name="actionBarHeight">56dp</dimen>
     <dimen name="actionBarHeightWithStatus">80dp</dimen>
+    <dimen name="actionBarTitleTextSize">18sp</dimen>
 
     <!-- Text Dimen -->
     <dimen name="textSizeSmall">12sp</dimen>
@@ -25,14 +26,28 @@
     <dimen name="ListItemTitleTextSize">15sp</dimen>
     <dimen name="ListItemDescribeTextSize">13sp</dimen>
 
+    <!-- List Nav -->
+    <dimen name="ListNavItemIconSize">48dp</dimen>
+
     <!-- Effects Size-->
     <dimen name="EffectsSize">16dp</dimen>
 
     <!-- Back Top-->
     <dimen name="BackToTopXOffset">48dp</dimen>
-    <dimen name="BackToTopYOffset">8dp</dimen>
+    <dimen name="BackToTopYOffset">16dp</dimen>
 
-    <!-- Drop Down Menu-->
-    <dimen name="menuWidth">112dp</dimen>
-    <dimen name="menuItemHeight">40dp</dimen>
+    <!-- Custom Popup Menu-->
+    <dimen name="customPopupMenuMaxWidth">112dp</dimen>
+    <dimen name="customPopupMenuItemHeight">40dp</dimen>
+
+    <!-- Custom Alert Dialog -->
+    <dimen name="customAlertDialogWidth">272dp</dimen>
+    <dimen name="customAlertDialogHeight">192dp</dimen>
+    <dimen name="customAlertDialogCornerRadius">8dp</dimen>
+    <dimen name="customAlertDialogTitleHeight">56dp</dimen>
+    <dimen name="customAlertDialogButtonHeight">48dp</dimen>
+
+    <!-- Bottom List Dialog-->
+    <dimen name="bottomListDialogHeight">400dp</dimen>
+    <dimen name="bottomListDialogItemHeight">48dp</dimen>
 </resources>

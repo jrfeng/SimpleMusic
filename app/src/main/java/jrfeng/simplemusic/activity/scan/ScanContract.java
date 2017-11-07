@@ -2,7 +2,7 @@ package jrfeng.simplemusic.activity.scan;
 
 import java.util.List;
 
-import jrfeng.musicplayer.data.Music;
+import jrfeng.player.data.Music;
 import jrfeng.simplemusic.base.BasePresenter;
 import jrfeng.simplemusic.base.BaseView;
 

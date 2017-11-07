@@ -3,19 +3,18 @@ package jrfeng.simplemusic;
 import android.app.Application;
 import android.util.Log;
 
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-import jrfeng.musicplayer.player.Configure;
 import jrfeng.simplemusic.base.BaseActivity;
-import jrfeng.musicplayer.player.MusicPlayerClient;
-import jrfeng.simplemusic.utils.log.L;
 
 public class MyApplication extends Application {
-    public static final String TAG = "SimpleMusic";
+    /**
+     * 调试用，请在调试时将其设为 true。
+     */
+    public static final boolean DEBUG = true;
+
+    public static final String TAG = "Application";
 
     private static MyApplication mMyApplication;
     private static List<BaseActivity> mActivityStack;
@@ -24,7 +23,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         //调试
-        L.d("App", "【************Application : onCreate****************】");
+        log("【************Application : onCreate****************】");
         if (mMyApplication == null) {
             mMyApplication = this;
             mActivityStack = new LinkedList<>();
@@ -45,12 +44,20 @@ public class MyApplication extends Application {
 
     public static void shutdown() {
         //调试
-        L.d(TAG, "MyApplication : shutdown app");
+        log("MyApplication : shutdown app");
         for (int i = 0; i < mActivityStack.size(); i++) {
             if (!mActivityStack.get(i).isFinishing()) {
                 mActivityStack.get(i).finish();
             }
         }
         mActivityStack.clear();
+    }
+
+    //****************调试用***************
+
+    private static void log(String msg) {
+        if (MyApplication.DEBUG) {
+            Log.d(TAG, msg);
+        }
     }
 }

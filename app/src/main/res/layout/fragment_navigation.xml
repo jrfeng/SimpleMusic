@@ -6,13 +6,14 @@
     android:orientation="vertical">
 
     <include
-        android:id="@+id/abSearch"
-        layout="@layout/widget_action_bar_search"/>
+        android:id="@+id/searchActionBar"
+        layout="@layout/widget_action_bar_search_placeholder"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvNavList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:background="@color/colorWhite"/>
 
 </LinearLayout>

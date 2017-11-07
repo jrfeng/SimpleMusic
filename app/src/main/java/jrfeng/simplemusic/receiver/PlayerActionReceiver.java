@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
-import jrfeng.musicplayer.player.MusicPlayerClient;
+import jrfeng.player.player.MusicPlayerClient;
 
 public class PlayerActionReceiver extends BroadcastReceiver {
     private PlayerActionDisposer mDisposer;

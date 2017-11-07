@@ -1,14 +1,17 @@
 package jrfeng.simplemusic.activity.main.nav;
 
+import android.support.v4.app.Fragment;
+
 import java.util.List;
 
-import jrfeng.musicplayer.data.Music;
-import jrfeng.musicplayer.player.MusicPlayerClient;
+import jrfeng.player.data.Music;
+import jrfeng.player.player.MusicPlayerClient;
 import jrfeng.simplemusic.base.BasePresenter;
 import jrfeng.simplemusic.base.BaseView;
 
 public interface NavigationContract {
     interface View extends BaseView<Presenter> {
+
         void refreshMenusDescribe();
 
         void refreshRecentPlayCount();
@@ -17,15 +20,19 @@ public interface NavigationContract {
 
         void refreshMusicList();
 
+        void refreshAllView();
+
         void refreshPlayingMusicPosition(int position);
 
         void setViewPlayMode(MusicPlayerClient.PlayMode mode);
 
         void musicListScrollTo(int position);
 
-        void backTop();
-
         void showPlayModeMenu(android.view.View anchorView);
+
+        void showMore_Menu(android.view.View anchorView);
+
+        void startFragment(Fragment fragment);
     }
 
     interface Presenter extends BasePresenter {
@@ -49,14 +56,14 @@ public interface NavigationContract {
 
         void setPlayMode(MusicPlayerClient.PlayMode mode);
 
-        List<Music> getAllMusic();
+        List<String> getTempListMusicNames();
 
-        void onMusicListItemClicked(int position);
+        List<Music> getTempList();
 
-        int getPlayingMusicPosition();
+        void clearTempList();
 
-        void addTempPlayMusic(Music music);
+        boolean tempListIsEmpty();
 
-        boolean isTempPlay();
+        void playTempMusic(int position);
     }
 }

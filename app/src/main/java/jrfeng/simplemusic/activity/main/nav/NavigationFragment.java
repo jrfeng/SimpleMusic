@@ -8,26 +8,30 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.alibaba.android.vlayout.DelegateAdapter;
 import com.alibaba.android.vlayout.VirtualLayoutManager;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import jrfeng.musicplayer.player.MusicPlayerClient;
+import jrfeng.player.mode.MusicStorage;
+import jrfeng.player.player.MusicPlayerClient;
+import jrfeng.simplemusic.MyApplication;
 import jrfeng.simplemusic.R;
-import jrfeng.simplemusic.activity.main.nav.vl_adpter.BackTopAdapter;
-import jrfeng.simplemusic.activity.main.nav.vl_adpter.MusicListAdapter;
-import jrfeng.simplemusic.activity.main.nav.vl_adpter.MusicListTitleAdapter;
-import jrfeng.simplemusic.activity.main.nav.vl_adpter.NavMenuAdapter;
-import jrfeng.simplemusic.adpter.vlayout.DividerAdapter;
-import jrfeng.simplemusic.widget.DropDownMenu;
+import jrfeng.simplemusic.activity.main.MainActivity;
+import jrfeng.simplemusic.adapter.vlayout.BackTopAdapter;
+import jrfeng.simplemusic.adapter.vlayout.musiclist.MusicListAdapter;
+import jrfeng.simplemusic.activity.main.nav.adpter.MusicListTitleAdapter;
+import jrfeng.simplemusic.activity.main.nav.adpter.NavMenuAdapter;
+import jrfeng.simplemusic.adapter.vlayout.DividerAdapter;
+import jrfeng.simplemusic.dialog.SortMusicListDialog;
+import jrfeng.simplemusic.dialog.TempPlayDialog;
+import jrfeng.simplemusic.widget.CustomPopupMenu;
 
 public class NavigationFragment extends Fragment implements NavigationContract.View {
+    private static final String TAG = "NavigationFragment";
     private NavigationContract.Presenter mPresenter;
 
-    private View abSearch;
+    private TextView tvSearch;
     private RecyclerView rvNavList;
 
     private VirtualLayoutManager mVLManager;
@@ -35,20 +39,23 @@ public class NavigationFragment extends Fragment implements NavigationContract.V
     private MusicListTitleAdapter mMusicListTitleAdapter;
     private MusicListAdapter mMusicListAdapter;
 
-    private DropDownMenu mPlayModeMenu;
+    private MainActivity mMainActivity;
 
     //*************************private**************************
 
     private void findViews(View contentView) {
-        abSearch = contentView.findViewById(R.id.abSearch);
+        tvSearch = contentView.findViewById(R.id.tvSearch);
         rvNavList = contentView.findViewById(R.id.rvNavList);
     }
 
     private void addViewListener() {
-        abSearch.setOnClickListener(new View.OnClickListener() {
+        tvSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO 打开搜索页面
+                //启动搜索 Activity
+                mMainActivity.startSearchActivity(
+                        MusicStorage.GroupType.MUSIC_LIST,
+                        MusicStorage.MUSIC_LIST_ALL_MUSIC);
             }
         });
     }
@@ -68,13 +75,22 @@ public class NavigationFragment extends Fragment implements NavigationContract.V
         delegateAdapter.addAdapter(mNavMenuAdapter);
 
         delegateAdapter.addAdapter(new DividerAdapter(getContext()));
-        delegateAdapter.addAdapter(new BackTopAdapter(getContext(), this));
+
+        delegateAdapter.addAdapter(new BackTopAdapter(getContext(), mVLManager));
 
         mMusicListTitleAdapter = new MusicListTitleAdapter(getContext(), mPresenter);
         delegateAdapter.addAdapter(mMusicListTitleAdapter);
 
-        mMusicListAdapter = new MusicListAdapter(getContext(), mPresenter);
+        mMusicListAdapter = new MusicListAdapter(
+                getContext(),
+                MusicStorage.GroupType.MUSIC_LIST,
+                MusicStorage.MUSIC_LIST_ALL_MUSIC,
+                9);
         delegateAdapter.addAdapter(mMusicListAdapter);
+    }
+
+    private void showTempList() {
+        TempPlayDialog.show(getContext());
     }
 
     //************************Override**************************
@@ -84,14 +100,26 @@ public class NavigationFragment extends Fragment implements NavigationContract.V
         mPresenter = presenter;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mPresenter = new NavigationPresenter(getContext(), this);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View contentView = inflater.inflate(R.layout.fragment_navigation, container, false);
         findViews(contentView);
-        initViews();
         addViewListener();
+        initViews();
         return contentView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mMainActivity = (MainActivity) getActivity();
     }
 
     @Override
@@ -127,6 +155,14 @@ public class NavigationFragment extends Fragment implements NavigationContract.V
     }
 
     @Override
+    public void refreshAllView() {
+        refreshMenusDescribe();
+        refreshRecentPlayCount();
+        refreshMusicListTitle();
+        refreshMusicList();
+    }
+
+    @Override
     public void refreshPlayingMusicPosition(int position) {
         mMusicListAdapter.setChoice(position);
     }
@@ -139,58 +175,84 @@ public class NavigationFragment extends Fragment implements NavigationContract.V
     @Override
     public void musicListScrollTo(int position) {
         //定位播放中的歌曲
-        if (mMusicListAdapter.getItemCount() > 0) {
+        if (mPresenter.getAllMusicCount() > 0) {
             final int index = position + 9;
             int p1 = mVLManager.findFirstCompletelyVisibleItemPosition();
             int p2 = mVLManager.findLastCompletelyVisibleItemPosition();
 
-            Log.d("Indicator", "P1 : " + p1);
-            Log.d("Indicator", "P2 : " + p2);
+            //调试
+            log("P1 : " + p1);
+            log("P2 : " + p2);
 
             int offset = (p2 - p1 + 1) / 2;
             if (index >= p2) {
-                Log.d("Indicator", ">= P2");
-                mVLManager.scrollToPosition(index + offset);
+                log(">= P2");
+                mVLManager.scrollToPosition(Math.min(index + offset, mPresenter.getAllMusicCount() + 8));
             } else if (index <= p1) {
-                Log.d("Indicator", "<= P1");
-                mVLManager.scrollToPosition(index - offset);
-            }
+                log("<= P1");
+                mVLManager.scrollToPosition(Math.max((index - offset), 0));
+            } /*else {
+                int offset2 = (index - (p1 + p2) / 2);
+                if (offset2 < 0) {
+                    mVLManager.scrollToPosition(p1 + offset2);
+                } else {
+                    mVLManager.scrollToPosition(p2 + offset2);
+                }
+            }*/
         }
-    }
-
-    @Override
-    public void backTop() {
-        rvNavList.scrollToPosition(0);
     }
 
     @Override
     public void showPlayModeMenu(android.view.View anchorView) {
-        if (mPlayModeMenu == null) {
-            initPlayModeMenu(anchorView);
-        }
-        mPlayModeMenu.show();
-    }
-
-    private void initPlayModeMenu(View anchorView) {
-        List<DropDownMenu.Item> items = new ArrayList<>(3);
-        items.add(new DropDownMenu.Item(R.mipmap.ic_mode_order, "顺序播放"));
-        items.add(new DropDownMenu.Item(R.mipmap.ic_mode_loop, "循环播放"));
-        items.add(new DropDownMenu.Item(R.mipmap.ic_mode_random, "随机播放"));
-        mPlayModeMenu = new DropDownMenu(anchorView, items).setOnItemClickedListener(new DropDownMenu.OnItemClickListener() {
+        CustomPopupMenu playModeMenu = new CustomPopupMenu(anchorView, R.menu.play_mode);
+        playModeMenu.setOnItemClickedListener(new CustomPopupMenu.OnItemClickListener() {
             @Override
-            public void onItemClicked(int position) {
-                switch (position) {
-                    case 0:
+            public void onItemClicked(int itemId) {
+                switch (itemId) {
+                    case R.id.mode_order:
                         mPresenter.setPlayMode(MusicPlayerClient.PlayMode.MODE_ORDER);
                         break;
-                    case 1:
+                    case R.id.mode_loop:
                         mPresenter.setPlayMode(MusicPlayerClient.PlayMode.MODE_LOOP);
                         break;
-                    case 2:
+                    case R.id.mode_random:
                         mPresenter.setPlayMode(MusicPlayerClient.PlayMode.MODE_RANDOM);
                         break;
                 }
             }
         });
+        playModeMenu.show();
+    }
+
+    @Override
+    public void showMore_Menu(View anchorView) {
+        CustomPopupMenu more_menu = new CustomPopupMenu(anchorView, R.menu.list_title_more);
+        more_menu.setOnItemClickedListener(new CustomPopupMenu.OnItemClickListener() {
+            @Override
+            public void onItemClicked(int itemId) {
+                switch (itemId) {
+                    case R.id.sort:
+                        SortMusicListDialog.show(getActivity(), MusicStorage.MUSIC_LIST_ALL_MUSIC);
+                        break;
+                    case R.id.tempList:
+                        showTempList();
+                        break;
+                }
+            }
+        });
+        more_menu.show();
+    }
+
+    @Override
+    public void startFragment(Fragment fragment) {
+        mMainActivity.startFragment(fragment);
+    }
+
+    //******************调试用********************
+
+    private static void log(String msg) {
+        if (MyApplication.DEBUG) {
+            Log.d(TAG, msg);
+        }
     }
 }

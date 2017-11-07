@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/ListItemHeight"
-    android:background="@drawable/btn_normal_button"
-    android:clickable="true">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/vgListItem"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@null"
+        android:layout_height="@dimen/ListItemHeight"
+        android:background="@drawable/bg_button"
+        android:clickable="true"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -54,39 +55,167 @@
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvTempPlayMark"
+        <FrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:background="@drawable/shape_rect_grey_stroke"
-            android:paddingBottom="2dp"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
-            android:paddingTop="2dp"
-            android:text="临时"
-            android:textColor="@color/colorBlue300"
-            android:textSize="10sp"
-            android:visibility="gone"
-            tools:visibility="visible"/>
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/dot"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_gravity="center"
+                android:background="@drawable/shape_oval_blue"
+                android:visibility="gone"
+                tools:visibility="visible"/>
+
+            <TextView
+                android:id="@+id/tvTempPlayMark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/shape_rect_blue_stroke"
+                android:paddingBottom="2dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:paddingTop="2dp"
+                android:text="临时"
+                android:textColor="@color/colorBlue300"
+                android:textSize="10sp"
+                android:visibility="gone"
+                tools:visibility="visible"/>
+        </FrameLayout>
 
         <ImageButton
             android:id="@+id/ibItemMore"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
             android:background="@null"
+            android:scaleType="centerInside"
             android:src="@drawable/btn_item_more"/>
-
-        <Space
-            android:layout_width="8dp"
-            android:layout_height="1dp"/>
     </LinearLayout>
 
     <jrfeng.simplemusic.widget.Divider
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_gravity="bottom"
         android:layout_marginLeft="48dp"
         android:background="@color/listDividerColor"/>
-</FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/vgItemMenu"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/colorGrey800"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:layout_height="@dimen/ListItemHeight"
+        tools:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/ibMenuTempPlay"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                android:scaleType="centerInside"
+                android:src="@drawable/menu_item_temp_play"/>
+
+            <ImageButton
+                android:id="@+id/ibMenuLove"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                android:scaleType="centerInside"
+                android:src="@drawable/level_love"/>
+
+            <ImageButton
+                android:id="@+id/ibMenuAddTo"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                android:scaleType="centerInside"
+                android:src="@drawable/menu_item_add_to"/>
+
+            <ImageButton
+                android:id="@+id/ibMenuRemove"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                android:scaleType="centerInside"
+                android:src="@drawable/menu_item_remove"/>
+
+            <ImageButton
+                android:id="@+id/ibMenuDelete"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                android:scaleType="centerInside"
+                android:src="@drawable/menu_item_delete"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:text="临时播"
+                android:textColor="#FFF"
+                android:textSize="10sp"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:text="我喜欢"
+                android:textColor="#FFF"
+                android:textSize="10sp"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:text="添加到"
+                android:textColor="#FFF"
+                android:textSize="10sp"/>
+
+            <TextView
+                android:id="@+id/tvMenuRemoveLabel"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:labelFor="@id/ibMenuRemove"
+                android:text="移除"
+                android:textColor="#FFF"
+                android:textSize="10sp"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:text="删除"
+                android:textColor="#FFF"
+                android:textSize="10sp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

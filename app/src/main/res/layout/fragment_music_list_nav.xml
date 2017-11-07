@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/actionBar"
+        layout="@layout/widget_action_bar"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/listHeaderHeight"
+        android:background="@color/colorWhite"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/ibPlayMode"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@color/colorWhite"
+            android:src="@drawable/level_play_mode"/>
+
+        <TextView
+            android:id="@+id/tvPlayModeLabel"
+            style="@style/TextStyle.ListHeader"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:labelFor="@id/ibPlayMode"
+            android:singleLine="true"
+            android:text="顺序播放"/>
+
+        <ImageButton
+            android:id="@+id/ibAdd"
+            android:layout_width="48dp"
+            android:layout_height="36dp"
+            android:background="@color/colorWhite"
+            android:scaleType="centerInside"
+            android:src="@drawable/btn_menu_add"/>
+
+    </LinearLayout>
+
+    <jrfeng.simplemusic.widget.Divider
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/listDividerColor"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvMusicGroupList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+</LinearLayout>

@@ -15,7 +15,7 @@
         android:paddingRight="16dp">
 
         <CheckBox
-            android:id="@+id/cbNeedAdd"
+            android:id="@+id/cbChecked"
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:background="@drawable/bg_check_box"

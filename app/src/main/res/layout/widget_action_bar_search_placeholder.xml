@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lyActionBar"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/actionBarHeightWithStatus"
+    android:background="@color/actionBarBgColor"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    android:paddingLeft="12dp"
+    android:paddingRight="12dp">
+
+    <TextView
+        android:id="@+id/tvSearch"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/shape_rect"
+        android:drawableLeft="@mipmap/ic_search_bold"
+        android:gravity="center_vertical"
+        android:text="搜索"
+        android:textColor="@color/colorListDescribe"
+        android:textSize="14sp"/>
+
+</RelativeLayout>

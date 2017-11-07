@@ -1,16 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="60dp"
     android:background="@color/colorWhite">
 
-    <ImageView
-        android:id="@+id/ivCtlImage"
+    <FrameLayout
         android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/ic_launcher"/>
+        android:layout_height="60dp">
+
+        <ImageView
+            android:id="@+id/ivCtlImage"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/ic_launcher"/>
+
+        <ImageView
+            android:id="@+id/ivCtlTempPlayMark"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="bottom|right"
+            android:scaleType="centerInside"
+            android:src="@mipmap/ic_temp_play_mark"
+            android:visibility="gone"
+            tools:visibility="visible"/>
+    </FrameLayout>
 
     <jrfeng.simplemusic.widget.Divider
         android:layout_width="match_parent"
@@ -22,6 +38,7 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
+            android:id="@+id/vgCtlMessage"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="72dp"

@@ -15,12 +15,12 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import jrfeng.musicplayer.data.Music;
-import jrfeng.musicplayer.player.MusicPlayerClient;
+import jrfeng.player.data.Music;
+import jrfeng.player.player.MusicPlayerClient;
 import jrfeng.simplemusic.R;
 import jrfeng.simplemusic.activity.scan_result.rv_adapter.ScannedMusicsAdapter;
 import jrfeng.simplemusic.base.BaseActivity;
-import jrfeng.musicplayer.mode.MusicStorageImp;
+import jrfeng.player.mode.MusicStorageImp;
 
 public class ScannedMusicsActivity extends BaseActivity {
     private MusicStorageImp mMusicStorageImp;
@@ -30,7 +30,7 @@ public class ScannedMusicsActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanned_musics);
-        overridePendingTransition(R.anim.enter_from_bottom, R.anim.exit_no_anim);
+        overridePendingTransition(R.anim.slide_in_up, R.anim.no_anim);
         MusicPlayerClient client = MusicPlayerClient.getInstance();
         mMusicStorageImp = (MusicStorageImp) client.getMusicStorage();
         init();

@@ -51,14 +51,11 @@
 
         <ImageButton
             android:id="@+id/ibMore"
-            android:layout_width="36dp"
+            android:layout_width="48dp"
             android:layout_height="36dp"
             android:background="@color/colorWhite"
+            android:scaleType="centerInside"
             android:src="@drawable/btn_item_more"/>
-
-        <Space
-            android:layout_width="8dp"
-            android:layout_height="1dp"/>
 
     </LinearLayout>
 

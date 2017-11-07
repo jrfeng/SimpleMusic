@@ -9,17 +9,18 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import jrfeng.musicplayer.data.Music;
+import jrfeng.player.data.Music;
+import jrfeng.simplemusic.MyApplication;
 import jrfeng.simplemusic.R;
 import jrfeng.simplemusic.activity.scan_result.ScannedMusicsActivity;
 import jrfeng.simplemusic.base.BaseActivity;
 
 public class ScanActivity extends BaseActivity implements ScanContract.View {
+    private static final String TAG = "ScanActivity";
     private static final int REQUEST_CODE_SHOW_SCANNED = 1;
     private static final int REQUEST_CODE_CUSTOM_SCAN = 2;
 
@@ -40,10 +41,18 @@ public class ScanActivity extends BaseActivity implements ScanContract.View {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
+        overridePendingTransition(R.anim.slide_in_up, R.anim.alpha_out);
+
         setPresenter(new ScanPresenter(this));
         findViews();
         initViews();
         addViewListener();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.alpha_in, R.anim.slide_out_down);
     }
 
     @Override
@@ -96,7 +105,7 @@ public class ScanActivity extends BaseActivity implements ScanContract.View {
                     finish();
                     break;
                 case REQUEST_CODE_CUSTOM_SCAN:
-                    //TODO 开始自定义扫描
+                    //开始自定义扫描（注：暂不支持）
                     break;
             }
         }
@@ -105,7 +114,7 @@ public class ScanActivity extends BaseActivity implements ScanContract.View {
     @Override
     public void showScannedMusic(List<Music> scannedMusics) {
         //调试
-        Log.d("App", "显示 添加 页面");
+        log("显示 添加 页面");
         Intent intent = new Intent(this, ScannedMusicsActivity.class);
         ArrayList<Music> musicList = new ArrayList<>(scannedMusics.size());
         musicList.addAll(scannedMusics);
@@ -158,8 +167,8 @@ public class ScanActivity extends BaseActivity implements ScanContract.View {
 //        tvCustomScan.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
-//                //TODO 自定义扫描
-//                Toast.makeText(getApplicationContext(), "暂不支持", Toast.LENGTH_SHORT).show();
+//                //自定义扫描（注：暂不支持）
+//                Toast.makeText(getApplicationContext(), "暂不支持", Toast.LENGTH_SHORT).showAsDropDown();
 //            }
 //        });
     }
@@ -175,5 +184,11 @@ public class ScanActivity extends BaseActivity implements ScanContract.View {
 
     private void setScanMusicCount(int count) {
         tvScanCount.setText(String.valueOf(count));
+    }
+
+    private void log(String msg) {
+        if (MyApplication.DEBUG) {
+            Log.d(TAG, msg);
+        }
     }
 }

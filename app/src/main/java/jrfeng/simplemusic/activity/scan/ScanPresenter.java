@@ -12,10 +12,12 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import jrfeng.musicplayer.data.Music;
-import jrfeng.musicplayer.utils.scanner.MusicScanner;
+import jrfeng.player.data.Music;
+import jrfeng.player.utils.scanner.MusicScanner;
+import jrfeng.simplemusic.MyApplication;
 
 class ScanPresenter implements ScanContract.Presenter {
+    private static final String TAG = "ScanPresenter";
     private ScanContract.View mView;
     private MusicScanner mMusicScanner;
 
@@ -54,7 +56,7 @@ class ScanPresenter implements ScanContract.Presenter {
     @Override
     public void startScan() {
         //调试
-        Log.d("App", "开始扫描");
+        log("开始扫描");
         if (mMusicScanner == null) {
             mMusicScanner = new MusicScanner();
         }
@@ -83,7 +85,7 @@ class ScanPresenter implements ScanContract.Presenter {
                 mScannedMusics = musics;
                 //调试
                 for (Music i : musics) {
-                    Log.d("App", i.getSongName());
+                    Log.d("App", i.getName());
                 }
                 Log.d("App", "【扫描完成】");
                 Log.d("App", "歌曲数 : " + musics.size());
@@ -122,5 +124,11 @@ class ScanPresenter implements ScanContract.Presenter {
             e.printStackTrace();
         }
         return Environment.getExternalStorageDirectory().getAbsolutePath();
+    }
+
+    private void log(String msg) {
+        if (MyApplication.DEBUG) {
+            Log.d(TAG, msg);
+        }
     }
 }

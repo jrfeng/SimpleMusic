@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        layout="@layout/widget_action_bar"/>
+
+    <include
+        layout="@layout/widget_multi_choice_header"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <LinearLayout
+        android:id="@+id/vgOptionMenu"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/colorBlue"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/ibMenuTempPlay"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                android:scaleType="centerInside"
+                android:src="@drawable/menu_item_temp_play"/>
+
+            <ImageButton
+                android:id="@+id/ibMenuLove"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                android:scaleType="centerInside"
+                android:src="@drawable/level_love"/>
+
+            <ImageButton
+                android:id="@+id/ibMenuAddTo"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                android:scaleType="centerInside"
+                android:src="@drawable/menu_item_add_to"/>
+
+            <ImageButton
+                android:id="@+id/ibMenuRemove"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                android:scaleType="centerInside"
+                android:src="@drawable/menu_item_remove"/>
+
+            <ImageButton
+                android:id="@+id/ibMenuDelete"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                android:scaleType="centerInside"
+                android:src="@drawable/menu_item_delete"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:labelFor="@id/ibMenuTempPlay"
+                android:text="临时播"
+                android:textColor="#FFF"
+                android:textSize="10sp"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:labelFor="@id/ibMenuLove"
+                android:text="我喜欢"
+                android:textColor="#FFF"
+                android:textSize="10sp"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:labelFor="@id/ibMenuAddTo"
+                android:text="添加到"
+                android:textColor="#FFF"
+                android:textSize="10sp"/>
+
+            <TextView
+                android:id="@+id/tvMenuRemoveLabel"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:labelFor="@id/ibMenuRemove"
+                android:text="移除"
+                android:textColor="#FFF"
+                android:textSize="10sp"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:labelFor="@id/ibMenuDelete"
+                android:text="删除"
+                android:textColor="#FFF"
+                android:textSize="10sp"/>
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/mode_order"
+        android:icon="@mipmap/ic_mode_order"
+        android:title="顺序播放"/>
+
+    <item
+        android:id="@+id/mode_loop"
+        android:icon="@mipmap/ic_mode_loop"
+        android:title="循环播放"/>
+
+    <item
+        android:id="@+id/mode_random"
+        android:icon="@mipmap/ic_mode_random"
+        android:title="随机播放"/>
+</menu>

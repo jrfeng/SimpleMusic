@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:icon="@mipmap/ic_sort"
+        android:id="@+id/sort"
+        android:title="排序歌单"/>
+
+    <item
+        android:icon="@mipmap/ic_menu_temp_list"
+        android:id="@+id/tempList"
+        android:title="临时列表"/>
+</menu>

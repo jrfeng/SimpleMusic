@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/bottomListDialogHeight"
+    android:background="@color/colorWhite"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/vgTitleContainer"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginLeft="56dp"
+            android:layout_marginRight="56dp"
+            android:ellipsize="middle"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="@string/app_name"
+            android:textColor="@color/colorListTitle"
+            android:textSize="15sp"/>
+
+        <ImageView
+            android:id="@+id/ivAdditionIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+            android:scaleType="centerInside"
+            android:src="@mipmap/ic_add"
+            android:visibility="gone"
+            tools:visibility="visible"/>
+    </FrameLayout>
+
+    <jrfeng.simplemusic.widget.Divider
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/listDividerColor"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+</LinearLayout>

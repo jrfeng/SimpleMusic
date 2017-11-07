@@ -1,13 +1,13 @@
 package jrfeng.simplemusic.activity.main.controller;
 
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -18,12 +18,16 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 
 import jrfeng.simplemusic.R;
+import jrfeng.simplemusic.activity.main.MainActivity;
+import jrfeng.simplemusic.activity.player.PlayerActivity;
+import jrfeng.simplemusic.dialog.PlayingMusicGroupDialog;
 
 public class ControllerFragment extends Fragment implements ControllerContract.View {
     private ControllerContract.Presenter mPresenter;
 
-    private View mContentView;
     private ImageView ivCtlImage;
+    private ImageView ivCtlTempPlayMark;
+    private View vgCtlMessage;
     private TextView tvCtlSongName;
     private TextView tvCtlArtist;
     private SeekBar sbCtlProgress;
@@ -35,6 +39,8 @@ public class ControllerFragment extends Fragment implements ControllerContract.V
 
     private void findViews(View contentView) {
         ivCtlImage = contentView.findViewById(R.id.ivCtlImage);
+        ivCtlTempPlayMark = contentView.findViewById(R.id.ivCtlTempPlayMark);
+        vgCtlMessage = contentView.findViewById(R.id.vgCtlMessage);
         tvCtlSongName = contentView.findViewById(R.id.tvCtlSongName);
         tvCtlArtist = contentView.findViewById(R.id.tvCtlArtist);
         sbCtlProgress = contentView.findViewById(R.id.sbCtlProgress);
@@ -47,6 +53,20 @@ public class ControllerFragment extends Fragment implements ControllerContract.V
     }
 
     private void addViewListener() {
+        vgCtlMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPresenter.openPlayingMusicGroup();
+            }
+        });
+
+        ivCtlImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startPlayerActivity();
+            }
+        });
+
         ibCtlPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,22 +105,22 @@ public class ControllerFragment extends Fragment implements ControllerContract.V
                 mPresenter.setSeekingState(false);
             }
         });
-
-        mContentView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //TODO 启动播放器 Activity
-            }
-        });
     }
+
+    private void startPlayerActivity() {
+        Intent intent = new Intent(getContext(), PlayerActivity.class);
+        startActivity(intent);
+    }
+
+    //********************Fragment********************
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mContentView = inflater.inflate(R.layout.fragment_player_controller, container, false);
-        findViews(mContentView);
+        View contentView = inflater.inflate(R.layout.fragment_player_controller, container, false);
+        findViews(contentView);
         addViewListener();
-        return mContentView;
+        return contentView;
     }
 
     @Override
@@ -115,6 +135,8 @@ public class ControllerFragment extends Fragment implements ControllerContract.V
         mPresenter.end();
     }
 
+    //***********************View*************************
+
     @Override
     public void setPresenter(ControllerContract.Presenter presenter) {
         mPresenter = presenter;
@@ -122,12 +144,12 @@ public class ControllerFragment extends Fragment implements ControllerContract.V
 
     @Override
     public void viewPlay() {
-        ibCtlPlayPause.setImageLevel(1);
+        ibCtlPlayPause.setImageLevel(2);
     }
 
     @Override
     public void viewPause() {
-        ibCtlPlayPause.setImageLevel(2);
+        ibCtlPlayPause.setImageLevel(1);
     }
 
     @Override
@@ -174,5 +196,15 @@ public class ControllerFragment extends Fragment implements ControllerContract.V
     public void notifyMusicNotExist() {
         viewPause();
         Toast.makeText(getContext(), "文件不存在", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showTempPlayMark() {
+        ivCtlTempPlayMark.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideTempPlayMark() {
+        ivCtlTempPlayMark.setVisibility(View.GONE);
     }
 }

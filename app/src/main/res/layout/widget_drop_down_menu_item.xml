@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="36dp"
-    android:background="@drawable/btn_normal_button"
+    android:background="@drawable/bg_button"
     android:clickable="true"
     android:gravity="center_vertical"
     android:orientation="horizontal">
@@ -23,5 +23,9 @@
         android:layout_weight="1"
         android:singleLine="true"
         tools:text="顺序播放"/>
+
+    <Space
+        android:layout_width="8dp"
+        android:layout_height="1dp"/>
 
 </LinearLayout>

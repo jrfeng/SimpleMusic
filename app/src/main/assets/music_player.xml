@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <player>
-    <!--<music-provider>jrfeng.musicplayer.mode.MusicStorageImp</music-provider>-->
     <pending-activity>jrfeng.simplemusic.activity.main.MainActivity</pending-activity>
     <!--<notyfy-view></notyfy-view>-->
 </player>

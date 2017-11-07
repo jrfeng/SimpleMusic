@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/bg_rect_bottom_right_radius_8_pressed"
+          android:state_pressed="true"/>
+
+    <item android:drawable="@drawable/bg_rect_bottom_right_radius_8"/>
+</selector>

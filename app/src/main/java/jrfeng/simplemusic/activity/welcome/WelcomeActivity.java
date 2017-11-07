@@ -7,11 +7,10 @@ import android.view.WindowManager;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import jrfeng.simplemusic.MyApplication;
 import jrfeng.simplemusic.R;
 import jrfeng.simplemusic.activity.main.MainActivity;
 import jrfeng.simplemusic.base.BaseActivity;
-import jrfeng.musicplayer.player.MusicPlayerClient;
+import jrfeng.player.player.MusicPlayerClient;
 
 public class WelcomeActivity extends BaseActivity {
     private boolean mIsActive = true;

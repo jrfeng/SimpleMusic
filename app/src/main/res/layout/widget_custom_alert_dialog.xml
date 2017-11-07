@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/outside"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorAlertDialogBackground">
+
+    <LinearLayout
+        android:id="@+id/vgContent"
+        android:layout_width="@dimen/customAlertDialogWidth"
+        android:layout_height="@dimen/customAlertDialogHeight"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_custom_dialog"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/customAlertDialogTitleHeight">
+
+            <TextView
+                android:id="@+id/tvDialogTitle"
+                android:layout_width="144dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:ellipsize="middle"
+                android:gravity="center"
+                android:maxEms="4"
+                android:singleLine="true"
+                android:text="@string/app_name"
+                android:textColor="@color/colorListTitle"
+                android:textSize="15sp"/>
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingBottom="8dp"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp">
+
+            <TextView
+                android:id="@+id/tvDialogMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="确认删除？"
+                android:textColor="@color/colorListDescribe"
+                android:textSize="14sp"
+                android:visibility="gone"
+                tools:visibility="visible"/>
+
+            <EditText
+                android:id="@+id/etDialogInput"
+                android:layout_width="192dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/shape_rect_grey_stroke"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:textColor="@color/colorGrey800"
+                android:textColorHint="@color/colorGrey500"
+                android:textSize="15sp"
+                android:visibility="gone"
+                tools:visibility="visible"/>
+
+            <LinearLayout
+                android:id="@+id/lvDialogOption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <ImageButton
+                    android:id="@+id/ibDialogCheckBox"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:background="@null"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/level_checkbox"/>
+
+                <Space
+                    android:layout_width="8dp"
+                    android:layout_height="0dp"/>
+
+                <TextView
+                    android:id="@+id/tvDialogOptionText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="删除本地文件"
+                    android:textColor="@color/colorListDescribe"
+                    android:textSize="14sp"/>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <jrfeng.simplemusic.widget.Divider
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/listDividerColor"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/customAlertDialogButtonHeight"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnDialogNegative"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/btn_bottom_left_radius8"
+                android:text="取消"
+                android:textColor="@color/colorGrey600"/>
+
+            <jrfeng.simplemusic.widget.Divider
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="@color/listDividerColor"/>
+
+            <Button
+                android:id="@+id/btnDialogPositive"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/btn_bottom_right_radius8"
+                android:text="确定"
+                android:textColor="@color/colorBlue300"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</FrameLayout>

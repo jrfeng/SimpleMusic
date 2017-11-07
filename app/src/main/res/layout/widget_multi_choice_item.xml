@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="@drawable/bg_button"
+    android:clickable="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <CheckBox
+            android:id="@+id/cbChecked"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:button="@drawable/bg_check_box"/>
+
+        <android.support.v4.widget.Space
+            android:layout_width="16dp"
+            android:layout_height="0dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvSongName"
+                style="@style/TextStyle.ListItemTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxEms="14"
+                android:singleLine="true"
+                android:text="@string/app_name"/>
+
+            <TextView
+                android:id="@+id/tvSongArtist"
+                style="@style/TextStyle.ListItemDescribe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <jrfeng.simplemusic.widget.Divider
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="48dp"
+        android:background="@color/colorGrey300"/>
+</FrameLayout>

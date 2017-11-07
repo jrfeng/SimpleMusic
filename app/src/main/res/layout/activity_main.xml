@@ -6,13 +6,13 @@
     android:orientation="vertical">
 
     <FrameLayout
-        android:id="@+id/fmContainer"
+        android:id="@+id/navContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
 
     <fragment
-        android:id="@+id/fmController"
+        android:id="@+id/ctlController"
         android:name="jrfeng.simplemusic.activity.main.controller.ControllerFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

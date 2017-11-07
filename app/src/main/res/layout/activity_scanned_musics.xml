@@ -69,7 +69,7 @@
 
         <include
             android:id="@+id/scannedMusicsTitle"
-            layout="@layout/widget_scanned_music_header"/>
+            layout="@layout/widget_scanned_music_list_header"/>
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v7.widget.RecyclerView
