@@ -89,13 +89,11 @@ public class MusicPlayerService extends Service {
     public void onDestroy() {
         super.onDestroy();
         //调试
-        log("onDestroy");
+        log("Client : onDestroy");
         stopForeground(true);
 
-        //用于避免非正常终止带来的BUG
-        if (MusicPlayerClient.getInstance().isConnect()) {
-            sendBroadcast(new Intent(PlayerCommandReceiver.PLAYER_SHUTDOWN));
-        }
+        //调试
+        log("Client : 销毁 Service");
     }
 
     //*********************private************************
@@ -384,7 +382,7 @@ public class MusicPlayerService extends Service {
 
         @Override
         public void addTempPlayMusics(List<Music> musics) {
-            for(Music music : musics) {
+            for (Music music : musics) {
                 addTempPlayMusic(music);
             }
         }
@@ -702,6 +700,7 @@ public class MusicPlayerService extends Service {
         public void shutdown(Context context) {
             //调试
             log("shutdown");
+            log("【退出应用程序】");
 
             stopProgressGenerator();
             //放弃音频焦点
@@ -714,13 +713,11 @@ public class MusicPlayerService extends Service {
 
             mMusicStorage.removeMusicGroupChangeListener(mMusicGroupChangeListener);
 
-            //发送结束应用程序的广播
-            sendActionBroadcast(MusicPlayerClient.Action.ACTION_SHUTDOWN);
-            Log.d("App", "【发送广播】 : " + MusicPlayerClient.Action.ACTION_SHUTDOWN);
-            Intent intent = new Intent(MusicPlayerClient.Action.ACTION_SHUTDOWN);
-            sendBroadcast(intent);
             releaseAndSaveState();//释放MediaPlayer，同时保存播放器状态。
             stopSelf();
+
+            //终止进程
+            android.os.Process.killProcess(android.os.Process.myPid());
         }
 
         //****************MediaPlayer Listener**************

@@ -1,8 +1,10 @@
 package jrfeng.simplemusic.widget;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatDialog;
 import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +24,7 @@ import android.widget.TextView;
 
 import jrfeng.simplemusic.MyApplication;
 import jrfeng.simplemusic.R;
+import jrfeng.simplemusic.utils.statusbar.QMUIStatusBarHelper;
 
 public class TopMenuDialog {
     private static final String TAG = "TopMenuDialog";
@@ -35,6 +38,8 @@ public class TopMenuDialog {
 
     private ImageButton ibCancel;
     private RecyclerView rvMenu;
+
+    private Activity mActivity;
 
     public TopMenuDialog(Context context, int menuResId, OnItemClickListener listener) {
         mContext = context;
@@ -55,6 +60,12 @@ public class TopMenuDialog {
         //调试
         log("显示菜单");
 
+        mDialog.show();
+    }
+
+    public void show(@NonNull Activity activity) {
+        mActivity = activity;
+        QMUIStatusBarHelper.setStatusBarLightMode(activity);
         mDialog.show();
     }
 
@@ -151,6 +162,9 @@ public class TopMenuDialog {
         mDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
+                if (mActivity != null) {
+                    QMUIStatusBarHelper.setStatusBarDarkMode(mActivity);
+                }
                 if (mOnDismissListener != null) {
                     mOnDismissListener.onDismiss(dialogInterface);
                 }

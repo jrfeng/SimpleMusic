@@ -23,7 +23,7 @@ import jrfeng.simplemusic.activity.main.MainActivity;
 import jrfeng.simplemusic.activity.main.listnav.adpter.MusicGroupAdapter;
 import jrfeng.simplemusic.adapter.vlayout.BackTopAdapter;
 import jrfeng.simplemusic.widget.CustomAlertDialog;
-import jrfeng.simplemusic.widget.CustomPopupMenu;
+import jrfeng.simplemusic.widget.CustomDropDownMenu;
 
 public class MusicListNavFragment extends Fragment implements MusicListNavContract.View {
     public static final String KEY_GROUP_TYPE = "groupType";
@@ -109,8 +109,8 @@ public class MusicListNavFragment extends Fragment implements MusicListNavContra
     }
 
     public void showPlayModeMenu(android.view.View anchorView) {
-        CustomPopupMenu playModeMenu = new CustomPopupMenu(anchorView, R.menu.play_mode);
-        playModeMenu.setOnItemClickedListener(new CustomPopupMenu.OnItemClickListener() {
+        CustomDropDownMenu playModeMenu = new CustomDropDownMenu(anchorView, R.menu.play_mode);
+        playModeMenu.setOnItemClickedListener(new CustomDropDownMenu.OnItemClickListener() {
             @Override
             public void onItemClicked(int itemId) {
                 switch (itemId) {

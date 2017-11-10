@@ -18,7 +18,7 @@ import jrfeng.simplemusic.activity.main.controller.ControllerFragment;
 import jrfeng.simplemusic.activity.main.controller.ControllerPresenter;
 import jrfeng.simplemusic.activity.main.nav.NavigationFragment;
 import jrfeng.simplemusic.activity.search.SearchActivity;
-import jrfeng.simplemusic.base.BaseActivity;
+import jrfeng.player.base.BaseActivity;
 
 public class MainActivity extends BaseActivity {
     private static final String TAG = "MainActivity";
@@ -34,10 +34,11 @@ public class MainActivity extends BaseActivity {
 
         //调试
         if (isClientConnect()) {
-            log("音乐播放器已连接");
+            log("Client : 音乐播放器已连接");
         } else {
-            log("音乐播放器未连接");
+            log("Client : 音乐播放器未连接");
         }
+        log("Client : SavedInstanceState is null :" + String.valueOf(savedInstanceState == null));
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         mFmManager = getSupportFragmentManager();
@@ -77,9 +78,9 @@ public class MainActivity extends BaseActivity {
     }
 
     public void startSearchActivity(MusicStorage.GroupType groupType, String groupName) {
-        //TODO 启动搜索 Activity
-        log("启动 SearchActivity");
         Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
+        intent.putExtra(SearchActivity.KEY_GROUP_TYPE, groupType.name());
+        intent.putExtra(SearchActivity.KEY_GROUP_NAME, groupName);
         startActivity(intent);
     }
 

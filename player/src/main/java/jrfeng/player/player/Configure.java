@@ -43,6 +43,11 @@ public class Configure {
             }
             eventType = parser.next();
         }
+
+        if(pendingActivity.equals("")) {
+            throw new IllegalArgumentException("need <pending-activity>.");
+        }
+
         mPendingActivityCL = Class.forName(pendingActivity);
 
         if (!notificationView.equals("")) {

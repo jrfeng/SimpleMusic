@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import jrfeng.simplemusic.R;
 
-public class CustomPopupMenu {
+public class CustomDropDownMenu {
     private View mAnchorView;
     private Context mContext;
     private MenuBuilder mMenuBuilder;
@@ -23,7 +23,7 @@ public class CustomPopupMenu {
 
     private PopupWindow mMenuContainer;
 
-    public CustomPopupMenu(View anchorView, @MenuRes int menuRes) {
+    public CustomDropDownMenu(View anchorView, @MenuRes int menuRes) {
         mAnchorView = anchorView;
         mContext = mAnchorView.getContext();
         mMenuBuilder = new MenuBuilder(mContext);
@@ -40,7 +40,7 @@ public class CustomPopupMenu {
         mMenuContainer.showAsDropDown(mAnchorView, 0, 0, gravity);
     }
 
-    public CustomPopupMenu setOnItemClickedListener(OnItemClickListener listener) {
+    public CustomDropDownMenu setOnItemClickedListener(OnItemClickListener listener) {
         mClickListener = listener;
         return this;
     }
@@ -54,9 +54,9 @@ public class CustomPopupMenu {
     private void initView() {
         View contentView = LayoutInflater.from(mContext)
                 .inflate(R.layout.widget_drop_down_menu, null, false);
-        int width = mContext.getResources().getDimensionPixelSize(R.dimen.customPopupMenuMaxWidth);
+        int width = mContext.getResources().getDimensionPixelSize(R.dimen.customDropDownMenuMaxWidth);
         int height = mContext.getResources()
-                .getDimensionPixelSize(R.dimen.customPopupMenuItemHeight) * mMenuBuilder.size();
+                .getDimensionPixelSize(R.dimen.customDropDownMenuItemHeight) * mMenuBuilder.size();
         mMenuContainer = new PopupWindow(contentView);
         mMenuContainer.setWidth(width);
         mMenuContainer.setHeight(height);

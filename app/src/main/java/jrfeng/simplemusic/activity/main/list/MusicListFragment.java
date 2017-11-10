@@ -25,7 +25,7 @@ import jrfeng.simplemusic.adapter.vlayout.musiclist.MusicListAdapter;
 import jrfeng.simplemusic.dialog.SortMusicListDialog;
 import jrfeng.simplemusic.dialog.TempPlayDialog;
 import jrfeng.simplemusic.widget.CustomAlertDialog;
-import jrfeng.simplemusic.widget.CustomPopupMenu;
+import jrfeng.simplemusic.widget.CustomDropDownMenu;
 
 public class MusicListFragment extends Fragment implements MusicListContract.View {
     public static final String KEY_GROUP_TYPE = "groupType";
@@ -171,8 +171,8 @@ public class MusicListFragment extends Fragment implements MusicListContract.Vie
     }
 
     public void showPlayModeMenu(android.view.View anchorView) {
-        CustomPopupMenu playModeMenu = new CustomPopupMenu(anchorView, R.menu.play_mode);
-        playModeMenu.setOnItemClickedListener(new CustomPopupMenu.OnItemClickListener() {
+        CustomDropDownMenu playModeMenu = new CustomDropDownMenu(anchorView, R.menu.play_mode);
+        playModeMenu.setOnItemClickedListener(new CustomDropDownMenu.OnItemClickListener() {
             @Override
             public void onItemClicked(int itemId) {
                 switch (itemId) {
@@ -198,8 +198,8 @@ public class MusicListFragment extends Fragment implements MusicListContract.Vie
     }
 
     public void showMore_Menu(View anchorView) {
-        CustomPopupMenu more_menu = new CustomPopupMenu(anchorView, mMore_MenuResId);
-        more_menu.setOnItemClickedListener(new CustomPopupMenu.OnItemClickListener() {
+        CustomDropDownMenu more_menu = new CustomDropDownMenu(anchorView, mMore_MenuResId);
+        more_menu.setOnItemClickedListener(new CustomDropDownMenu.OnItemClickListener() {
             @Override
             public void onItemClicked(int itemId) {
                 switch (itemId) {

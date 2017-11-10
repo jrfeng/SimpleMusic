@@ -9,7 +9,7 @@ import jrfeng.player.mode.MusicStorage;
 import jrfeng.player.player.MusicPlayerClient;
 import jrfeng.player.utils.sort.MusicComparator;
 import jrfeng.simplemusic.R;
-import jrfeng.simplemusic.utils.statusbar.StatusBarUtil;
+import jrfeng.simplemusic.utils.statusbar.QMUIStatusBarHelper;
 import jrfeng.simplemusic.widget.TopMenuDialog;
 
 public class SortMusicListDialog {
@@ -17,8 +17,6 @@ public class SortMusicListDialog {
     }
 
     public static void show(final Activity activity, final String musicListName) {
-        StatusBarUtil.darkMode(activity);
-
         TopMenuDialog sortMenu = new TopMenuDialog(activity, R.menu.music_list_sort, new TopMenuDialog.OnItemClickListener() {
             @Override
             public void onItemClick(MenuItem item) {
@@ -35,12 +33,6 @@ public class SortMusicListDialog {
             }
         });
 
-        sortMenu.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-                StatusBarUtil.lightMode(activity);
-            }
-        });
-        sortMenu.show();
+        sortMenu.show(activity);
     }
 }

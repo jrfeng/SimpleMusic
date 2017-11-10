@@ -25,7 +25,7 @@ import jrfeng.simplemusic.activity.main.nav.adpter.NavMenuAdapter;
 import jrfeng.simplemusic.adapter.vlayout.DividerAdapter;
 import jrfeng.simplemusic.dialog.SortMusicListDialog;
 import jrfeng.simplemusic.dialog.TempPlayDialog;
-import jrfeng.simplemusic.widget.CustomPopupMenu;
+import jrfeng.simplemusic.widget.CustomDropDownMenu;
 
 public class NavigationFragment extends Fragment implements NavigationContract.View {
     private static final String TAG = "NavigationFragment";
@@ -44,7 +44,7 @@ public class NavigationFragment extends Fragment implements NavigationContract.V
     //*************************private**************************
 
     private void findViews(View contentView) {
-        tvSearch = contentView.findViewById(R.id.tvSearch);
+        tvSearch = contentView.findViewById(R.id.etSearchInput);
         rvNavList = contentView.findViewById(R.id.rvNavList);
     }
 
@@ -204,8 +204,8 @@ public class NavigationFragment extends Fragment implements NavigationContract.V
 
     @Override
     public void showPlayModeMenu(android.view.View anchorView) {
-        CustomPopupMenu playModeMenu = new CustomPopupMenu(anchorView, R.menu.play_mode);
-        playModeMenu.setOnItemClickedListener(new CustomPopupMenu.OnItemClickListener() {
+        CustomDropDownMenu playModeMenu = new CustomDropDownMenu(anchorView, R.menu.play_mode);
+        playModeMenu.setOnItemClickedListener(new CustomDropDownMenu.OnItemClickListener() {
             @Override
             public void onItemClicked(int itemId) {
                 switch (itemId) {
@@ -226,8 +226,8 @@ public class NavigationFragment extends Fragment implements NavigationContract.V
 
     @Override
     public void showMore_Menu(View anchorView) {
-        CustomPopupMenu more_menu = new CustomPopupMenu(anchorView, R.menu.list_title_more);
-        more_menu.setOnItemClickedListener(new CustomPopupMenu.OnItemClickListener() {
+        CustomDropDownMenu more_menu = new CustomDropDownMenu(anchorView, R.menu.list_title_more);
+        more_menu.setOnItemClickedListener(new CustomDropDownMenu.OnItemClickListener() {
             @Override
             public void onItemClicked(int itemId) {
                 switch (itemId) {

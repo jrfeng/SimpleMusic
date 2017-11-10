@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <!--<uses-permission android:name="android.permission.INTERNET"/>-->
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:name=".MyApplication"
@@ -60,15 +60,6 @@
             </intent-filter>
         </receiver>
 
-        <receiver
-            android:name=".receiver.ShutdownActionReceiver"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="jrfeng.simplemusic.action.SHUTDOWN"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>

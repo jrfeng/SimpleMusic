@@ -17,7 +17,7 @@ import jrfeng.player.data.Music;
 import jrfeng.simplemusic.MyApplication;
 import jrfeng.simplemusic.R;
 import jrfeng.simplemusic.activity.scan_result.ScannedMusicsActivity;
-import jrfeng.simplemusic.base.BaseActivity;
+import jrfeng.player.base.BaseActivity;
 
 public class ScanActivity extends BaseActivity implements ScanContract.View {
     private static final String TAG = "ScanActivity";

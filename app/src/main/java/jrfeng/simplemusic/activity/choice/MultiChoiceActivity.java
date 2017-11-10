@@ -7,7 +7,7 @@ import android.util.Log;
 
 import jrfeng.simplemusic.MyApplication;
 import jrfeng.simplemusic.R;
-import jrfeng.simplemusic.base.BaseActivity;
+import jrfeng.player.base.BaseActivity;
 
 public class MultiChoiceActivity extends BaseActivity {
     public static final String KEY_GROUP_TYPE = "groupType";

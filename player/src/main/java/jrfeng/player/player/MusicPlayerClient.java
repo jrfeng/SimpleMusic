@@ -27,6 +27,9 @@ public class MusicPlayerClient implements ServiceConnection, MusicPlayerControll
     private OnConnectedListener mConnectedListener;
     private MusicStorage mMusicStorage;
 
+    private MusicPlayerClient() {
+    }
+
     public void connect(final Context context, OnConnectedListener listener) {
         //避免重复连接
         if (isConnect()) {
@@ -86,7 +89,9 @@ public class MusicPlayerClient implements ServiceConnection, MusicPlayerControll
     @Override
     public void onServiceDisconnected(ComponentName componentName) {
         isConnect = false;
-        Log.e(TAG, "onServiceDisconnected: 非正常断开连接");
+        Log.e(TAG, "Client : **************Warning***************");
+        Log.e(TAG, "Client : onServiceDisconnected: 非正常断开连接");
+        Log.e(TAG, "Client : ************************************");
     }
 
     @Override
@@ -336,7 +341,6 @@ public class MusicPlayerClient implements ServiceConnection, MusicPlayerControll
         public static final String ACTION_STOP = "jrfeng.simplemusic.action.STOP";
         public static final String ACTION_PREPARED = "jrfeng.simplemusic.action.PREPARED";
         public static final String ACTION_ERROR = "jrfeng.simplemusic.action.ERROR";
-        public static final String ACTION_SHUTDOWN = "jrfeng.simplemusic.action.SHUTDOWN";
         public static final String ACTION_MUSIC_NOT_EXIST = "jrfeng.simplemusic.action.MUSIC_NOT_EXIST";
     }
 

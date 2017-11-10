@@ -2,6 +2,7 @@ package jrfeng.simplemusic.activity.welcome;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 
 import java.util.Timer;
@@ -9,10 +10,9 @@ import java.util.TimerTask;
 
 import jrfeng.simplemusic.R;
 import jrfeng.simplemusic.activity.main.MainActivity;
-import jrfeng.simplemusic.base.BaseActivity;
 import jrfeng.player.player.MusicPlayerClient;
 
-public class WelcomeActivity extends BaseActivity {
+public class WelcomeActivity extends AppCompatActivity {
     private boolean mIsActive = true;
 
     @Override

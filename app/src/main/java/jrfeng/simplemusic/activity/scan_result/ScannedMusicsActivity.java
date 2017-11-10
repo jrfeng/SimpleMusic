@@ -19,7 +19,7 @@ import jrfeng.player.data.Music;
 import jrfeng.player.player.MusicPlayerClient;
 import jrfeng.simplemusic.R;
 import jrfeng.simplemusic.activity.scan_result.rv_adapter.ScannedMusicsAdapter;
-import jrfeng.simplemusic.base.BaseActivity;
+import jrfeng.player.base.BaseActivity;
 import jrfeng.player.mode.MusicStorageImp;
 
 public class ScannedMusicsActivity extends BaseActivity {

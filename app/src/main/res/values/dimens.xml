@@ -29,6 +29,9 @@
     <!-- List Nav -->
     <dimen name="ListNavItemIconSize">48dp</dimen>
 
+    <!-- List Nav -->
+    <dimen name="SearchResultItemIconSize">36dp</dimen>
+
     <!-- Effects Size-->
     <dimen name="EffectsSize">16dp</dimen>
 
@@ -36,9 +39,9 @@
     <dimen name="BackToTopXOffset">48dp</dimen>
     <dimen name="BackToTopYOffset">16dp</dimen>
 
-    <!-- Custom Popup Menu-->
-    <dimen name="customPopupMenuMaxWidth">112dp</dimen>
-    <dimen name="customPopupMenuItemHeight">40dp</dimen>
+    <!-- Drop Down Menu-->
+    <dimen name="customDropDownMenuMaxWidth">112dp</dimen>
+    <dimen name="customDropDownMenuItemHeight">40dp</dimen>
 
     <!-- Custom Alert Dialog -->
     <dimen name="customAlertDialogWidth">272dp</dimen>
