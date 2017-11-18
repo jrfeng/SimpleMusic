@@ -76,11 +76,13 @@ public class TempPlayDialog {
                 .setOnItemClickListener(new BottomListDialog.OnItemClickListener() {
                     @Override
                     public void onItemClicked(BottomListDialog dialog, BottomListDialog.Item item, int position) {
+                        dialog.dismiss();
                         Toast.makeText(context, "临时播 插队播放", Toast.LENGTH_SHORT).show();
-                        client.playTempMusic(position, true);
+
                         //调试
                         log("插队播放 : " + position);
-                        dialog.dismiss();
+
+                        client.playTempMusic(position, true);
                     }
                 })
                 .create();
