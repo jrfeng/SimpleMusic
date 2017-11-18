@@ -33,6 +33,7 @@ import jrfeng.player.R;
 import jrfeng.player.data.Music;
 import jrfeng.player.mode.MusicStorage;
 import jrfeng.player.player.MusicPlayerClient.NotifyControllerView;
+import jrfeng.player.utils.activity.ActivityStack;
 import jrfeng.player.utils.mp3.MP3Util;
 
 /**
@@ -716,8 +717,8 @@ public class MusicPlayerService extends Service {
             releaseAndSaveState();//释放MediaPlayer，同时保存播放器状态。
             stopSelf();
 
-            //终止进程
-            android.os.Process.killProcess(android.os.Process.myPid());
+            //退出应用
+            ActivityStack.finishAll();
         }
 
         //****************MediaPlayer Listener**************
@@ -905,8 +906,29 @@ public class MusicPlayerService extends Service {
         private void loadDefault() {
             boolean play = mPlaying;
             stop();
-            loadMusicGroup(MusicStorage.GroupType.MUSIC_LIST,
-                    MusicStorage.MUSIC_LIST_ALL_MUSIC, 0, play);
+
+            if (isDefaultMusicGroup()) {
+                reset();
+            } else {
+                loadMusicGroup(MusicStorage.GroupType.MUSIC_LIST,
+                        MusicStorage.MUSIC_LIST_ALL_MUSIC, 0, play);
+            }
+        }
+
+        private void reset() {
+            mMusicGroup = null;
+            mPlayingMusic = null;
+            mPrepared = false;
+            mPlaying = false;
+            mMediaPlayer.reset();
+            mMusicPosition = 0;
+            mMusicPlayingPosition = 0;
+            sendActionBroadcast(MusicPlayerClient.Action.ACTION_RESET);
+        }
+
+        private boolean isDefaultMusicGroup() {
+            return mMusicGroupType == MusicStorage.GroupType.MUSIC_LIST
+                    && mMusicGroupName.equals(MusicStorage.MUSIC_LIST_ALL_MUSIC);
         }
 
         private void releaseAndSaveState() {

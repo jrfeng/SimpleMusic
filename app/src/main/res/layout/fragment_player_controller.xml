@@ -78,21 +78,21 @@
                 android:id="@+id/ibCtlPrevious"
                 android:layout_width="40dp"
                 android:layout_height="36dp"
-                android:background="@color/colorWhite"
+                android:background="@null"
                 android:src="@drawable/btn_ctl_previous"/>
 
             <ImageButton
                 android:id="@+id/ibCtlPlayPause"
                 android:layout_width="40dp"
                 android:layout_height="36dp"
-                android:background="@color/colorWhite"
+                android:background="@null"
                 android:src="@drawable/btn_ctl_play_pause"/>
 
             <ImageButton
                 android:id="@+id/ibCtlNext"
                 android:layout_width="40dp"
                 android:layout_height="36dp"
-                android:background="@color/colorWhite"
+                android:background="@null"
                 android:src="@drawable/btn_ctl_next"/>
 
             <Space
@@ -109,6 +109,7 @@
         android:layout_marginRight="10dp"
         android:gravity="center_vertical"
         android:max="100"
+        android:splitTrack="false"
         android:progressDrawable="@drawable/seek_bar_progress"
         android:thumb="@drawable/seek_bar_thumb"/>
 </RelativeLayout>

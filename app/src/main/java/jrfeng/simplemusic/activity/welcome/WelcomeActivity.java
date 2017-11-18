@@ -8,18 +8,18 @@ import android.view.WindowManager;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import jrfeng.player.base.BaseActivity;
 import jrfeng.simplemusic.R;
 import jrfeng.simplemusic.activity.main.MainActivity;
 import jrfeng.player.player.MusicPlayerClient;
 
-public class WelcomeActivity extends AppCompatActivity {
+public class WelcomeActivity extends BaseActivity {
     private boolean mIsActive = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-
         init();
     }
 
@@ -74,5 +74,4 @@ public class WelcomeActivity extends AppCompatActivity {
         mIsActive = false;
         finish();
     }
-
 }

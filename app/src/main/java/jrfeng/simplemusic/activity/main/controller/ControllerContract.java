@@ -22,6 +22,8 @@ public interface ControllerContract {
         void showTempPlayMark();
 
         void hideTempPlayMark();
+
+        void reset();
     }
 
     interface Presenter extends BasePresenter {

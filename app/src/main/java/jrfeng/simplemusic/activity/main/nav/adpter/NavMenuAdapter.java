@@ -16,6 +16,7 @@ import com.alibaba.android.vlayout.layout.GridLayoutHelper;
 import com.bumptech.glide.Glide;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import jrfeng.simplemusic.GlideApp;
 import jrfeng.simplemusic.MyApplication;
 import jrfeng.simplemusic.R;
 import jrfeng.simplemusic.activity.main.nav.NavigationContract;
@@ -59,7 +60,7 @@ public class NavMenuAdapter extends DelegateAdapter.Adapter<NavMenuAdapter.ViewH
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Glide.with(mContext).load(mMenuIconId[position])
+        GlideApp.with(mContext).load(mMenuIconId[position])
                 .dontAnimate()
                 .into(holder.civMenuIcon);
         holder.tvMenuTitle.setText(mMenuTitle[position]);

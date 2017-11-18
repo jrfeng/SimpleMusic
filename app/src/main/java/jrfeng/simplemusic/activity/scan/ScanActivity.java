@@ -1,7 +1,11 @@
 package jrfeng.simplemusic.activity.scan;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -9,6 +13,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +47,7 @@ public class ScanActivity extends BaseActivity implements ScanContract.View {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
         overridePendingTransition(R.anim.slide_in_up, R.anim.alpha_out);
+        requestExternalStoragePermission();
 
         setPresenter(new ScanPresenter(this));
         findViews();
@@ -112,6 +118,15 @@ public class ScanActivity extends BaseActivity implements ScanContract.View {
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults.length < 1
+                || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "需要存储器访问权限", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
     public void showScannedMusic(List<Music> scannedMusics) {
         //调试
         log("显示 添加 页面");
@@ -120,6 +135,18 @@ public class ScanActivity extends BaseActivity implements ScanContract.View {
         musicList.addAll(scannedMusics);
         intent.putExtra("musics", musicList);
         startActivityForResult(intent, REQUEST_CODE_SHOW_SCANNED);
+    }
+
+    //******************private*****************
+
+    private void requestExternalStoragePermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int checkPermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            if (checkPermission != PackageManager.PERMISSION_GRANTED) {
+                //没有则申请权限
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            }
+        }
     }
 
     private void findViews() {

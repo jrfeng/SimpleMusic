@@ -41,4 +41,9 @@ public class PlayerActionDisposerAdapter implements PlayerActionDisposer {
     public void onMusicNotExist() {
 
     }
+
+    @Override
+    public void onReset() {
+
+    }
 }

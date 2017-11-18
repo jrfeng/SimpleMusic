@@ -44,6 +44,9 @@ public class PlayerActionReceiver extends BroadcastReceiver {
             case MusicPlayerClient.Action.ACTION_MUSIC_NOT_EXIST:
                 mDisposer.onMusicNotExist();
                 break;
+            case MusicPlayerClient.Action.ACTION_RESET:
+                mDisposer.onReset();
+                break;
         }
     }
 
@@ -57,6 +60,7 @@ public class PlayerActionReceiver extends BroadcastReceiver {
         intentFilter.addAction(MusicPlayerClient.Action.ACTION_PREPARED);
         intentFilter.addAction(MusicPlayerClient.Action.ACTION_ERROR);
         intentFilter.addAction(MusicPlayerClient.Action.ACTION_MUSIC_NOT_EXIST);
+        intentFilter.addAction(MusicPlayerClient.Action.ACTION_RESET);
         mContext.registerReceiver(this, intentFilter);
     }
 

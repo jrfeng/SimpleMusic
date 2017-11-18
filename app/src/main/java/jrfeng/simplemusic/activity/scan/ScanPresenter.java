@@ -62,8 +62,16 @@ class ScanPresenter implements ScanContract.Presenter {
         }
 
         File[] dirs = new File[2];
-        dirs[0] = new File(getStoragePath((Context) mView, false));
-        dirs[1] = new File(getStoragePath((Context) mView, true));
+        String notRemove = getStoragePath((Context) mView, false);
+        String canRemove = getStoragePath((Context) mView, true);
+
+        if (notRemove != null) {
+            dirs[0] = new File(notRemove);
+        }
+        if (canRemove != null) {
+            dirs[1] = new File(canRemove);
+        }
+
         mMusicScanner.scan(dirs, new MusicScanner.OnScanListener() {
             @Override
             public void onStart() {
@@ -102,7 +110,6 @@ class ScanPresenter implements ScanContract.Presenter {
     }
 
     private String getStoragePath(Context mContext, boolean is_removable) {
-
         StorageManager mStorageManager = (StorageManager) mContext.getSystemService(Context.STORAGE_SERVICE);
         Class<?> storageVolumeClazz = null;
         try {
@@ -123,7 +130,7 @@ class ScanPresenter implements ScanContract.Presenter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return Environment.getExternalStorageDirectory().getAbsolutePath();
+        return null;
     }
 
     private void log(String msg) {

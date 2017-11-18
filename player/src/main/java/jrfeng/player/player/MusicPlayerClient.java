@@ -342,6 +342,7 @@ public class MusicPlayerClient implements ServiceConnection, MusicPlayerControll
         public static final String ACTION_PREPARED = "jrfeng.simplemusic.action.PREPARED";
         public static final String ACTION_ERROR = "jrfeng.simplemusic.action.ERROR";
         public static final String ACTION_MUSIC_NOT_EXIST = "jrfeng.simplemusic.action.MUSIC_NOT_EXIST";
+        public static final String ACTION_RESET = "jrfeng.simplemusic.action.RESET_PLAYER";
     }
 
     /**

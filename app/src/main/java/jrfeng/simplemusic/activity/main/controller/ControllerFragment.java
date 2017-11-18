@@ -16,7 +16,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 
+import jrfeng.simplemusic.GlideApp;
 import jrfeng.simplemusic.R;
 import jrfeng.simplemusic.activity.main.MainActivity;
 import jrfeng.simplemusic.activity.player.PlayerActivity;
@@ -172,9 +175,12 @@ public class ControllerFragment extends Fragment implements ControllerContract.V
         animator.setDuration(1000);
         animator.start();
         if (image != null) {
-            Glide.with(getContext())
+            GlideApp.with(getContext())
                     .load(image)
                     .placeholder(R.mipmap.ic_launcher)
+                    .skipMemoryCache(true)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .transition(DrawableTransitionOptions.withCrossFade())
                     .into(ivCtlImage);
         } else {
             Glide.with(getContext()).load(R.mipmap.ic_launcher).into(ivCtlImage);
@@ -206,5 +212,14 @@ public class ControllerFragment extends Fragment implements ControllerContract.V
     @Override
     public void hideTempPlayMark() {
         ivCtlTempPlayMark.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void reset() {
+        ivCtlImage.setImageResource(R.mipmap.ic_launcher);
+        tvCtlSongName.setText(getResources().getString(R.string.app_name));
+        tvCtlArtist.setText(getResources().getString(R.string.app_name));
+        ibCtlPlayPause.setImageLevel(1);
+        sbCtlProgress.setProgress(0);
     }
 }

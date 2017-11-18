@@ -87,8 +87,8 @@ public class TopMenuDialog {
                 @Override
                 public void onClick(View view) {
                     if (mItemClickListener != null) {
-                        mItemClickListener.onItemClick(mMenu.getItem(index));
                         mDialog.dismiss();
+                        mItemClickListener.onItemClick(mMenu.getItem(index));
                     }
                 }
             });

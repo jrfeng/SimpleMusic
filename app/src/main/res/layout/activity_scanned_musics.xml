@@ -8,9 +8,9 @@
     android:background="@color/colorWhite">
 
     <android.support.design.widget.AppBarLayout
-        android:background="@null"
         android:layout_width="match_parent"
-        android:layout_height="256dp">
+        android:layout_height="256dp"
+        android:background="@null">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
@@ -76,6 +76,7 @@
         android:id="@+id/rvScannedMusics"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:overScrollMode="never"
         android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 

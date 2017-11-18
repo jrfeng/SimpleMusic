@@ -4,10 +4,13 @@ import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.MenuRes;
 import android.support.v7.view.menu.MenuBuilder;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -33,7 +36,7 @@ public class CustomDropDownMenu {
     }
 
     public void show() {
-        mMenuContainer.showAsDropDown(mAnchorView);
+        mMenuContainer.showAsDropDown(mAnchorView, 0, 0, Gravity.BOTTOM);
     }
 
     public void show(int gravity) {
@@ -53,7 +56,7 @@ public class CustomDropDownMenu {
 
     private void initView() {
         View contentView = LayoutInflater.from(mContext)
-                .inflate(R.layout.widget_drop_down_menu, null, false);
+                .inflate(R.layout.widget_drop_down_menu, (ViewGroup) mAnchorView.getRootView(), false);
         int width = mContext.getResources().getDimensionPixelSize(R.dimen.customDropDownMenuMaxWidth);
         int height = mContext.getResources()
                 .getDimensionPixelSize(R.dimen.customDropDownMenuItemHeight) * mMenuBuilder.size();

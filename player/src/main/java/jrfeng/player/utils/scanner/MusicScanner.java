@@ -14,7 +14,7 @@ import jrfeng.player.utils.mp3.MP3Util;
 
 public class MusicScanner {
     private static final String TAG = "MusicScanner";
-    private static final int DIR_DEEP = 3; //目录的深度默认为3。如果需要更深的目录，将该值增大即可。
+    private static final int DIR_DEEP = 4; //目录的深度默认为4。如果需要更深的目录，将该值增大即可。
     private List<File> mDirs;
     private List<Music> mMusicTemp;
 
@@ -63,7 +63,9 @@ public class MusicScanner {
                 Log.d(TAG, "开始扫描");
 
                 for (File dir : dirs) {
-                    getDirs(dir, 0);
+                    if (dir != null) {
+                        getDirs(dir, 0);
+                    }
                 }
                 scan();
                 if (!Thread.currentThread().isInterrupted() && mListener != null) {
@@ -116,7 +118,13 @@ public class MusicScanner {
                     mMusicTemp.size());
         }
         File[] subDirs = dir.listFiles(mDirFilter);
+
+        //调试
+        Log.d(TAG, "subDirs is null : " + (subDirs == null));
+        Log.d(TAG, "current Deep : " + currentDeep);
+
         if (subDirs != null && currentDeep < DIR_DEEP) {
+            Log.d(TAG, "subDirs size : " + subDirs.length);
             for (File d : subDirs) {
                 getDirs(d, currentDeep + 1);
             }

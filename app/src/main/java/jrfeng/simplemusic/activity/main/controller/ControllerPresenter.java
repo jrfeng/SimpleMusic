@@ -138,6 +138,11 @@ public class ControllerPresenter implements ControllerContract.Presenter, Player
         mView.notifyMusicNotExist();
     }
 
+    @Override
+    public void onReset() {
+        mView.reset();
+    }
+
     //********************private********************
 
     private void notifyViewRefresh() {

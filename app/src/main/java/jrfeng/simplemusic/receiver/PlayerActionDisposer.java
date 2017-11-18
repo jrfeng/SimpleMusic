@@ -16,4 +16,6 @@ public interface PlayerActionDisposer {
     void onError();
 
     void onMusicNotExist();
+
+    void onReset();
 }

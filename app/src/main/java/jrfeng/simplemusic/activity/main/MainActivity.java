@@ -1,8 +1,12 @@
 package jrfeng.simplemusic.activity.main;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.media.AudioManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -31,6 +35,8 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        requestExternalStoragePermission();
 
         //调试
         if (isClientConnect()) {
@@ -64,6 +70,15 @@ public class MainActivity extends BaseActivity {
         return super.onKeyUp(keyCode, event);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults.length < 1
+                || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "需要存储器访问权限", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     //*******************public********************
 
     public void startFragment(Fragment fragment) {
@@ -85,6 +100,16 @@ public class MainActivity extends BaseActivity {
     }
 
     //*******************private*******************
+
+    private void requestExternalStoragePermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int checkPermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            if (checkPermission != PackageManager.PERMISSION_GRANTED) {
+                //没有则申请权限
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            }
+        }
+    }
 
     private void initPlayerController() {
         ControllerFragment controllerFragment = (ControllerFragment) getSupportFragmentManager().findFragmentById(R.id.ctlController);
