@@ -4,6 +4,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 
 import java.io.File;
@@ -44,6 +47,8 @@ public class MusicStorageImp implements MusicStorage {
 
     private List<OnMusicGroupChangListener> mMusicGroupChangeListenerList;
 
+    private Handler mHandler;
+
     public MusicStorageImp(Context context) {
         mDBOpenHelper = new MusicDBOpenHelper(context, null);
 
@@ -61,6 +66,8 @@ public class MusicStorageImp implements MusicStorage {
         mSingleThreadPool = Executors.newSingleThreadExecutor();
 
         mMusicGroupChangeListenerList = new LinkedList<>();
+
+        mHandler = new Handler(Looper.getMainLooper());//创建在主线程中运行的 Handler
     }
 
     //***************************调试************************
@@ -920,9 +927,15 @@ public class MusicStorageImp implements MusicStorage {
         insertMusicsInto(tableName, newData, true);
     }
 
-    private void notifyMusicGroupChanged(GroupType groupType, String groupName, GroupAction action) {
-        for (OnMusicGroupChangListener listener : mMusicGroupChangeListenerList) {
-            listener.onMusicGroupChanged(groupType, groupName, action);
-        }
+    private void notifyMusicGroupChanged(final GroupType groupType, final String groupName, final GroupAction action) {
+        //避免在其他线程修改 MusicStorage 时造成应用程序崩溃
+        mHandler.post(new Runnable() {
+            @Override
+            public void run() {
+                for (OnMusicGroupChangListener listener : mMusicGroupChangeListenerList) {
+                    listener.onMusicGroupChanged(groupType, groupName, action);
+                }
+            }
+        });
     }
 }

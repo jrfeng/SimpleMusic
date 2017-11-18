@@ -49,6 +49,7 @@ public class TempPlayDialog {
                             @Override
                             public void onButtonClicked(String input, boolean optionChecked, int arg) {
                                 client.clearTempList();
+                                Toast.makeText(context, "临时列表已清空", Toast.LENGTH_SHORT).show();
                             }
                         });
                         alertDialog.show();
@@ -77,7 +78,7 @@ public class TempPlayDialog {
                     @Override
                     public void onItemClicked(BottomListDialog dialog, BottomListDialog.Item item, int position) {
                         dialog.dismiss();
-                        Toast.makeText(context, "临时播 插队播放", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "临时播", Toast.LENGTH_SHORT).show();
 
                         //调试
                         log("插队播放 : " + position);
