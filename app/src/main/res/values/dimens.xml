@@ -53,4 +53,11 @@
     <!-- Bottom List Dialog-->
     <dimen name="bottomListDialogHeight">400dp</dimen>
     <dimen name="bottomListDialogItemHeight">48dp</dimen>
+
+    <!-- Wave Form -->
+    <dimen name="waveFormStrokeWidth">1dp</dimen>
+    <dimen name="waveFormCenterCutWidth">190dp</dimen>
+
+    <!-- Player Disk -->
+    <dimen name="playerDiskSize">192dp</dimen>
 </resources>

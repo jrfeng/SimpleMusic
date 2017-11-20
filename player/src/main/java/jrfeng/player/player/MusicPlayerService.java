@@ -396,7 +396,7 @@ public class MusicPlayerService extends Service {
         @Override
         public int getMusicLength() {
             if (mPlayingMusic == null || !mPrepared) {
-                return 100;
+                return 0;
             }
             return mMediaPlayer.getDuration();
         }
@@ -410,6 +410,20 @@ public class MusicPlayerService extends Service {
         }
 
         //***********************MusicPlayerController*****************
+
+        @Override
+        public int getAudioSessionId() {
+            if (mMediaPlayer == null) {
+                //调试
+                log("Session Id : " + 0);
+                return 0;
+            }
+
+            //调试
+            log("Session Id : " + mMediaPlayer.getAudioSessionId());
+
+            return mMediaPlayer.getAudioSessionId();
+        }
 
         @Override
         public void previous() {
@@ -646,9 +660,9 @@ public class MusicPlayerService extends Service {
                 abandonAudioFocus();
                 //更新View
                 mControllerView.pause();
-                sendActionBroadcast(MusicPlayerClient.Action.ACTION_PAUSE);
                 //渐隐暂停
                 volumeTransition(1.0F, 0.0F, true, MusicPlayerClient.Action.ACTION_PAUSE);
+                sendActionBroadcast(MusicPlayerClient.Action.ACTION_PAUSE);
             }
         }
 

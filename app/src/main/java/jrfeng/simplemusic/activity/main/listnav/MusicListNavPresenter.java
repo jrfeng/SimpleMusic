@@ -40,7 +40,7 @@ public class MusicListNavPresenter extends PlayerActionDisposerAdapter implement
 
     private MusicStorage.OnMusicGroupChangListener mMusicGroupChangListener;
 
-    private static final int CACHE_SIZE = 4 * 1024 * 1024;  //4M
+    private static final int CACHE_SIZE = 8 * 1024 * 1024;  //8M
     private LruCache<String, Bitmap> mIconCache;
 
     public MusicListNavPresenter(Context context,
@@ -146,7 +146,7 @@ public class MusicListNavPresenter extends PlayerActionDisposerAdapter implement
 
     @Override
     public void setGroupIcon(final String groupName, final ImageView iconView) {
-        //从内存加载
+        //从缓存加载
         Bitmap cacheIcon = mIconCache.get(groupName);
         if (cacheIcon != null) {
             iconView.setImageBitmap(cacheIcon);

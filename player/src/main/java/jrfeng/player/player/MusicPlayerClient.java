@@ -95,6 +95,11 @@ public class MusicPlayerClient implements ServiceConnection, MusicPlayerControll
     }
 
     @Override
+    public int getAudioSessionId() {
+        return mController.getAudioSessionId();
+    }
+
+    @Override
     public void previous() {
         mController.previous();
     }

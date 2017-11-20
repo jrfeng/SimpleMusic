@@ -10,6 +10,13 @@ import jrfeng.player.mode.MusicStorage;
 interface MusicPlayerController {
 
     /**
+     * 获取 MediaPlayer 的 Session Id。
+     *
+     * @return MediaPlayer 的 Session Id。
+     */
+    int getAudioSessionId();
+
+    /**
      * 播放上一首音乐。
      */
     void previous();

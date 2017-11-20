@@ -1,14 +1,219 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/shape_rect_player_bg"
+    android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/ivBackground"
+    <Space
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/shape_rect_player_bg"/>
+        android:layout_height="24dp"/>
 
-</FrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp">
+
+        <ImageButton
+            android:id="@+id/ibBack"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:alpha="0.8"
+            android:background="@null"
+            android:scaleType="centerInside"
+            android:src="@drawable/btn_player_back"/>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvSongArtist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:alpha="0.8"
+                android:ellipsize="middle"
+                android:singleLine="true"
+                android:text="@string/app_name"
+                android:textColor="@color/colorWhite"
+                android:textSize="18sp"/>
+
+        </RelativeLayout>
+
+        <!-- 如果需要 "More" 按钮，请将它设为可见 -->
+        <ImageButton
+            android:id="@+id/ibMore"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:alpha="0.8"
+            android:background="@null"
+            android:scaleType="centerInside"
+            android:src="@drawable/btn_player_more"
+            android:visibility="invisible"
+            tools:visibility="visible"/>
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="312dp">
+
+        <jrfeng.simplemusic.widget.WaveFormView
+            android:id="@+id/waveForm"
+            android:layout_width="match_parent"
+            android:layout_height="88dp"
+            android:layout_gravity="center"
+            app:waveFormColor="@color/colorBlue300"
+            app:waveFormWidth="@dimen/waveFormStrokeWidth"/>
+
+        <ImageView
+            android:layout_width="208dp"
+            android:layout_height="208dp"
+            android:layout_gravity="center"
+            android:src="@drawable/bg_player_disk"/>
+
+        <ImageView
+            android:id="@+id/ivSongImage"
+            android:layout_width="@dimen/playerDiskSize"
+            android:layout_height="@dimen/playerDiskSize"
+            android:layout_gravity="center"
+            android:scaleType="centerInside"
+            android:src="@mipmap/ic_player_disk"/>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tvSongName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="64dp"
+        android:layout_marginRight="64dp"
+        android:alpha="0.8"
+        android:ellipsize="marquee"
+        android:gravity="center_horizontal"
+        android:singleLine="true"
+        android:text="@string/app_name"
+        android:textColor="@color/colorWhite"
+        android:textSize="18sp"/>
+
+    <!-- 占位 -->
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <TextView
+            android:id="@+id/tvSongProgress"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:gravity="center"
+            android:text="00:00"
+            android:textColor="@color/colorWhite"
+            android:textSize="12sp"/>
+
+        <SeekBar
+            android:id="@+id/sbProgress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:progressDrawable="@drawable/player_seek_bar_progress"
+            android:thumb="@drawable/player_seek_bar_thumb"/>
+
+        <TextView
+            android:id="@+id/tvSongLength"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:gravity="center"
+            android:text="00:00"
+            android:textColor="@color/colorWhite"
+            android:textSize="12sp"/>
+    </LinearLayout>
+
+    <!-- 占位 -->
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="32dp"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <ImageButton
+            android:id="@+id/ibPlayMode"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="start"
+            android:background="@null"
+            android:src="@drawable/btn_player_play_mode"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/ibPrevious"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@null"
+                android:src="@drawable/btn_player_previous"/>
+
+            <!-- 占位 -->
+            <Space
+                android:layout_width="36dp"
+                android:layout_height="36dp"/>
+
+            <ImageButton
+                android:id="@+id/ibPlayPause"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@null"
+                android:src="@drawable/btn_player_play_pause"/>
+
+            <!-- 占位 -->
+            <Space
+                android:layout_width="36dp"
+                android:layout_height="36dp"/>
+
+            <ImageButton
+                android:id="@+id/ibNext"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@null"
+                android:src="@drawable/btn_player_next"/>
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/ibLoveMusic"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="end"
+            android:background="@null"
+            android:src="@drawable/btn_player_i_love"/>
+    </FrameLayout>
+
+    <!-- 占位 -->
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="36dp"/>
+</LinearLayout>
