@@ -9,7 +9,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.EditText;
@@ -48,7 +47,7 @@ public class SearchActivity extends BaseActivity implements SearchContract.View 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        overridePendingTransition(R.anim.alpha_in, R.anim.no_anim);
+        overridePendingTransition(R.anim.opacity_in, R.anim.no_anim);
 
         Bundle args = getIntent().getExtras();
         mGroupType = MusicStorage.GroupType.valueOf(args.getString(KEY_GROUP_TYPE, MusicStorage.GroupType.MUSIC_LIST.name()));
@@ -68,7 +67,7 @@ public class SearchActivity extends BaseActivity implements SearchContract.View 
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(R.anim.no_anim, R.anim.alpha_out);
+        overridePendingTransition(R.anim.no_anim, R.anim.opacity_out);
     }
 
     @Override

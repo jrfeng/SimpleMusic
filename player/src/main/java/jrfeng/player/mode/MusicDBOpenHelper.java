@@ -64,6 +64,6 @@ class MusicDBOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         //数据库升级逻辑(保留，暂无需求)
-        throw new UnsupportedOperationException("请实现数据库升级逻辑");
+        throw new UnsupportedOperationException("数据库升级逻辑未实现");
     }
 }

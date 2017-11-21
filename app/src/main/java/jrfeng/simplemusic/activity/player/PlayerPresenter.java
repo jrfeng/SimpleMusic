@@ -118,11 +118,11 @@ public class PlayerPresenter extends PlayerActionDisposerAdapter implements Play
         if (music != null) {
             if (isILove(music)) {
                 mView.love(false);
-                Toast.makeText(mContext, "我喜欢 已移除", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "取消喜欢", Toast.LENGTH_SHORT).show();
                 mMusicStorage.removeMusicFromILove(music);
             } else {
                 mView.love(true);
-                Toast.makeText(mContext, "我喜欢 已添加", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "我喜欢", Toast.LENGTH_SHORT).show();
                 mMusicStorage.addMusicToILove(music);
             }
         }

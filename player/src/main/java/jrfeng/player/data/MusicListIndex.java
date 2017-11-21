@@ -17,19 +17,8 @@ public class MusicListIndex {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getTableName() {
         return tableName;
-    }
-
-    public void setTableName(String tableName) {
-        if (!isLegal(tableName)) {
-            throw new IllegalArgumentException("table name must start with a-z or A-Z or _");
-        }
-        this.tableName = tableName;
     }
 
     //***********private*********

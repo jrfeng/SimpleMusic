@@ -80,7 +80,7 @@ public class MultiChoicePresenter implements MultiChoiceContract.Presenter {
             return;
         }
 
-        mMusicStorage.addMusicsToMusicList(musics, name);
+        mMusicStorage.addMusicsToCustomMusicList(musics, name);
         Toast.makeText(mContext, "添加成功", Toast.LENGTH_SHORT).show();
         mView.close();
     }
@@ -97,16 +97,28 @@ public class MultiChoicePresenter implements MultiChoiceContract.Presenter {
             return;
         }
 
-        mMusicStorage.removeMusicsFromMusicGroup(musics, mGroupType, mGroupName);
+        switch (mGroupName) {
+            case MusicStorage.MUSIC_LIST_ALL_MUSIC:
+                mMusicStorage.removeMusicsFromAllMusic(musics);
+                break;
+            case MusicStorage.MUSIC_LIST_I_LOVE:
+                mMusicStorage.removeMusicsFromILove(musics);
+                break;
+            case MusicStorage.MUSIC_LIST_RECENT_PLAY:
+                mMusicStorage.removeMusicsFromRecentPlay(musics);
+                break;
+            default:
+                mMusicStorage.removeMusicsFromCustomMusicList(musics, mGroupName);
+                break;
+        }
         Toast.makeText(mContext, "移除成功", Toast.LENGTH_SHORT).show();
         mView.close();
     }
 
     @Override
     public void removeMusicsFromAllMusic(List<Music> musics) {
-        mMusicStorage.removeMusicsFromMusicGroup(musics,
-                MusicStorage.GroupType.MUSIC_LIST,
-                MusicStorage.MUSIC_LIST_ALL_MUSIC);
+        mMusicStorage.removeMusicsFromAllMusic(musics);
+
         Toast.makeText(mContext, "删除成功", Toast.LENGTH_SHORT).show();
         mView.close();
     }
@@ -118,7 +130,7 @@ public class MultiChoicePresenter implements MultiChoiceContract.Presenter {
             return;
         }
 
-        mMusicStorage.deleteMusics(musics);
+        mMusicStorage.deleteMusicsFile(musics);
         Toast.makeText(mContext, "删除成功", Toast.LENGTH_SHORT).show();
         mView.close();
     }
@@ -141,9 +153,11 @@ public class MultiChoicePresenter implements MultiChoiceContract.Presenter {
     @Override
     public void createNewMusicList(String listName, List<Music> addMusics) {
         if (mMusicStorage.createNewMusicList(listName)) {
-            mMusicStorage.addMusicsToMusicList(addMusics, listName);
+            mMusicStorage.addMusicsToCustomMusicList(addMusics, listName);
             Toast.makeText(mContext, "添加成功", Toast.LENGTH_SHORT).show();
             mView.close();
+        } else {
+            Toast.makeText(mContext, "添加失败", Toast.LENGTH_SHORT).show();
         }
     }
 }

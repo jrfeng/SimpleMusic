@@ -13,7 +13,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
@@ -51,10 +50,17 @@ public class PlayerActivity extends BaseActivity implements PlayerContract.View 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
+        overridePendingTransition(R.anim.slide_in_up, R.anim.opacity_out);
         mPresenter = new PlayerPresenter(getApplicationContext(), this);
         findViews();
         initViews();
         addViewListener();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.opacity_in, R.anim.slide_out_down);
     }
 
     @Override
@@ -109,7 +115,7 @@ public class PlayerActivity extends BaseActivity implements PlayerContract.View 
         requestRecordAudioPermission();
 
         mRotateAnim = ObjectAnimator.ofFloat(ivSongImage, "rotation", 0, 360);
-        mRotateAnim.setDuration(40000);
+        mRotateAnim.setDuration(60_000);
         mRotateAnim.setInterpolator(new LinearInterpolator());
         mRotateAnim.setRepeatMode(ObjectAnimator.RESTART);
         mRotateAnim.setRepeatCount(-1);
@@ -186,19 +192,19 @@ public class PlayerActivity extends BaseActivity implements PlayerContract.View 
                         mPresenter.setPlayMode(MusicPlayerClient.PlayMode.MODE_LOOP);
                         ibPlayMode.setImageLevel(2);
                         ibPlayMode.setTag(2);
-                        Toast.makeText(getApplicationContext(), "循环播放", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(), "循环播放", Toast.LENGTH_SHORT).show();
                         break;
                     case 2:
                         mPresenter.setPlayMode(MusicPlayerClient.PlayMode.MODE_RANDOM);
                         ibPlayMode.setImageLevel(3);
                         ibPlayMode.setTag(3);
-                        Toast.makeText(getApplicationContext(), "随机播放", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(), "随机播放", Toast.LENGTH_SHORT).show();
                         break;
                     case 3:
                         mPresenter.setPlayMode(MusicPlayerClient.PlayMode.MODE_ORDER);
                         ibPlayMode.setImageLevel(1);
                         ibPlayMode.setTag(1);
-                        Toast.makeText(getApplicationContext(), "顺序播放", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getApplicationContext(), "顺序播放", Toast.LENGTH_SHORT).show();
                         break;
                 }
             }

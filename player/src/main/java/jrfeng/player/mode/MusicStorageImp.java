@@ -109,7 +109,6 @@ public class MusicStorageImp implements MusicStorage {
         return mAllMusic;
     }
 
-
     @Override
     public List<Music> getILove() {
         return mILove;
@@ -295,35 +294,28 @@ public class MusicStorageImp implements MusicStorage {
     }
 
     @Override
-    public boolean addMusicToMusicList(Music music, String name) {
-        switch (name) {
-            case MUSIC_LIST_I_LOVE:
-                return addMusicToILove(music);
-            case MUSIC_LIST_RECENT_PLAY:
-                return addMusicToRecentPlay(music);
-            default:
-                int index = mMusicListNames.indexOf(name);
-                if (index != -1) {
-                    List<Music> musicList = mMusicLists.get(index);
-                    if (musicList.contains(music)) {
-                        return true;
-                    }
-                    boolean result = musicList.add(music);
-                    if (result) {
-                        insertMusicInto(mMusicListIndices.get(index).getTableName(), music);
-                        notifyMusicGroupChanged(
-                                GroupType.MUSIC_LIST,
-                                name,
-                                GroupAction.ADD_MUSIC);
-                    }
-                    return result;
-                }
-                return false;
+    public boolean addMusicToCustomMusicList(Music music, String name) {
+        int index = mMusicListNames.indexOf(name);
+        if (index != -1) {
+            List<Music> musicList = mMusicLists.get(index);
+            if (musicList.contains(music)) {
+                return true;
+            }
+            boolean result = musicList.add(music);
+            if (result) {
+                insertMusicInto(mMusicListIndices.get(index).getTableName(), music);
+                notifyMusicGroupChanged(
+                        GroupType.MUSIC_LIST,
+                        name,
+                        GroupAction.ADD_MUSIC);
+            }
+            return result;
         }
+        return false;
     }
 
     @Override
-    public boolean addMusicsToMusicList(List<Music> musics, String name) {
+    public boolean addMusicsToCustomMusicList(List<Music> musics, String name) {
         if (musics.size() < 1) {
             return false;
         }
@@ -348,44 +340,25 @@ public class MusicStorageImp implements MusicStorage {
     }
 
     @Override
-    public boolean removeMusicFromMusicList(Music music, String name) {
-        switch (name) {
-            case MusicStorage.MUSIC_LIST_ALL_MUSIC:
-                return removeMusicFromAllMusic(music);
-            case MUSIC_LIST_I_LOVE:
-                return removeMusicFromILove(music);
-            case MUSIC_LIST_RECENT_PLAY:
-                return removeMusicFromRecentPlay(music);
-            default:
-                int index = mMusicListNames.indexOf(name);
-                if (index != -1 && mMusicLists.get(index).contains(music)) {
-                    boolean result = mMusicLists.get(index).remove(music);
-                    if (result) {
-                        deleteMusicFrom(mMusicListIndices.get(index).getTableName(), music);
-                        notifyMusicGroupChanged(
-                                GroupType.MUSIC_LIST,
-                                name,
-                                GroupAction.REMOVE_MUSIC);
-                    }
-                    return result;
-                }
-                return false;
+    public boolean removeMusicFromCustomMusicList(Music music, String name) {
+        int index = mMusicListNames.indexOf(name);
+        if (index != -1 && mMusicLists.get(index).contains(music)) {
+            boolean result = mMusicLists.get(index).remove(music);
+            if (result) {
+                deleteMusicFrom(mMusicListIndices.get(index).getTableName(), music);
+                notifyMusicGroupChanged(
+                        GroupType.MUSIC_LIST,
+                        name,
+                        GroupAction.REMOVE_MUSIC);
+            }
+            return result;
         }
+        return false;
     }
 
     @Override
-    public boolean removeMusicsFromMusicGroup(List<Music> musics, GroupType groupType, String groupName) {
-        switch (groupType) {
-            case ALBUM_LIST:
-                removeFromAlbum(musics, groupName);
-                break;
-            case ARTIST_LIST:
-                removeFromArtist(musics, groupName);
-                break;
-            case MUSIC_LIST:
-                removeFromMusicList(musics, groupName);
-                break;
-        }
+    public boolean removeMusicsFromCustomMusicList(List<Music> musics, String name) {
+        removeFromCustomMusicList(musics, name);
         return true;
     }
 
@@ -439,6 +412,12 @@ public class MusicStorageImp implements MusicStorage {
     }
 
     @Override
+    public boolean removeMusicsFromILove(List<Music> musics) {
+        removeFromILove(musics);
+        return true;
+    }
+
+    @Override
     public boolean addMusicToRecentPlay(Music music) {
         if (!mRecentPlay.contains(music)) {
             mRecentPlay.add(0, music);
@@ -466,6 +445,12 @@ public class MusicStorageImp implements MusicStorage {
             return result;
         }
         return false;
+    }
+
+    @Override
+    public boolean removeMusicsFromRecentPlay(List<Music> musics) {
+        removeFromRecentPlay(musics);
+        return true;
     }
 
     @Override
@@ -504,6 +489,12 @@ public class MusicStorageImp implements MusicStorage {
     }
 
     @Override
+    public boolean removeMusicsFromAllMusic(List<Music> musics) {
+        removeFromAllMusic(musics);
+        return true;
+    }
+
+    @Override
     public boolean deleteMusicFile(Music music) {
         String path = music.getPath();
         File file = new File(path);
@@ -515,7 +506,7 @@ public class MusicStorageImp implements MusicStorage {
     }
 
     @Override
-    public boolean deleteMusics(List<Music> musics) {
+    public boolean deleteMusicsFile(List<Music> musics) {
         for (Music music : musics) {
             deleteMusicFile(music);
         }
@@ -748,23 +739,6 @@ public class MusicStorageImp implements MusicStorage {
                     GroupType.ALBUM_LIST,
                     albumName,
                     GroupAction.DELETE_GROUP);
-        }
-    }
-
-    private void removeFromMusicList(List<Music> musics, String listName) {
-        switch (listName) {
-            case MUSIC_LIST_ALL_MUSIC:
-                removeFromAllMusic(musics);
-                break;
-            case MUSIC_LIST_I_LOVE:
-                removeFromILove(musics);
-                break;
-            case MUSIC_LIST_RECENT_PLAY:
-                removeFromRecentPlay(musics);
-                break;
-            default:
-                removeFromCustomMusicList(musics, listName);
-                break;
         }
     }
 

@@ -35,6 +35,12 @@ public class SortMusicListDialog {
                     case R.id.sortByNameReverse:
                         musicStorage.sortMusicList(musicListName, MusicComparator.BY_NAME_REVERSE);
                         break;
+                    case R.id.sortByArtist:
+                        musicStorage.sortMusicList(musicListName, MusicComparator.BY_ARTIST);
+                        break;
+                    case R.id.sortByArtistReverse:
+                        musicStorage.sortMusicList(musicListName, MusicComparator.BY_ARTIST_REVERSE);
+                        break;
                 }
 
                 //调试

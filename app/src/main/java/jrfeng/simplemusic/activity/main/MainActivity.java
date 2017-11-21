@@ -84,8 +84,8 @@ public class MainActivity extends BaseActivity {
     public void startFragment(Fragment fragment) {
         mFmManager.beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_up,
-                        R.anim.alpha_out,
-                        R.anim.alpha_in,
+                        R.anim.opacity_out,
+                        R.anim.opacity_in,
                         R.anim.slide_out_down)
                 .replace(R.id.navContainer, fragment)
                 .addToBackStack(null)

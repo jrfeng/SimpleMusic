@@ -11,6 +11,10 @@ import jrfeng.player.mode.MusicStorage;
 import jrfeng.player.player.MusicPlayerClient;
 import jrfeng.simplemusic.base.BasePresenter;
 
+import static jrfeng.player.mode.MusicStorage.MUSIC_LIST_ALL_MUSIC;
+import static jrfeng.player.mode.MusicStorage.MUSIC_LIST_I_LOVE;
+import static jrfeng.player.mode.MusicStorage.MUSIC_LIST_RECENT_PLAY;
+
 class MusicListPresenter implements BasePresenter {
     private Context mContext;
     private MusicPlayerClient mClient;
@@ -73,18 +77,18 @@ class MusicListPresenter implements BasePresenter {
 
     void addMusicToILove(Music music) {
         mMusicStorage.addMusicToILove(music);
-        Toast.makeText(mContext, "我喜欢 已添加", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, "我喜欢", Toast.LENGTH_SHORT).show();
     }
 
     void removeMusicFromILove(Music music) {
         boolean result = mMusicStorage.removeMusicFromILove(music);
         if (result) {
-            Toast.makeText(mContext, "我喜欢 已移除", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "取消喜欢", Toast.LENGTH_SHORT).show();
         }
     }
 
     void removeMusicFromCurrentList(Music music) {
-        if (mMusicStorage.removeMusicFromMusicList(music, mGroupName)) {
+        if (removeMusicFromMusicGroup(music)) {
             Toast.makeText(mContext, "移除成功", Toast.LENGTH_SHORT).show();
         }
     }
@@ -122,7 +126,7 @@ class MusicListPresenter implements BasePresenter {
         if (musicList.contains(music)) {
             Toast.makeText(mContext, "已存在", Toast.LENGTH_SHORT).show();
         } else {
-            mMusicStorage.addMusicToMusicList(music, listName);
+            mMusicStorage.addMusicToCustomMusicList(music, listName);
             Toast.makeText(mContext, "添加到 " + listName + " 成功", Toast.LENGTH_SHORT).show();
         }
     }
@@ -138,5 +142,18 @@ class MusicListPresenter implements BasePresenter {
 
     boolean isILove(Music music) {
         return mILove.contains(music);
+    }
+
+    private boolean removeMusicFromMusicGroup(Music music) {
+        switch (mGroupName) {
+            case MUSIC_LIST_ALL_MUSIC:
+                return mMusicStorage.removeMusicFromAllMusic(music);
+            case MUSIC_LIST_I_LOVE:
+                return mMusicStorage.removeMusicFromILove(music);
+            case MUSIC_LIST_RECENT_PLAY:
+                return mMusicStorage.removeMusicFromRecentPlay(music);
+            default:
+                return mMusicStorage.removeMusicFromCustomMusicList(music, mGroupName);
+        }
     }
 }

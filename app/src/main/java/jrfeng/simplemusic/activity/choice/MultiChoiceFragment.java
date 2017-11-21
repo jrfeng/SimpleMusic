@@ -50,11 +50,11 @@ public class MultiChoiceFragment extends Fragment implements MultiChoiceContract
     private ImageButton ibMenuLove;
     private ImageButton ibMenuAddTo;
     private ImageButton ibMenuRemove;
-    private TextView tvMenuRemoveLabel;
     private ImageButton ibMenuDelete;
 
     private MultiChoiceAdapter mMultiChoiceAdapter;
 
+    private boolean mDisableLove;
     private boolean mDisableRemove;
 
     @Override
@@ -69,6 +69,11 @@ public class MultiChoiceFragment extends Fragment implements MultiChoiceContract
 
         mPresenter = new MultiChoicePresenter(mContext, this, mGroupType, mGroupName);
         mMusicGroup = mPresenter.getMusicGroup();
+
+        if (mGroupType == MusicStorage.GroupType.MUSIC_LIST
+                && mGroupName.equals(MusicStorage.MUSIC_LIST_I_LOVE)) {
+            mDisableLove = true;
+        }
 
         if (mGroupType != MusicStorage.GroupType.MUSIC_LIST) {
             mDisableRemove = true;
@@ -126,10 +131,16 @@ public class MultiChoiceFragment extends Fragment implements MultiChoiceContract
 
         ibMenuTempPlay = contentView.findViewById(R.id.ibMenuTempPlay);
         ibMenuLove = contentView.findViewById(R.id.ibMenuLove);
+        TextView tvMenuLoveLabel = contentView.findViewById(R.id.tvMenuLoveLabel);
         ibMenuAddTo = contentView.findViewById(R.id.ibMenuAddTo);
         ibMenuRemove = contentView.findViewById(R.id.ibMenuRemove);
-        tvMenuRemoveLabel = contentView.findViewById(R.id.tvMenuRemoveLabel);
+        TextView tvMenuRemoveLabel = contentView.findViewById(R.id.tvMenuRemoveLabel);
         ibMenuDelete = contentView.findViewById(R.id.ibMenuDelete);
+
+        if(mDisableLove) {
+            ibMenuLove.setVisibility(View.GONE);
+            tvMenuLoveLabel.setVisibility(View.GONE);
+        }
 
         if (mDisableRemove) {
             ibMenuRemove.setVisibility(View.GONE);

@@ -20,7 +20,7 @@ public class MultiChoiceActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multi_choice);
-        overridePendingTransition(R.anim.slide_in_up, R.anim.alpha_out);
+        overridePendingTransition(R.anim.slide_in_up, R.anim.opacity_out);
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fmContainer);
 
@@ -37,7 +37,7 @@ public class MultiChoiceActivity extends BaseActivity {
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(R.anim.alpha_in, R.anim.slide_out_down);
+        overridePendingTransition(R.anim.opacity_in, R.anim.slide_out_down);
     }
 
     //*******************调试用******************

@@ -25,48 +25,24 @@ public class Music implements Serializable {
         return path;
     }
 
-    public void setPath(String path) {
-        this.path = path;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getArtist() {
         return artist;
     }
 
-    public void setArtist(String artist) {
-        this.artist = artist;
-    }
-
     public String getAlbum() {
         return album;
-    }
-
-    public void setAlbum(String album) {
-        this.album = album;
     }
 
     public String getYear() {
         return year;
     }
 
-    public void setYear(String year) {
-        this.year = year;
-    }
-
     public String getComment() {
         return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
     }
 
     @Override

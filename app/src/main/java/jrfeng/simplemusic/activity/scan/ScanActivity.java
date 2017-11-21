@@ -46,7 +46,7 @@ public class ScanActivity extends BaseActivity implements ScanContract.View {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan);
-        overridePendingTransition(R.anim.slide_in_up, R.anim.alpha_out);
+        overridePendingTransition(R.anim.slide_in_up, R.anim.opacity_out);
         requestExternalStoragePermission();
 
         setPresenter(new ScanPresenter(this));
@@ -58,7 +58,7 @@ public class ScanActivity extends BaseActivity implements ScanContract.View {
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(R.anim.alpha_in, R.anim.slide_out_down);
+        overridePendingTransition(R.anim.opacity_in, R.anim.slide_out_down);
     }
 
     @Override

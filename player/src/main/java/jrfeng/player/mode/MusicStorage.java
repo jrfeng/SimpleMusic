@@ -17,9 +17,9 @@ public interface MusicStorage {
     String MUSIC_LIST_RECENT_PLAY = "recentPlay";
 
     /**
-     * 初始化 MusicStorage。这个方法由音乐播放器调用。
-     * 注意！千万不要将该方法设计成异步的（不要在该方法
-     * 中使用任何线程），如果设计成异步的反而会坏事。
+     * 初始化 MusicStorage。这个方法由 MusicPlayerClient 负责调用。
+     * 注意！千万不要将该方法设计成异步的（不要在该方法中开启任何新线程）
+     * ，如果设计成异步的反而会坏事。
      */
     void restore();
 
@@ -157,26 +157,40 @@ public interface MusicStorage {
     List<String> getArtistNames();
 
     /**
-     * 添加音乐到指定歌单（包括 “我喜欢”、“最近播放”）。
+     * 添加音乐到用户的自建歌单（不包括默认的 “我喜欢”）。
      *
      * @param music 要添加的音乐。
-     * @param name  歌单名称（包括 “我喜欢”、“最近播放”）。
+     * @param name  用户自建歌单的名字。
      * @return 如果添加成功则返回 true，否则返回 false。
      */
-    boolean addMusicToMusicList(Music music, String name);
-
-    boolean addMusicsToMusicList(List<Music> musics, String name);
+    boolean addMusicToCustomMusicList(Music music, String name);
 
     /**
-     * 从歌单中移除音乐（包括 “所有音乐”、“我喜欢”、“最近播放”）。
+     * 添加一组音乐到用户的自建歌单（不包括默认的 “我喜欢”）。
+     *
+     * @param musics 要添加的音乐。
+     * @param name   用户自建歌单的名字。
+     * @return 如果添加成功则返回 true，否则返回 false。
+     */
+    boolean addMusicsToCustomMusicList(List<Music> musics, String name);
+
+    /**
+     * 从用户的自建歌单中移除指定音乐（注意，不包括 “所有音乐”、“我喜欢”、“最近播放”）。
      *
      * @param music 要移除的音乐。
-     * @param name  歌单名称（包括 “所有音乐”、“我喜欢”、“最近播放”）。
+     * @param name  歌单名称（不包括 “所有音乐”、“我喜欢”、“最近播放”）。
      * @return 如果移除成功则返回 true，否则返回 false。
      */
-    boolean removeMusicFromMusicList(Music music, String name);
+    boolean removeMusicFromCustomMusicList(Music music, String name);
 
-    boolean removeMusicsFromMusicGroup(List<Music> musics, GroupType groupType, String groupName);
+    /**
+     * 从用户的自建歌单中移除一组音乐（注意，不包括 “所有音乐”、“我喜欢”、“最近播放”）。
+     *
+     * @param musics 要移除的音乐。
+     * @param name   歌单名称（不包括 “所有音乐”、“我喜欢”、“最近播放”）。
+     * @return 如果移除成功则返回 true，否则返回 false。
+     */
+    boolean removeMusicsFromCustomMusicList(List<Music> musics, String name);
 
     /**
      * 添加音乐到 “我喜欢” 歌单。
@@ -186,6 +200,12 @@ public interface MusicStorage {
      */
     boolean addMusicToILove(Music music);
 
+    /**
+     * 添加一组音乐到 “我喜欢”。
+     *
+     * @param musics 要添加的音乐。
+     * @return 如果添加成功则返回 true，否则返回 false。
+     */
     boolean addMusicsToILove(List<Music> musics);
 
     /**
@@ -195,6 +215,14 @@ public interface MusicStorage {
      * @return 如果移除成功则返回 true，否则返回 false。
      */
     boolean removeMusicFromILove(Music music);
+
+    /**
+     * 从 “我喜欢” 列表移除一组音乐。
+     *
+     * @param musics 要移除的音乐。
+     * @return 如果移除成功则返回 true，否则返回 false。
+     */
+    boolean removeMusicsFromILove(List<Music> musics);
 
     /**
      * 记录最近播放的音乐。
@@ -212,6 +240,13 @@ public interface MusicStorage {
      */
     boolean removeMusicFromRecentPlay(Music music);
 
+    /**
+     * 从 “最近播放” 中移除一组音乐。
+     *
+     * @param musics 要移除的音乐。
+     * @return 如果移除成功则返回 true，否则返回 false。
+     */
+    boolean removeMusicsFromRecentPlay(List<Music> musics);
 
     /**
      * 从所有歌单中移除指定音乐。
@@ -222,6 +257,14 @@ public interface MusicStorage {
     boolean removeMusicFromAllMusic(Music music);
 
     /**
+     * 从所有歌单中移除一组音乐。
+     *
+     * @param musics 要移除的音乐。
+     * @return 如果移除成功则返回 true，否则返回 false。
+     */
+    boolean removeMusicsFromAllMusic(List<Music> musics);
+
+    /**
      * 彻底删除音乐。注意，该方法会同时删除本地文件，请谨慎使用！
      *
      * @param music 要删除的音乐。
@@ -229,7 +272,7 @@ public interface MusicStorage {
      */
     boolean deleteMusicFile(Music music);
 
-    boolean deleteMusics(List<Music> musics);
+    boolean deleteMusicsFile(List<Music> musics);
 
     /**
      * 判断音乐是否存在（主要用于避免从 “临时列表” 中播放已经彻底移除的音乐）。

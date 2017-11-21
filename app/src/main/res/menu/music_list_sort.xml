@@ -7,4 +7,10 @@
     <item
         android:id="@+id/sortByNameReverse"
         android:title="按名称排序 - 逆序"/>
+
+    <item android:id="@+id/sortByArtist"
+        android:title="按歌手排序 - 正序"/>
+
+    <item android:id="@+id/sortByArtistReverse"
+          android:title="按歌手排序 - 逆序"/>
 </menu>
