@@ -77,6 +77,13 @@ public class PlayerActivity extends BaseActivity implements PlayerContract.View 
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //必须退出属性动画，不然可能造成内存泄露
+        mRotateAnim.cancel();
+    }
+
+    @Override
     public void setPresenter(PlayerContract.Presenter presenter) {
 
     }

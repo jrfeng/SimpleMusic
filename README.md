@@ -2,6 +2,8 @@
 
 音乐播放器 **Demo**，使用 **MVP** 模式构建。
 
+> **提示**：仅支持播放本地音乐。
+
 [**下载 App**](http://oh5447og7.bkt.clouddn.com/app/SimpleMusic.apk)
 
 ## 已实现功能
@@ -24,6 +26,15 @@
 * 线控 暂停/播放
 * 支持外设控制（例如：蓝牙耳机）
 
+## 项目介绍
+
+项目分为两个模块：
+
+* app 模块：负责 UI 交互。
+* player 模块：负责播放音乐与管理已添加的音乐。
+
+**player 模块独立于 app 模块，可以抽离出来单独使用。**
+
 ## 参考图
 
 ![welcome](screenshot/welcome.png) ![nav](screenshot/nav.png) ![all_music_list](screenshot/all_music_list.png)
@@ -35,15 +46,6 @@
 ![scanned](screenshot/scanned.png) ![sort_menu](screenshot/sort_menu.png) ![temp_list](screenshot/temp_list.png)
 
 ![custom_music_list](screenshot/custom_music_list.png) ![album_list](screenshot/album_list.png) ![artist_list](screenshot/artist_list.png)
-
-## 项目介绍
-
-项目分为两个模块：
-
-* app 模块：负责 UI 交互。
-* player 模块：负责音乐播放与管理已添加的音乐。
-
-说明：player 模块独立于 app 模块，可以单独使用。
 
 ## License
 
