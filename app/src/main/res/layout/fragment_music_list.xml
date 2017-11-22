@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:ignore="Overdraw">
 
     <include
-        android:id="@+id/actionBar"
         layout="@layout/widget_action_bar"/>
 
     <LinearLayout
@@ -22,7 +23,8 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:background="@color/colorWhite"
-            android:src="@drawable/level_play_mode"/>
+            android:src="@drawable/level_play_mode"
+            tools:ignore="ContentDescription"/>
 
         <TextView
             android:id="@+id/tvPlayModeLabel"
@@ -32,14 +34,16 @@
             android:layout_weight="1"
             android:labelFor="@id/ibPlayMode"
             android:singleLine="true"
-            android:text="顺序播放"/>
+            android:text="顺序播放"
+            tools:ignore="Deprecated"/>
 
         <ImageButton
             android:id="@+id/ibSearch"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:background="@color/colorWhite"
-            android:src="@drawable/btn_search"/>
+            android:src="@drawable/btn_search"
+            tools:ignore="ContentDescription"/>
 
         <jrfeng.simplemusic.widget.Divider
             android:layout_width="1px"
@@ -51,7 +55,8 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:background="@color/colorWhite"
-            android:src="@drawable/btn_locate"/>
+            android:src="@drawable/btn_locate"
+            tools:ignore="ContentDescription"/>
 
         <jrfeng.simplemusic.widget.Divider
             android:layout_width="1px"
@@ -64,7 +69,8 @@
             android:layout_height="36dp"
             android:background="@color/colorWhite"
             android:scaleType="centerInside"
-            android:src="@drawable/btn_item_more"/>
+            android:src="@drawable/btn_item_more"
+            tools:ignore="ContentDescription"/>
 
     </LinearLayout>
 

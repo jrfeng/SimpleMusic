@@ -2,10 +2,10 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/outside"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAlertDialogBackground">
+    android:background="@color/colorAlertDialogBackground"
+    tools:ignore="Overdraw">
 
     <LinearLayout
         android:id="@+id/vgContent"
@@ -30,7 +30,8 @@
                 android:singleLine="true"
                 android:text="@string/app_name"
                 android:textColor="@color/colorListTitle"
-                android:textSize="15sp"/>
+                android:textSize="15sp"
+                tools:ignore="Deprecated"/>
         </FrameLayout>
 
         <FrameLayout
@@ -45,10 +46,11 @@
                 android:id="@+id/tvDialogMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="确认删除？"
+                android:maxLines="2"
                 android:textColor="@color/colorListDescribe"
                 android:textSize="14sp"
                 android:visibility="gone"
+                tools:text="确认删除？"
                 tools:visibility="visible"/>
 
             <EditText
@@ -59,12 +61,14 @@
                 android:layout_marginBottom="8dp"
                 android:background="@drawable/shape_rect_grey_stroke"
                 android:paddingLeft="4dp"
+                android:inputType="text"
                 android:paddingRight="4dp"
                 android:textColor="@color/colorGrey800"
                 android:textColorHint="@color/colorGrey500"
                 android:textSize="15sp"
                 android:visibility="gone"
-                tools:visibility="visible"/>
+                tools:visibility="visible"
+                tools:ignore="LabelFor"/>
 
             <LinearLayout
                 android:id="@+id/lvDialogOption"
@@ -83,7 +87,8 @@
                     android:layout_height="16dp"
                     android:background="@null"
                     android:scaleType="centerInside"
-                    android:src="@drawable/level_checkbox"/>
+                    android:src="@drawable/level_checkbox"
+                    tools:ignore="ContentDescription"/>
 
                 <Space
                     android:layout_width="8dp"

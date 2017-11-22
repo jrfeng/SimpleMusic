@@ -6,10 +6,6 @@ import jrfeng.player.data.Music;
 import jrfeng.simplemusic.base.BasePresenter;
 import jrfeng.simplemusic.base.BaseView;
 
-/**
- * Created by ASUS on 2017/9/14.
- * Author JRFeng
- */
 class ScanContract {
     interface View extends BaseView<Presenter> {
         void refreshView(int percent, String path, int count);

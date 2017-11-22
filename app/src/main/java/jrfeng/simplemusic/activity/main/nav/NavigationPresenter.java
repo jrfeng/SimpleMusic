@@ -18,7 +18,6 @@ import jrfeng.simplemusic.MyApplication;
 import jrfeng.simplemusic.activity.main.listnav.MusicListNavFragment;
 import jrfeng.simplemusic.activity.main.list.MusicListFragment;
 import jrfeng.simplemusic.activity.scan.ScanActivity;
-import jrfeng.simplemusic.dialog.SortMusicListDialog;
 import jrfeng.simplemusic.receiver.PlayerActionDisposerAdapter;
 import jrfeng.simplemusic.receiver.PlayerActionReceiver;
 

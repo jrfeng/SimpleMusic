@@ -1,12 +1,10 @@
 package jrfeng.simplemusic.activity.player;
 
-import android.graphics.Bitmap;
-
 import jrfeng.player.player.MusicPlayerClient;
 import jrfeng.simplemusic.base.BasePresenter;
 import jrfeng.simplemusic.base.BaseView;
 
-public interface PlayerContract {
+interface PlayerContract {
 
     interface View extends BaseView<Presenter> {
         void setSongName(String name);

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/listHeaderHeight">
 
@@ -23,14 +24,16 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:singleLine="true"
-            android:text="所有音乐（共0首）"/>
+            android:text="所有音乐（共0首）"
+            tools:ignore="Deprecated"/>
 
         <ImageButton
             android:id="@+id/ibPlayMode"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:background="@color/colorWhite"
-            android:src="@drawable/level_play_mode"/>
+            android:src="@drawable/level_play_mode"
+            tools:ignore="ContentDescription"/>
 
         <jrfeng.simplemusic.widget.Divider
             android:layout_width="1px"
@@ -42,7 +45,8 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:background="@color/colorWhite"
-            android:src="@drawable/btn_locate"/>
+            android:src="@drawable/btn_locate"
+            tools:ignore="ContentDescription"/>
 
         <jrfeng.simplemusic.widget.Divider
             android:layout_width="1px"
@@ -55,7 +59,8 @@
             android:layout_height="36dp"
             android:background="@color/colorWhite"
             android:scaleType="centerInside"
-            android:src="@drawable/btn_item_more"/>
+            android:src="@drawable/btn_item_more"
+            tools:ignore="ContentDescription"/>
 
     </LinearLayout>
 

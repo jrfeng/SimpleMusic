@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:ignore="Overdraw">
 
     <include
         layout="@layout/widget_action_bar"/>
@@ -19,7 +21,6 @@
         android:layout_weight="1"/>
 
     <LinearLayout
-        android:id="@+id/vgOptionMenu"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@color/colorBlue"
@@ -37,7 +38,8 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:scaleType="centerInside"
-                android:src="@drawable/menu_item_temp_play"/>
+                android:src="@drawable/menu_item_temp_play"
+                tools:ignore="ContentDescription"/>
 
             <ImageButton
                 android:id="@+id/ibMenuLove"
@@ -46,7 +48,8 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:scaleType="centerInside"
-                android:src="@drawable/level_love"/>
+                android:src="@drawable/level_love"
+                tools:ignore="ContentDescription"/>
 
             <ImageButton
                 android:id="@+id/ibMenuAddTo"
@@ -55,7 +58,8 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:scaleType="centerInside"
-                android:src="@drawable/menu_item_add_to"/>
+                android:src="@drawable/menu_item_add_to"
+                tools:ignore="ContentDescription"/>
 
             <ImageButton
                 android:id="@+id/ibMenuRemove"
@@ -64,7 +68,8 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:scaleType="centerInside"
-                android:src="@drawable/menu_item_remove"/>
+                android:src="@drawable/menu_item_remove"
+                tools:ignore="ContentDescription"/>
 
             <ImageButton
                 android:id="@+id/ibMenuDelete"
@@ -73,7 +78,8 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:scaleType="centerInside"
-                android:src="@drawable/menu_item_delete"/>
+                android:src="@drawable/menu_item_delete"
+                tools:ignore="ContentDescription"/>
 
         </LinearLayout>
 
@@ -90,7 +96,8 @@
                 android:labelFor="@id/ibMenuTempPlay"
                 android:text="临时播"
                 android:textColor="#FFF"
-                android:textSize="10sp"/>
+                android:textSize="10sp"
+                tools:ignore="SmallSp"/>
 
             <TextView
                 android:id="@+id/tvMenuLoveLabel"
@@ -101,7 +108,8 @@
                 android:labelFor="@id/ibMenuLove"
                 android:text="我喜欢"
                 android:textColor="#FFF"
-                android:textSize="10sp"/>
+                android:textSize="10sp"
+                tools:ignore="SmallSp"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -111,7 +119,8 @@
                 android:labelFor="@id/ibMenuAddTo"
                 android:text="添加到"
                 android:textColor="#FFF"
-                android:textSize="10sp"/>
+                android:textSize="10sp"
+                tools:ignore="SmallSp"/>
 
             <TextView
                 android:id="@+id/tvMenuRemoveLabel"
@@ -122,7 +131,8 @@
                 android:labelFor="@id/ibMenuRemove"
                 android:text="移除"
                 android:textColor="#FFF"
-                android:textSize="10sp"/>
+                android:textSize="10sp"
+                tools:ignore="SmallSp"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -132,7 +142,8 @@
                 android:labelFor="@id/ibMenuDelete"
                 android:text="删除"
                 android:textColor="#FFF"
-                android:textSize="10sp"/>
+                android:textSize="10sp"
+                tools:ignore="SmallSp"/>
 
         </LinearLayout>
     </LinearLayout>

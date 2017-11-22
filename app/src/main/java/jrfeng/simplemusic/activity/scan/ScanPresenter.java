@@ -1,7 +1,6 @@
 package jrfeng.simplemusic.activity.scan;
 
 import android.content.Context;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.storage.StorageManager;
@@ -111,7 +110,7 @@ class ScanPresenter implements ScanContract.Presenter {
 
     private String getStoragePath(Context mContext, boolean is_removable) {
         StorageManager mStorageManager = (StorageManager) mContext.getSystemService(Context.STORAGE_SERVICE);
-        Class<?> storageVolumeClazz = null;
+        Class<?> storageVolumeClazz;
         try {
             storageVolumeClazz = Class.forName("android.os.storage.StorageVolume");
             Method getVolumeList = mStorageManager.getClass().getMethod("getVolumeList");

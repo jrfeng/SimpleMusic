@@ -7,7 +7,7 @@ import jrfeng.player.data.Music;
 import jrfeng.player.mode.MusicStorage;
 import jrfeng.player.player.MusicPlayerClient;
 
-public class SearchPresenter implements SearchContract.Presenter {
+class SearchPresenter implements SearchContract.Presenter {
     private SearchContract.View mView;
     private MusicStorage.GroupType mGroupType;
     private String mGroupName;
@@ -17,7 +17,7 @@ public class SearchPresenter implements SearchContract.Presenter {
 
     private List<Music> mSearchResult;
 
-    public SearchPresenter(SearchContract.View view,
+    SearchPresenter(SearchContract.View view,
                            MusicStorage.GroupType groupType,
                            String groupName) {
         mView = view;
@@ -45,8 +45,8 @@ public class SearchPresenter implements SearchContract.Presenter {
         mSearchResult.clear();
         if (!key.equals("")) {
             for (Music music : mMusicGroup) {
-                if (music.getName().contains(key)
-                        || music.getArtist().contains(key)) {
+                if (music.getName().toLowerCase().contains(key.toLowerCase())
+                        || music.getArtist().toLowerCase().contains(key.toLowerCase())) {
                     mSearchResult.add(music);
                 }
             }

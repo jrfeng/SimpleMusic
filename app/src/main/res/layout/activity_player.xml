@@ -27,7 +27,8 @@
             android:alpha="0.8"
             android:background="@null"
             android:scaleType="centerInside"
-            android:src="@drawable/btn_player_back"/>
+            android:src="@drawable/btn_player_back"
+            tools:ignore="ContentDescription"/>
 
         <RelativeLayout
             android:layout_width="0dp"
@@ -47,7 +48,8 @@
                 android:singleLine="true"
                 android:text="@string/app_name"
                 android:textColor="@color/colorWhite"
-                android:textSize="18sp"/>
+                android:textSize="18sp"
+                tools:ignore="Deprecated"/>
 
         </RelativeLayout>
 
@@ -61,7 +63,8 @@
             android:scaleType="centerInside"
             android:src="@drawable/btn_player_more"
             android:visibility="invisible"
-            tools:visibility="visible"/>
+            tools:visibility="visible"
+            tools:ignore="ContentDescription"/>
     </LinearLayout>
 
     <FrameLayout
@@ -80,7 +83,8 @@
             android:layout_width="208dp"
             android:layout_height="208dp"
             android:layout_gravity="center"
-            android:src="@drawable/bg_player_disk"/>
+            android:src="@drawable/bg_player_disk"
+            tools:ignore="ContentDescription"/>
 
         <ImageView
             android:id="@+id/ivSongImage"
@@ -88,7 +92,8 @@
             android:layout_height="@dimen/playerDiskSize"
             android:layout_gravity="center"
             android:scaleType="centerInside"
-            android:src="@mipmap/ic_player_disk"/>
+            android:src="@mipmap/ic_player_disk"
+            tools:ignore="ContentDescription"/>
     </FrameLayout>
 
     <TextView
@@ -103,7 +108,8 @@
         android:singleLine="true"
         android:text="@string/app_name"
         android:textColor="@color/colorWhite"
-        android:textSize="18sp"/>
+        android:textSize="18sp"
+        tools:ignore="Deprecated"/>
 
     <!-- 占位 -->
     <Space
@@ -163,7 +169,8 @@
             android:layout_height="36dp"
             android:layout_gravity="start"
             android:background="@null"
-            android:src="@drawable/btn_player_play_mode"/>
+            android:src="@drawable/btn_player_play_mode"
+            tools:ignore="ContentDescription"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -176,7 +183,8 @@
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:background="@null"
-                android:src="@drawable/btn_player_previous"/>
+                android:src="@drawable/btn_player_previous"
+                tools:ignore="ContentDescription"/>
 
             <!-- 占位 -->
             <Space
@@ -188,7 +196,8 @@
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:background="@null"
-                android:src="@drawable/btn_player_play_pause"/>
+                android:src="@drawable/btn_player_play_pause"
+                tools:ignore="ContentDescription"/>
 
             <!-- 占位 -->
             <Space
@@ -200,7 +209,8 @@
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:background="@null"
-                android:src="@drawable/btn_player_next"/>
+                android:src="@drawable/btn_player_next"
+                tools:ignore="ContentDescription"/>
         </LinearLayout>
 
         <ImageButton
@@ -209,7 +219,8 @@
             android:layout_height="36dp"
             android:layout_gravity="end"
             android:background="@null"
-            android:src="@drawable/btn_player_i_love"/>
+            android:src="@drawable/btn_player_i_love"
+            tools:ignore="ContentDescription"/>
     </FrameLayout>
 
     <!-- 占位 -->

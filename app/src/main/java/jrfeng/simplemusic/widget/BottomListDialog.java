@@ -179,9 +179,9 @@ public class BottomListDialog {
 
     private void findViews() {
         vgTitleContainer = mDialog.findViewById(R.id.vgTitleContainer);
-        tvTitle = (TextView) mDialog.findViewById(R.id.tvTitle);
-        ivAdditionIcon = (ImageView) mDialog.findViewById(R.id.ivAdditionIcon);
-        rvList = (RecyclerView) mDialog.findViewById(R.id.rvList);
+        tvTitle = mDialog.findViewById(R.id.tvTitle);
+        ivAdditionIcon = mDialog.findViewById(R.id.ivAdditionIcon);
+        rvList = mDialog.findViewById(R.id.rvList);
     }
 
     private void initViews(final Builder builder) {

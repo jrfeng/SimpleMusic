@@ -1,5 +1,6 @@
 package jrfeng.simplemusic.utils.statusbar;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -45,6 +46,7 @@ public class QMUIStatusBarHelper {
      *
      * @param activity 需要被设置沉浸式状态栏的 Activity。
      */
+    @SuppressLint("ObsoleteSdkInt")
     @TargetApi(19)
     public static void translucent(Activity activity, @ColorInt int colorOn5x) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {

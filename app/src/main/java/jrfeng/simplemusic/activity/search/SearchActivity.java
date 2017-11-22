@@ -90,10 +90,10 @@ public class SearchActivity extends BaseActivity implements SearchContract.View 
     //******************private***************
 
     private void findViews() {
-        etSearchInput = (EditText) findViewById(R.id.etSearchInput);
-        ibClear = (ImageButton) findViewById(R.id.ibClear);
-        tvResultHint = (TextView) findViewById(R.id.tvResultHint);
-        rvListContainer = (RecyclerView) findViewById(R.id.rvListContainer);
+        etSearchInput = findViewById(R.id.etSearchInput);
+        ibClear = findViewById(R.id.ibClear);
+        tvResultHint = findViewById(R.id.tvResultHint);
+        rvListContainer = findViewById(R.id.rvListContainer);
 
     }
 

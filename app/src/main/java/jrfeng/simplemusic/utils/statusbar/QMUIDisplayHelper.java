@@ -1,5 +1,6 @@
 package jrfeng.simplemusic.utils.statusbar;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -208,6 +209,7 @@ public class QMUIDisplayHelper {
     /**
      * 是否有硬件menu
      */
+    @SuppressLint("ObsoleteSdkInt")
     @SuppressWarnings("SimplifiableIfStatement")
     public static boolean hasHardwareMenuKey(Context context) {
         boolean flag;

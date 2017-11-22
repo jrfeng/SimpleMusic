@@ -23,6 +23,7 @@ import jrfeng.simplemusic.MyApplication;
 import jrfeng.simplemusic.R;
 import jrfeng.simplemusic.activity.scan_result.ScannedMusicsActivity;
 import jrfeng.player.base.BaseActivity;
+import jrfeng.simplemusic.dialog.PermissionRationaleDialog;
 
 public class ScanActivity extends BaseActivity implements ScanContract.View {
     private static final String TAG = "ScanActivity";
@@ -144,21 +145,26 @@ public class ScanActivity extends BaseActivity implements ScanContract.View {
             int checkPermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             if (checkPermission != PackageManager.PERMISSION_GRANTED) {
                 //没有则申请权限
-                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    PermissionRationaleDialog.show("需要 存储器访问 权限，否则扫描功能无法正常使用。",
+                            this, Manifest.permission.WRITE_EXTERNAL_STORAGE, 1);
+                } else {
+                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                }
             }
         }
     }
 
     private void findViews() {
-        toolbar = (Toolbar) findViewById(R.id.tbScan);
-        tvMessage = (TextView) findViewById(R.id.tvMessage);
-        tvScanningHint = (TextView) findViewById(R.id.tvScanningHint);
-        tvScannedPathHint = (TextView) findViewById(R.id.tvScannedPathHint);
-        tvScanCount = (TextView) findViewById(R.id.tvScanCount);
-        tvScanCountHint1 = (TextView) findViewById(R.id.tvScanCountHint1);
-        tvScanCountHint2 = (TextView) findViewById(R.id.tvScanCountHint2);
-        tvScanSwitch = (TextView) findViewById(R.id.tvScanSwitch);
-//        tvCustomScan = (TextView) findViewById(R.id.tvCustomScan);
+        toolbar = findViewById(R.id.tbScan);
+        tvMessage = findViewById(R.id.tvMessage);
+        tvScanningHint = findViewById(R.id.tvScanningHint);
+        tvScannedPathHint = findViewById(R.id.tvScannedPathHint);
+        tvScanCount = findViewById(R.id.tvScanCount);
+        tvScanCountHint1 = findViewById(R.id.tvScanCountHint1);
+        tvScanCountHint2 = findViewById(R.id.tvScanCountHint2);
+        tvScanSwitch = findViewById(R.id.tvScanSwitch);
+//        tvCustomScan = findViewById(R.id.tvCustomScan);
     }
 
     private void initViews() {

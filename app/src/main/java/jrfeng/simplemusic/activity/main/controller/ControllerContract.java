@@ -1,11 +1,9 @@
 package jrfeng.simplemusic.activity.main.controller;
 
-import android.support.v4.app.Fragment;
-
 import jrfeng.simplemusic.base.BasePresenter;
 import jrfeng.simplemusic.base.BaseView;
 
-public interface ControllerContract {
+interface ControllerContract {
     interface View extends BaseView<Presenter> {
         void viewPlay();
 

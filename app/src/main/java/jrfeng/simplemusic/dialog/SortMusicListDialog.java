@@ -1,8 +1,6 @@
 package jrfeng.simplemusic.dialog;
 
 import android.app.Activity;
-import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -11,7 +9,6 @@ import jrfeng.player.mode.MusicStorage;
 import jrfeng.player.player.MusicPlayerClient;
 import jrfeng.player.utils.sort.MusicComparator;
 import jrfeng.simplemusic.R;
-import jrfeng.simplemusic.utils.statusbar.QMUIStatusBarHelper;
 import jrfeng.simplemusic.widget.TopMenuDialog;
 
 public class SortMusicListDialog {

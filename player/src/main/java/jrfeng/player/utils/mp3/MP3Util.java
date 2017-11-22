@@ -91,7 +91,10 @@ public class MP3Util {
         BufferedInputStream file = null;
         try {
             file = new BufferedInputStream(new FileInputStream(mp3File));
-            file.read(mID3V2Head);
+            int count = 0;
+            do {
+                count += file.read(mID3V2Head, count, mID3V2Head.length);
+            } while (count < mID3V2Head.length);
 
             ID3V2Info id3V2Info;
             //抽取ID3V2信息
@@ -103,7 +106,10 @@ public class MP3Util {
                         + (mID3V2Head[8] & 0x7f) * 0x80
                         + (mID3V2Head[9] & 0x7f);
                 byte[] mID3V2Data = new byte[size];
-                file.read(mID3V2Data);
+                count = 0;
+                do {
+                    count += file.read(mID3V2Data, count, mID3V2Data.length);
+                } while (count < mID3V2Data.length);
                 id3V2Info = new ID3V2Info(mID3V2Data, 0);
                 return id3V2Info.getImage();
             } else {

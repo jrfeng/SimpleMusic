@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
@@ -23,6 +24,7 @@ import jrfeng.simplemusic.activity.main.controller.ControllerPresenter;
 import jrfeng.simplemusic.activity.main.nav.NavigationFragment;
 import jrfeng.simplemusic.activity.search.SearchActivity;
 import jrfeng.player.base.BaseActivity;
+import jrfeng.simplemusic.dialog.PermissionRationaleDialog;
 
 public class MainActivity extends BaseActivity {
     private static final String TAG = "MainActivity";
@@ -101,12 +103,18 @@ public class MainActivity extends BaseActivity {
 
     //*******************private*******************
 
+    //Android 6.0 动态权限申请
     private void requestExternalStoragePermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             int checkPermission = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             if (checkPermission != PackageManager.PERMISSION_GRANTED) {
                 //没有则申请权限
-                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    PermissionRationaleDialog.show("需要存储器访问权限，否则无法扫描与播放音乐！",
+                            this, Manifest.permission.WRITE_EXTERNAL_STORAGE, 1);
+                } else {
+                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                }
             }
         }
     }

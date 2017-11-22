@@ -2,13 +2,13 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/vgActionBar"
     android:layout_width="match_parent"
     android:layout_height="@dimen/actionBarHeightWithStatus"
     android:background="@color/actionBarBgColor"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingTop="24dp">
+    android:paddingTop="24dp"
+    tools:ignore="Overdraw">
 
     <ImageButton
         android:id="@+id/ibClose"
@@ -16,7 +16,8 @@
         android:layout_height="48dp"
         android:background="@null"
         android:scaleType="centerInside"
-        android:src="@drawable/btn_close"/>
+        android:src="@drawable/btn_close"
+        tools:ignore="ContentDescription"/>
 
     <TextView
         android:id="@+id/tvActionBarTitle"
@@ -26,7 +27,8 @@
         android:singleLine="true"
         android:textColor="@color/colorWhite"
         android:textSize="@dimen/actionBarTitleTextSize"
-        android:text="@string/app_name"/>
+        android:text="@string/app_name"
+        tools:ignore="Deprecated"/>
 
     <Space
         android:layout_width="16dp"

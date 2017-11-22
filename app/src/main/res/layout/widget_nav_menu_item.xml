@@ -32,7 +32,8 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:textSize="16sp"
-            tools:text="我喜欢"/>
+            tools:text="我喜欢"
+            tools:ignore="Deprecated"/>
 
         <TextView
             android:id="@+id/tvMenuDescribe"
@@ -40,7 +41,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            tools:text="暂无音乐"/>
+            tools:text="暂无音乐"
+            tools:ignore="Deprecated"/>
 
     </LinearLayout>
 

@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import java.util.LinkedList;
@@ -15,7 +14,6 @@ import java.util.List;
 
 import jrfeng.player.data.Music;
 import jrfeng.simplemusic.R;
-import jrfeng.simplemusic.activity.choice.MultiChoiceContract;
 
 public class MultiChoiceAdapter extends RecyclerView.Adapter<MultiChoiceAdapter.ViewHolder> {
     private Context mContext;

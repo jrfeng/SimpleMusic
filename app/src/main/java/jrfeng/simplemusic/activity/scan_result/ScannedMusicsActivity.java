@@ -41,7 +41,7 @@ public class ScannedMusicsActivity extends BaseActivity {
         ArrayList<Music> musics = (ArrayList<Music>) getIntent().getSerializableExtra("musics");
 
         //初始化 Toolbar
-        Toolbar tbScannedMusics = (Toolbar) findViewById(R.id.tbScanned);
+        Toolbar tbScannedMusics = findViewById(R.id.tbScanned);
         setSupportActionBar(tbScannedMusics);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -50,12 +50,12 @@ public class ScannedMusicsActivity extends BaseActivity {
         }
 
         //初始化 RecyclerView
-        RecyclerView rvScannedMusics = (RecyclerView) findViewById(R.id.rvScannedMusics);
+        RecyclerView rvScannedMusics = findViewById(R.id.rvScannedMusics);
         RecyclerView.LayoutManager lm = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rvScannedMusics.setLayoutManager(lm);
 
-        TextView tvScannedMusicCount = (TextView) findViewById(R.id.tvScannedMusicCount);
-        TextView tvNewMusicCount = (TextView) findViewById(R.id.tvNewMusicCount);
+        TextView tvScannedMusicCount = findViewById(R.id.tvScannedMusicCount);
+        TextView tvNewMusicCount = findViewById(R.id.tvNewMusicCount);
 
         initNewMusic(musics);
 
@@ -65,7 +65,7 @@ public class ScannedMusicsActivity extends BaseActivity {
         final ScannedMusicsAdapter adapter = new ScannedMusicsAdapter(this, mNewMusic, findViewById(R.id.scannedMusicsTitle));
         rvScannedMusics.setAdapter(adapter);
 
-        Button btnCommitAdd = (Button) findViewById(R.id.btnCommitAdd);
+        Button btnCommitAdd = findViewById(R.id.btnCommitAdd);
         btnCommitAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

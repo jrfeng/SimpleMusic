@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="60dp"
-    android:background="@color/colorWhite">
+    android:background="@color/colorWhite"
+    tools:ignore="Overdraw">
 
     <FrameLayout
         android:layout_width="60dp"
@@ -15,7 +16,8 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:scaleType="centerCrop"
-            android:src="@mipmap/ic_launcher"/>
+            android:src="@mipmap/ic_launcher"
+            tools:ignore="ContentDescription"/>
 
         <ImageView
             android:id="@+id/ivCtlTempPlayMark"
@@ -25,7 +27,8 @@
             android:scaleType="centerInside"
             android:src="@mipmap/ic_temp_play_mark"
             android:visibility="gone"
-            tools:visibility="visible"/>
+            tools:visibility="visible"
+            tools:ignore="ContentDescription"/>
     </FrameLayout>
 
     <jrfeng.simplemusic.widget.Divider
@@ -35,7 +38,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:baselineAligned="false">
 
         <LinearLayout
             android:id="@+id/vgCtlMessage"
@@ -54,7 +58,8 @@
                 android:ellipsize="marquee"
                 android:marqueeRepeatLimit="marquee_forever"
                 android:singleLine="true"
-                android:text="@string/app_name"/>
+                android:text="@string/app_name"
+                tools:ignore="Deprecated"/>
 
             <TextView
                 android:id="@+id/tvCtlArtist"
@@ -64,7 +69,8 @@
                 android:ellipsize="end"
                 android:maxEms="8"
                 android:singleLine="true"
-                android:text="@string/app_name"/>
+                android:text="@string/app_name"
+                tools:ignore="Deprecated"/>
         </LinearLayout>
 
         <LinearLayout
@@ -72,28 +78,32 @@
             android:layout_height="36dp"
             android:layout_alignParentRight="true"
             android:layout_marginTop="16dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            tools:ignore="ObsoleteLayoutParam">
 
             <ImageButton
                 android:id="@+id/ibCtlPrevious"
                 android:layout_width="40dp"
                 android:layout_height="36dp"
                 android:background="@null"
-                android:src="@drawable/btn_ctl_previous"/>
+                android:src="@drawable/btn_ctl_previous"
+                tools:ignore="ContentDescription"/>
 
             <ImageButton
                 android:id="@+id/ibCtlPlayPause"
                 android:layout_width="40dp"
                 android:layout_height="36dp"
                 android:background="@null"
-                android:src="@drawable/btn_ctl_play_pause"/>
+                android:src="@drawable/btn_ctl_play_pause"
+                tools:ignore="ContentDescription"/>
 
             <ImageButton
                 android:id="@+id/ibCtlNext"
                 android:layout_width="40dp"
                 android:layout_height="36dp"
                 android:background="@null"
-                android:src="@drawable/btn_ctl_next"/>
+                android:src="@drawable/btn_ctl_next"
+                tools:ignore="ContentDescription"/>
 
             <Space
                 android:layout_width="16dp"
@@ -109,7 +119,6 @@
         android:layout_marginRight="10dp"
         android:gravity="center_vertical"
         android:max="100"
-        android:splitTrack="false"
         android:progressDrawable="@drawable/seek_bar_progress"
         android:thumb="@drawable/seek_bar_thumb"/>
 </RelativeLayout>

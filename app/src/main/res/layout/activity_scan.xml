@@ -6,7 +6,8 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorWhite">
+    android:background="@color/colorWhite"
+    tools:ignore="Overdraw">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/tbScan"
@@ -35,7 +36,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="24dp"
         android:scaleType="fitCenter"
-        android:src="@mipmap/ic_scan_big"/>
+        android:src="@mipmap/ic_scan_big"
+        tools:ignore="ContentDescription"/>
 
     <TextView
         android:id="@+id/tvScanningHint"
@@ -63,8 +65,9 @@
         android:textColor="@color/textColorGrey"
         android:textSize="@dimen/textSizeSmall"
         android:visibility="invisible"
-        tools:text="asasdsasdadaasdad/kugou/music/crazy.mp3"
-        tools:visibility="visible"/>
+        tools:text="sdcard/user/kugou/music/crazy.mp3"
+        tools:visibility="visible"
+        tools:ignore="Deprecated"/>
 
     <TextView
         android:id="@+id/tvScanCount"

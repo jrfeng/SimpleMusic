@@ -6,7 +6,6 @@
     android:orientation="vertical">
 
     <include
-        android:id="@+id/searchActionBar"
         layout="@layout/widget_action_bar_search_placeholder"/>
 
     <android.support.v7.widget.RecyclerView

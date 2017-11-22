@@ -1,7 +1,6 @@
 package jrfeng.simplemusic.activity.main.controller;
 
 import android.content.Context;
-import android.os.Bundle;
 
 import java.io.File;
 
@@ -9,7 +8,6 @@ import jrfeng.player.data.Music;
 import jrfeng.player.mode.MusicStorage;
 import jrfeng.player.player.MusicPlayerClient;
 import jrfeng.player.utils.mp3.MP3Util;
-import jrfeng.simplemusic.activity.main.list.MusicListFragment;
 import jrfeng.simplemusic.dialog.PlayingMusicGroupDialog;
 import jrfeng.simplemusic.dialog.TempPlayDialog;
 import jrfeng.simplemusic.receiver.PlayerActionDisposer;

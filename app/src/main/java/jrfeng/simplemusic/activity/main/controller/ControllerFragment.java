@@ -21,9 +21,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 
 import jrfeng.simplemusic.GlideApp;
 import jrfeng.simplemusic.R;
-import jrfeng.simplemusic.activity.main.MainActivity;
 import jrfeng.simplemusic.activity.player.PlayerActivity;
-import jrfeng.simplemusic.dialog.PlayingMusicGroupDialog;
 
 public class ControllerFragment extends Fragment implements ControllerContract.View {
     private ControllerContract.Presenter mPresenter;

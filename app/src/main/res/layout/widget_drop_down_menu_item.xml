@@ -13,7 +13,8 @@
         android:id="@+id/ivMenuIcon"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        tools:src="@mipmap/ic_mode_order"/>
+        tools:src="@mipmap/ic_mode_order"
+        tools:ignore="ContentDescription"/>
 
     <TextView
         android:id="@+id/tvMenuText"
@@ -22,7 +23,8 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:singleLine="true"
-        tools:text="顺序播放"/>
+        tools:text="顺序播放"
+        tools:ignore="Deprecated"/>
 
     <Space
         android:layout_width="8dp"

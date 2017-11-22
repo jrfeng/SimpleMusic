@@ -26,7 +26,8 @@
             android:singleLine="true"
             android:text="@string/app_name"
             android:textColor="@color/colorListTitle"
-            android:textSize="15sp"/>
+            android:textSize="15sp"
+            tools:ignore="Deprecated"/>
 
         <ImageView
             android:id="@+id/ivAdditionIcon"
@@ -37,7 +38,8 @@
             android:scaleType="centerInside"
             android:src="@mipmap/ic_add"
             android:visibility="gone"
-            tools:visibility="visible"/>
+            tools:visibility="visible"
+            tools:ignore="ContentDescription"/>
     </FrameLayout>
 
     <jrfeng.simplemusic.widget.Divider

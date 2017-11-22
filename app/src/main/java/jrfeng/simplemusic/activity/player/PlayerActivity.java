@@ -22,6 +22,7 @@ import jrfeng.player.base.BaseActivity;
 import jrfeng.player.player.MusicPlayerClient;
 import jrfeng.simplemusic.GlideApp;
 import jrfeng.simplemusic.R;
+import jrfeng.simplemusic.dialog.PermissionRationaleDialog;
 import jrfeng.simplemusic.widget.WaveFormView;
 
 public class PlayerActivity extends BaseActivity implements PlayerContract.View {
@@ -83,10 +84,8 @@ public class PlayerActivity extends BaseActivity implements PlayerContract.View 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (grantResults.length < 1
-                || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-            //do something
-        } else {
+        if (!(grantResults.length < 1
+                || grantResults[0] != PackageManager.PERMISSION_GRANTED)) {
             initWaveForm();
         }
     }
@@ -144,7 +143,13 @@ public class PlayerActivity extends BaseActivity implements PlayerContract.View 
             int checkPermission = checkSelfPermission(Manifest.permission.RECORD_AUDIO);
             if (checkPermission != PackageManager.PERMISSION_GRANTED) {
                 //没有则申请权限
-                requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, 1);
+                if (shouldShowRequestPermissionRationale(Manifest.permission.RECORD_AUDIO)) {
+                    PermissionRationaleDialog.show("需要 \"录音\" 权限，否则波形特效无法正常显示。",
+                            this, Manifest.permission.RECORD_AUDIO, 1);
+                } else {
+                    requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, 1);
+                }
+
             } else {
                 initWaveForm();
             }

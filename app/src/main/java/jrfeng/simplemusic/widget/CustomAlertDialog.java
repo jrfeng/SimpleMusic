@@ -136,15 +136,15 @@ public class CustomAlertDialog {
 
     private void findViews() {
         vgContent = mDialog.findViewById(R.id.vgContent);
-        tvDialogTitle = (TextView) mDialog.findViewById(R.id.tvDialogTitle);
-        tvDialogMessage = (TextView) mDialog.findViewById(R.id.tvDialogMessage);
+        tvDialogTitle = mDialog.findViewById(R.id.tvDialogTitle);
+        tvDialogMessage = mDialog.findViewById(R.id.tvDialogMessage);
         lvDialogOption = mDialog.findViewById(R.id.lvDialogOption);
-        ibDialogCheckBox = (ImageButton) mDialog.findViewById(R.id.ibDialogCheckBox);
-        tvDialogOptionText = (TextView) mDialog.findViewById(R.id.tvDialogOptionText);
-        etDialogInput = (EditText) mDialog.findViewById(R.id.etDialogInput);
+        ibDialogCheckBox = mDialog.findViewById(R.id.ibDialogCheckBox);
+        tvDialogOptionText = mDialog.findViewById(R.id.tvDialogOptionText);
+        etDialogInput = mDialog.findViewById(R.id.etDialogInput);
 
-        btnDialogNegative = (Button) mDialog.findViewById(R.id.btnDialogNegative);
-        btnDialogPositive = (Button) mDialog.findViewById(R.id.btnDialogPositive);
+        btnDialogNegative = mDialog.findViewById(R.id.btnDialogNegative);
+        btnDialogPositive = mDialog.findViewById(R.id.btnDialogPositive);
     }
 
     private void addViewListener() {

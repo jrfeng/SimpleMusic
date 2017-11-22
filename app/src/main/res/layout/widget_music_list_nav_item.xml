@@ -54,7 +54,8 @@
             android:id="@+id/ivDot"
             android:layout_width="8dp"
             android:layout_height="8dp"
-            android:background="@drawable/shape_oval_blue"/>
+            android:background="@drawable/shape_oval_blue"
+            tools:ignore="ContentDescription"/>
 
         <Space
             android:layout_width="16dp"

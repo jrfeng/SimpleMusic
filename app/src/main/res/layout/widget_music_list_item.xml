@@ -29,7 +29,8 @@
             android:layout_height="56dp"
             android:background="@null"
             android:scaleType="centerInside"
-            android:src="@drawable/btn_temp_play"/>
+            android:src="@drawable/btn_temp_play"
+            tools:ignore="ContentDescription"/>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -43,7 +44,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                tools:text="@string/app_name"/>
+                tools:text="@string/app_name"
+                tools:ignore="Deprecated"/>
 
             <TextView
                 android:id="@+id/tvSongArtist"
@@ -51,7 +53,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                tools:text="@string/app_name"/>
+                tools:text="@string/app_name"
+                tools:ignore="Deprecated"/>
 
         </LinearLayout>
 
@@ -66,7 +69,8 @@
                 android:layout_gravity="center"
                 android:background="@drawable/shape_oval_blue"
                 android:visibility="gone"
-                tools:visibility="visible"/>
+                tools:visibility="visible"
+                tools:ignore="ContentDescription"/>
 
             <TextView
                 android:id="@+id/tvTempPlayMark"
@@ -83,7 +87,8 @@
                 android:textColor="@color/colorBlue300"
                 android:textSize="10sp"
                 android:visibility="gone"
-                tools:visibility="visible"/>
+                tools:visibility="visible"
+                tools:ignore="SmallSp"/>
         </FrameLayout>
 
         <ImageButton
@@ -92,7 +97,8 @@
             android:layout_height="match_parent"
             android:background="@null"
             android:scaleType="centerInside"
-            android:src="@drawable/btn_item_more"/>
+            android:src="@drawable/btn_item_more"
+            tools:ignore="ContentDescription"/>
     </LinearLayout>
 
     <jrfeng.simplemusic.widget.Divider
@@ -123,7 +129,8 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:scaleType="centerInside"
-                android:src="@drawable/menu_item_temp_play"/>
+                android:src="@drawable/menu_item_temp_play"
+                tools:ignore="ContentDescription"/>
 
             <ImageButton
                 android:id="@+id/ibMenuLove"
@@ -132,7 +139,8 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:scaleType="centerInside"
-                android:src="@drawable/level_love"/>
+                android:src="@drawable/level_love"
+                tools:ignore="ContentDescription"/>
 
             <ImageButton
                 android:id="@+id/ibMenuAddTo"
@@ -141,7 +149,8 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:scaleType="centerInside"
-                android:src="@drawable/menu_item_add_to"/>
+                android:src="@drawable/menu_item_add_to"
+                tools:ignore="ContentDescription"/>
 
             <ImageButton
                 android:id="@+id/ibMenuRemove"
@@ -150,7 +159,8 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:scaleType="centerInside"
-                android:src="@drawable/menu_item_remove"/>
+                android:src="@drawable/menu_item_remove"
+                tools:ignore="ContentDescription"/>
 
             <ImageButton
                 android:id="@+id/ibMenuDelete"
@@ -159,7 +169,8 @@
                 android:layout_weight="1"
                 android:background="@null"
                 android:scaleType="centerInside"
-                android:src="@drawable/menu_item_delete"/>
+                android:src="@drawable/menu_item_delete"
+                tools:ignore="ContentDescription"/>
 
         </LinearLayout>
 
@@ -175,7 +186,8 @@
                 android:gravity="center_horizontal"
                 android:text="临时播"
                 android:textColor="#FFF"
-                android:textSize="10sp"/>
+                android:textSize="10sp"
+                tools:ignore="SmallSp"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -184,7 +196,8 @@
                 android:gravity="center_horizontal"
                 android:text="我喜欢"
                 android:textColor="#FFF"
-                android:textSize="10sp"/>
+                android:textSize="10sp"
+                tools:ignore="SmallSp"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -193,7 +206,8 @@
                 android:gravity="center_horizontal"
                 android:text="添加到"
                 android:textColor="#FFF"
-                android:textSize="10sp"/>
+                android:textSize="10sp"
+                tools:ignore="SmallSp"/>
 
             <TextView
                 android:id="@+id/tvMenuRemoveLabel"
@@ -204,7 +218,8 @@
                 android:labelFor="@id/ibMenuRemove"
                 android:text="移除"
                 android:textColor="#FFF"
-                android:textSize="10sp"/>
+                android:textSize="10sp"
+                tools:ignore="SmallSp"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -213,7 +228,8 @@
                 android:gravity="center_horizontal"
                 android:text="删除"
                 android:textColor="#FFF"
-                android:textSize="10sp"/>
+                android:textSize="10sp"
+                tools:ignore="SmallSp"/>
 
         </LinearLayout>
 

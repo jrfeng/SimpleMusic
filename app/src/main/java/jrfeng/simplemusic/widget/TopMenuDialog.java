@@ -140,8 +140,8 @@ public class TopMenuDialog {
     }
 
     private void findViews() {
-        ibCancel = (ImageButton) mDialog.findViewById(R.id.ibCancel);
-        rvMenu = (RecyclerView) mDialog.findViewById(R.id.rvMenu);
+        ibCancel = mDialog.findViewById(R.id.ibCancel);
+        rvMenu = mDialog.findViewById(R.id.rvMenu);
         rvMenu.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
     }
 
