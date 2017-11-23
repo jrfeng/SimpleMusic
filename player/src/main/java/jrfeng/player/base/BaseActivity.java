@@ -18,7 +18,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityStack.push(this);
+        ActivityStack.add(this);
         if (savedInstanceState != null && !MusicPlayerClient.getInstance().isConnect()) {
             resetApp();
         }
@@ -27,7 +27,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ActivityStack.pop(this);
+        ActivityStack.remove(this);
     }
 
     //****************private**************
