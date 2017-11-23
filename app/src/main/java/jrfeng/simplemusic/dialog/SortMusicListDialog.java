@@ -1,6 +1,7 @@
 package jrfeng.simplemusic.dialog;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -19,32 +20,41 @@ public class SortMusicListDialog {
         TopMenuDialog sortMenu = new TopMenuDialog(activity, R.menu.music_list_sort, new TopMenuDialog.OnItemClickListener() {
             @Override
             public void onItemClick(MenuItem item) {
-
-                //调试
-                long start = System.currentTimeMillis();
-
                 final int itemId = item.getItemId();
-                MusicStorage musicStorage = MusicPlayerClient.getInstance().getMusicStorage();
-                switch (itemId) {
-                    case R.id.sortByName:
-                        musicStorage.sortMusicList(musicListName, MusicComparator.BY_NAME);
-                        break;
-                    case R.id.sortByNameReverse:
-                        musicStorage.sortMusicList(musicListName, MusicComparator.BY_NAME_REVERSE);
-                        break;
-                    case R.id.sortByArtist:
-                        musicStorage.sortMusicList(musicListName, MusicComparator.BY_ARTIST);
-                        break;
-                    case R.id.sortByArtistReverse:
-                        musicStorage.sortMusicList(musicListName, MusicComparator.BY_ARTIST_REVERSE);
-                        break;
-                }
+                new AsyncTask<Void, Void, Void>() {
 
-                //调试
-                long end = System.currentTimeMillis();
-                Log.d("Sort", "耗时 : " + (end - start));
+                    @Override
+                    protected Void doInBackground(Void... voids) {
+                        //调试
+                        long start = System.currentTimeMillis();
+                        MusicStorage musicStorage = MusicPlayerClient.getInstance().getMusicStorage();
+                        switch (itemId) {
+                            case R.id.sortByName:
+                                musicStorage.sortMusicList(musicListName, MusicComparator.BY_NAME);
+                                break;
+                            case R.id.sortByNameReverse:
+                                musicStorage.sortMusicList(musicListName, MusicComparator.BY_NAME_REVERSE);
+                                break;
+                            case R.id.sortByArtist:
+                                musicStorage.sortMusicList(musicListName, MusicComparator.BY_ARTIST);
+                                break;
+                            case R.id.sortByArtistReverse:
+                                musicStorage.sortMusicList(musicListName, MusicComparator.BY_ARTIST_REVERSE);
+                                break;
+                        }
 
-                Toast.makeText(activity, "排序完成", Toast.LENGTH_SHORT).show();
+                        //调试
+                        long end = System.currentTimeMillis();
+                        Log.d("Sort", "耗时 : " + (end - start));
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void aVoid) {
+                        super.onPostExecute(aVoid);
+                        Toast.makeText(activity, "排序完成", Toast.LENGTH_SHORT).show();
+                    }
+                }.execute();
             }
         });
 
