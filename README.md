@@ -39,7 +39,7 @@
 
 ![welcome](screenshot/welcome.png) ![nav](screenshot/nav.png) ![all_music_list](screenshot/all_music_list.png)
 
-![player](screenshot/player.png)!  ![custom_list](screenshot/custom_list.png) ![notify_controller](screenshot/notify_controller.png)
+![player](screenshot/player.png)  ![custom_list](screenshot/custom_list.png) ![notify_controller](screenshot/notify_controller.png)
 
 ![multi_choice](screenshot/multi_choice.png) ![search](screenshot/search.png) ![scanning](screenshot/scanning.png)
 
