@@ -12,11 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="24dp"/>
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
         android:paddingLeft="8dp"
         android:paddingRight="8dp">
 
@@ -24,48 +22,41 @@
             android:id="@+id/ibBack"
             android:layout_width="36dp"
             android:layout_height="36dp"
+            android:layout_gravity="center_vertical"
             android:alpha="0.8"
             android:background="@null"
             android:scaleType="centerInside"
             android:src="@drawable/btn_player_back"
             tools:ignore="ContentDescription"/>
 
-        <RelativeLayout
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/tvSongArtist"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="32dp"
-            android:layout_marginRight="32dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tvSongArtist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:alpha="0.8"
-                android:ellipsize="middle"
-                android:singleLine="true"
-                android:text="@string/app_name"
-                android:textColor="@color/colorWhite"
-                android:textSize="18sp"
-                tools:ignore="Deprecated"/>
-
-        </RelativeLayout>
+            android:layout_gravity="center"
+            android:alpha="0.8"
+            android:ellipsize="middle"
+            android:maxWidth="192dp"
+            android:singleLine="true"
+            android:text="@string/app_name"
+            android:textColor="@color/colorWhite"
+            android:textSize="18sp"
+            tools:ignore="Deprecated"/>
 
         <!-- 如果需要 "More" 按钮，请将它设为可见 -->
         <ImageButton
             android:id="@+id/ibMore"
             android:layout_width="36dp"
             android:layout_height="36dp"
+            android:layout_gravity="right|center_vertical"
             android:alpha="0.8"
             android:background="@null"
             android:scaleType="centerInside"
             android:src="@drawable/btn_player_more"
-            android:visibility="invisible"
-            tools:visibility="visible"
-            tools:ignore="ContentDescription"/>
-    </LinearLayout>
+            android:visibility="gone"
+            tools:ignore="ContentDescription"
+            tools:visibility="visible"/>
+    </FrameLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -105,6 +96,7 @@
         android:alpha="0.8"
         android:ellipsize="marquee"
         android:gravity="center_horizontal"
+        android:marqueeRepeatLimit="marquee_forever"
         android:singleLine="true"
         android:text="@string/app_name"
         android:textColor="@color/colorWhite"
