@@ -89,7 +89,9 @@ public class MusicListAdapter extends DelegateAdapter.Adapter<MusicListAdapter.V
 
     @Override
     public LayoutHelper onCreateLayoutHelper() {
-        return new LinearLayoutHelper();
+        LinearLayoutHelper layoutHelper = new LinearLayoutHelper();
+        layoutHelper.setBgColor(Color.WHITE);
+        return layoutHelper;
     }
 
     @Override

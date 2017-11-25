@@ -24,10 +24,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:background="@null"
         android:singleLine="true"
+        android:text="@string/app_name"
         android:textColor="@color/colorWhite"
         android:textSize="@dimen/actionBarTitleTextSize"
-        android:text="@string/app_name"
         tools:ignore="Deprecated"/>
 
     <Space

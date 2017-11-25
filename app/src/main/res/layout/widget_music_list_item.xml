@@ -10,7 +10,7 @@
         android:id="@+id/vgListItem"
         android:layout_width="match_parent"
         android:layout_height="@dimen/ListItemHeight"
-        android:background="@drawable/bg_button_white"
+        android:background="@drawable/bg_button_transparent"
         android:clickable="true"
         android:gravity="center_vertical"
         android:orientation="horizontal">

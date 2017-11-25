@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorWhite"
+    android:background="@null"
     android:orientation="vertical"
     tools:ignore="Overdraw">
 
@@ -22,7 +22,7 @@
             android:id="@+id/ibPlayMode"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:background="@color/colorWhite"
+            android:background="@null"
             android:src="@drawable/level_play_mode"
             tools:ignore="ContentDescription"/>
 
@@ -41,7 +41,7 @@
             android:id="@+id/ibSearch"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:background="@color/colorWhite"
+            android:background="@null"
             android:src="@drawable/btn_search"
             tools:ignore="ContentDescription"/>
 
@@ -54,7 +54,7 @@
             android:id="@+id/ibLocateMusic"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:background="@color/colorWhite"
+            android:background="@null"
             android:src="@drawable/btn_locate"
             tools:ignore="ContentDescription"/>
 
@@ -67,7 +67,7 @@
             android:id="@+id/ibMore"
             android:layout_width="48dp"
             android:layout_height="36dp"
-            android:background="@color/colorWhite"
+            android:background="@null"
             android:scaleType="centerInside"
             android:src="@drawable/btn_item_more"
             tools:ignore="ContentDescription"/>
@@ -83,5 +83,6 @@
         android:id="@+id/rvMusicList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:background="@null"/>
 </LinearLayout>
