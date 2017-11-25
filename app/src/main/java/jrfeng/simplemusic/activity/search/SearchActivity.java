@@ -43,6 +43,8 @@ public class SearchActivity extends BaseActivity implements SearchContract.View 
 
     private SearchResultAdapter mAdapter;
 
+    private ViewTreeObserver.OnGlobalLayoutListener mLayoutListener;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +105,56 @@ public class SearchActivity extends BaseActivity implements SearchContract.View 
         mAdapter = new SearchResultAdapter(this, mPresenter);
         rvListContainer.setAdapter(mAdapter);
         rvListContainer.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+
+        initGlobalLayoutListener();
+    }
+
+    private void initGlobalLayoutListener() {
+        final Window window = getWindow();
+        mLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+            private boolean softInputShow;
+
+            @Override
+            public void onGlobalLayout() {
+                Rect rect = new Rect();
+                View decorView = window.getDecorView();
+                decorView.getWindowVisibleDisplayFrame(rect);
+                //获取屏幕的高度
+                int screenHeight = decorView.getRootView().getHeight();
+
+                //获取软件盘高度
+                int softInputHeight = screenHeight - rect.bottom;
+
+                //调试
+                log("softInputHeight : " + softInputHeight);
+
+                //调试
+                log("List Height(前) : " + rvListContainer.getHeight());
+
+                if (softInputHeight == 0 && softInputShow) {
+                    softInputShow = false;
+                    LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) rvListContainer.getLayoutParams();
+                    lp.height = RecyclerView.LayoutParams.MATCH_PARENT;
+                    rvListContainer.setLayoutParams(lp);
+                    rvListContainer.requestLayout();
+
+                    //调试
+                    log("List : 恢复高度");
+                } else if (softInputHeight > 0 && !softInputShow) {
+                    softInputShow = true;
+                    LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) rvListContainer.getLayoutParams();
+                    lp.height = rvListContainer.getHeight() - softInputHeight;
+                    rvListContainer.setLayoutParams(lp);
+                    rvListContainer.requestLayout();
+
+                    //调试
+                    log("List : 调整高度");
+                }
+
+                //调试
+                log("List Height(后) : " + rvListContainer.getHeight());
+            }
+        };
     }
 
     private void addViewListener() {
@@ -174,51 +226,13 @@ public class SearchActivity extends BaseActivity implements SearchContract.View 
     }
 
     private void initSoftInputListener() {
-        final Window window = getWindow();
-        etSearchInput.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            private boolean softInputShow;
+        etSearchInput.getViewTreeObserver().addOnGlobalLayoutListener(mLayoutListener);
+    }
 
-            @Override
-            public void onGlobalLayout() {
-                Rect rect = new Rect();
-                View decorView = window.getDecorView();
-                decorView.getWindowVisibleDisplayFrame(rect);
-                //获取屏幕的高度
-                int screenHeight = decorView.getRootView().getHeight();
-
-                //获取软件盘高度
-                int softInputHeight = screenHeight - rect.bottom;
-
-                //调试
-                log("softInputHeight : " + softInputHeight);
-
-                //调试
-                log("List Height(前) : " + rvListContainer.getHeight());
-
-                if (softInputHeight == 0 && softInputShow) {
-                    softInputShow = false;
-                    LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) rvListContainer.getLayoutParams();
-                    lp.height = RecyclerView.LayoutParams.MATCH_PARENT;
-                    rvListContainer.setLayoutParams(lp);
-                    rvListContainer.requestLayout();
-
-                    //调试
-                    log("List : 恢复高度");
-                } else if (softInputHeight > 0 && !softInputShow) {
-                    softInputShow = true;
-                    LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) rvListContainer.getLayoutParams();
-                    lp.height = rvListContainer.getHeight() - softInputHeight;
-                    rvListContainer.setLayoutParams(lp);
-                    rvListContainer.requestLayout();
-
-                    //调试
-                    log("List : 调整高度");
-                }
-
-                //调试
-                log("List Height(后) : " + rvListContainer.getHeight());
-            }
-        });
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        etSearchInput.getViewTreeObserver().removeOnGlobalLayoutListener(mLayoutListener);
     }
 
     //****************调试用***************
