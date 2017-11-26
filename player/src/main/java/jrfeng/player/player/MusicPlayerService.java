@@ -37,7 +37,7 @@ import jrfeng.player.utils.mp3.MP3Util;
 
 /**
  * 音乐播放器 Service。请不要调用该类任何方法，
- * 你应该通过 MusicPlayerClient 来使用音乐播放器 Service。
+ * 你应该通过 MusicPlayerClient 来使用 MusicPlayerService。
  */
 public class MusicPlayerService extends Service {
     private static final int NOTIFY_ID = 1;
@@ -877,20 +877,8 @@ public class MusicPlayerService extends Service {
                                 //调试
                                 log("正在播放歌曲被删除");
 
-                                if (mMusicGroup.size() > 0) {
-                                    //调试
-                                    log("下一曲");
-                                    mMusicPosition = mMusicPosition - 1;
-                                    if (mPlaying) {
-                                        next();
-                                    } else {
-                                        nextButNotPlay();
-                                    }
-                                } else {
-                                    //调试
-                                    log("加载默认歌单");
-
-                                    loadDefault();
+                                if(!isPlayingILoveGroup()) {
+                                    switchMusic();
                                 }
                             } else {
                                 //调试
@@ -925,6 +913,29 @@ public class MusicPlayerService extends Service {
             } else {
                 loadMusicGroup(MusicStorage.GroupType.MUSIC_LIST,
                         MusicStorage.MUSIC_LIST_ALL_MUSIC, 0, play);
+            }
+        }
+
+        private boolean isPlayingILoveGroup() {
+            return mMusicGroupType == MusicStorage.GroupType.MUSIC_LIST
+                    && mMusicGroupName.equals(MusicStorage.MUSIC_LIST_I_LOVE);
+        }
+
+        private void switchMusic() {
+            if (mMusicGroup.size() > 0) {
+                //调试
+                log("下一曲");
+                mMusicPosition = mMusicPosition - 1;
+                if (mPlaying) {
+                    next();
+                } else {
+                    nextButNotPlay();
+                }
+            } else {
+                //调试
+                log("加载默认歌单");
+
+                loadDefault();
             }
         }
 
