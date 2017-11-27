@@ -29,5 +29,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
     compile files('libs/jaudiotagger-2.0.3.jar')
     testCompile 'junit:junit:4.12'
-    compile files('libs/pinyin4j-2.5.0.jar')
+    compile 'com.github.promeg:tinypinyin:2.0.3'
 }

@@ -2,7 +2,7 @@ package jrfeng.player.utils.sort;
 
 import android.support.annotation.NonNull;
 
-import net.sourceforge.pinyin4j.PinyinHelper;
+import com.github.promeg.pinyinhelper.Pinyin;
 
 import java.util.Comparator;
 
@@ -91,13 +91,13 @@ public class MusicComparator {
             }
         }
 
-        return s2Length - s1Length;
+        return s1Length - s2Length;
     }
 
     private static int comparePinyinChar(char ch1, char ch2) {
-        return concatPinyinStringArray(PinyinHelper.toHanyuPinyinStringArray(ch1))
-                .compareTo(
-                        concatPinyinStringArray(PinyinHelper.toHanyuPinyinStringArray(ch2))
-                );
+        String pinyin1 = Pinyin.toPinyin(ch1);
+        String pinyin2 = Pinyin.toPinyin(ch2);
+
+        return pinyin1.charAt(0) - pinyin2.charAt(0);
     }
 }

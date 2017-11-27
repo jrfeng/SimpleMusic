@@ -278,6 +278,7 @@ public class MusicPlayerClient implements ServiceConnection, MusicPlayerControll
     public void shutdown(Context context) {
         disconnect(context);
         mController.shutdown(context);
+        mInstance = null;
     }
 
     //***********************private********************
