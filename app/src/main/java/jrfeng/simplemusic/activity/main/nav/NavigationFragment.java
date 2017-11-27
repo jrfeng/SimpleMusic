@@ -135,6 +135,12 @@ public class NavigationFragment extends Fragment implements NavigationContract.V
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mMusicListAdapter = null;
+    }
+
+    @Override
     public void refreshMenusDescribe() {
         mNavMenuAdapter.refreshMenusDescribe();
     }

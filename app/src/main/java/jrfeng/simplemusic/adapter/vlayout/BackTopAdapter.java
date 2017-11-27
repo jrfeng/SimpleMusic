@@ -52,7 +52,7 @@ public class BackTopAdapter extends DelegateAdapter.Adapter<BackTopAdapter.ViewH
         return 1;
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         View ibBackTop;
 
         ViewHolder(View itemView) {

@@ -1,4 +1,4 @@
-package jrfeng.simplemusic.activity.scan_result.rv_adapter;
+package jrfeng.simplemusic.activity.scan_result.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -126,7 +126,7 @@ public class ScannedMusicsAdapter extends RecyclerView.Adapter<ScannedMusicsAdap
         }
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         View itemView;
         CheckBox cbChecked;
         TextView tvSongName;

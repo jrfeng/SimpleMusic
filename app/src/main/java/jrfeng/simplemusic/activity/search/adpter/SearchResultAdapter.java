@@ -62,7 +62,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         return mSearchResult.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         View itemView;
         CircleImageView ivSongIcon;
         TextView tvSongName;

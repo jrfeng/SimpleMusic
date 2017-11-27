@@ -60,7 +60,7 @@ public class MusicListAdapter extends DelegateAdapter.Adapter<MusicListAdapter.V
 
     private BottomListDialog.OnAdditionButtonClickListener mAdditionButtonClickListener;
 
-    private boolean mDisableRemove;
+    private static boolean mDisableRemove;
 
     public MusicListAdapter(Context context, MusicStorage.GroupType groupType,
                             String groupName, int offset) {
@@ -136,7 +136,7 @@ public class MusicListAdapter extends DelegateAdapter.Adapter<MusicListAdapter.V
         return mMusicGroup.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         View listItem;
         View playingIndicator;
         ImageButton ibTempPlay;

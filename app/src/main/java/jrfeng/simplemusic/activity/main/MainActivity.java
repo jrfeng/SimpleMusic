@@ -28,7 +28,6 @@ import jrfeng.simplemusic.dialog.PermissionRationaleDialog;
 
 public class MainActivity extends BaseActivity {
     private static final String TAG = "MainActivity";
-    private Toast mExitCue;
     private long mLastPressTime;
 
     private FragmentManager mFmManager;
@@ -61,10 +60,7 @@ public class MainActivity extends BaseActivity {
         if (size <= 0 && keyCode == KeyEvent.KEYCODE_BACK) {
             long pressedTime = System.currentTimeMillis();
             if (pressedTime - mLastPressTime > 2000) {
-                if (mExitCue == null) {
-                    mExitCue = Toast.makeText(this, "再按一次回到桌面", Toast.LENGTH_SHORT);
-                }
-                mExitCue.show();
+                Toast.makeText(this, "再按一次回到桌面", Toast.LENGTH_SHORT).show();
                 mLastPressTime = pressedTime;
                 return true;
             }

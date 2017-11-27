@@ -125,7 +125,7 @@ public class MusicGroupAdapter extends DelegateAdapter.Adapter<MusicGroupAdapter
         return mGroupNames.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         View vgGroupItem;
         CircleImageView ivItemIcon;
         TextView tvGroupName;

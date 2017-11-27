@@ -40,7 +40,7 @@ public class DividerAdapter extends DelegateAdapter.Adapter<DividerAdapter.ViewH
         return 1;
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
         public ViewHolder(View itemView) {
             super(itemView);

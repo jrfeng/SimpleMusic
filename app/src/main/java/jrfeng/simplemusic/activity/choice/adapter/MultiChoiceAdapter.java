@@ -54,7 +54,7 @@ public class MultiChoiceAdapter extends RecyclerView.Adapter<MultiChoiceAdapter.
 
     //*************ViewHolder*************
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         View itemView;
         CheckBox cbChecked;
         TextView tvSongName;

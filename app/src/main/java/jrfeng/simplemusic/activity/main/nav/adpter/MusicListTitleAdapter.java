@@ -99,7 +99,7 @@ public class MusicListTitleAdapter extends DelegateAdapter.Adapter<MusicListTitl
         }
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvAllMusicDescribe;
         ImageButton ibPlayMode;
         ImageButton ibLocateMusic;
