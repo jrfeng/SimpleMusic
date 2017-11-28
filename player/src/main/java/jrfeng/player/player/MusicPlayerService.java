@@ -281,7 +281,7 @@ public class MusicPlayerService extends Service {
         @Override
         public void playTempMusic(int position, boolean autoPlay) {
             Music tempMusic = mTempList.remove(position);
-            if (!checkFile(tempMusic)) {
+            if (checkMusicFile(tempMusic)) {
                 return;
             }
             if (mMusicStorage.contains(tempMusic)) {
@@ -442,7 +442,7 @@ public class MusicPlayerService extends Service {
             } else {
                 position = previousPosition();
             }
-            if (!checkFile(mMusicGroup.get(position))) {
+            if (checkMusicFile(mMusicGroup.get(position))) {
                 return;
             }
             mMusicPosition = position;
@@ -477,7 +477,7 @@ public class MusicPlayerService extends Service {
                 } else {
                     position = nextPosition();
                 }
-                if (!checkFile(mMusicGroup.get(position))) {
+                if (checkMusicFile(mMusicGroup.get(position))) {
                     return;
                 }
                 mMusicPosition = position;
@@ -503,7 +503,7 @@ public class MusicPlayerService extends Service {
                 return;
             }
 
-            if (!checkFile(mPlayingMusic)) {
+            if (checkMusicFile(mPlayingMusic)) {
                 return;
             }
 
@@ -542,7 +542,7 @@ public class MusicPlayerService extends Service {
                 return;
             }
 
-            if (!checkFile(mMusicGroup.get(position))) {
+            if (checkMusicFile(mMusicGroup.get(position))) {
                 return;
             }
 
@@ -582,7 +582,7 @@ public class MusicPlayerService extends Service {
                 } else {
                     position = nextPosition();
                 }
-                if (!checkFile(mMusicGroup.get(position))) {
+                if (checkMusicFile(mMusicGroup.get(position))) {
                     return;
                 }
                 mMusicPosition = position;
@@ -613,7 +613,7 @@ public class MusicPlayerService extends Service {
                 return;
             }
 
-            if (!checkFile(musicGroup.get(position))) {
+            if (checkMusicFile(musicGroup.get(position))) {
                 return;
             }
 
@@ -877,7 +877,7 @@ public class MusicPlayerService extends Service {
                                 //调试
                                 log("正在播放歌曲被删除");
 
-                                if(!isPlayingILoveGroup()) {
+                                if(playingILoveGroup()) {
                                     switchMusic();
                                 }
                             } else {
@@ -916,9 +916,9 @@ public class MusicPlayerService extends Service {
             }
         }
 
-        private boolean isPlayingILoveGroup() {
-            return mMusicGroupType == MusicStorage.GroupType.MUSIC_LIST
-                    && mMusicGroupName.equals(MusicStorage.MUSIC_LIST_I_LOVE);
+        private boolean playingILoveGroup() {
+            return mMusicGroupType != MusicStorage.GroupType.MUSIC_LIST
+                    || !mMusicGroupName.equals(MusicStorage.MUSIC_LIST_I_LOVE);
         }
 
         private void switchMusic() {
@@ -1025,7 +1025,7 @@ public class MusicPlayerService extends Service {
             mAudioManager.abandonAudioFocus(mAudioFocusChangeListener);
         }
 
-        private boolean checkFile(Music music) {
+        private boolean checkMusicFile(Music music) {
             File file = new File(music.getPath());
             boolean result = file.exists();
             if (!result) {
@@ -1034,7 +1034,7 @@ public class MusicPlayerService extends Service {
                 }
                 sendActionBroadcast(MusicPlayerClient.Action.ACTION_MUSIC_NOT_EXIST);
             }
-            return result;
+            return !result;
         }
 
         //关键的方法，负责渐隐播放/渐隐暂停

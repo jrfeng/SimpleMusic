@@ -36,6 +36,7 @@ public class ScannedMusicsActivity extends BaseActivity {
         init();
     }
 
+    @SuppressWarnings("unchecked")
     private void init() {
         //获取值
         ArrayList<Music> musics = (ArrayList<Music>) getIntent().getSerializableExtra("musics");

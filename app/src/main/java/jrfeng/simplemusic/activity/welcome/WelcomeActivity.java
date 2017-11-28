@@ -2,7 +2,6 @@ package jrfeng.simplemusic.activity.welcome;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.WindowManager;
 
 import java.util.Timer;
