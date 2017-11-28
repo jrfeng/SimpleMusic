@@ -122,7 +122,7 @@ public class NavigationPresenter extends PlayerActionDisposerAdapter implements 
 
     @Override
     public int getRecentPlayCount() {
-        return mMusicStorage.getRecentPlaySize();
+        return mMusicStorage.getRecentPlayCount();
     }
 
     @Override
@@ -179,8 +179,8 @@ public class NavigationPresenter extends PlayerActionDisposerAdapter implements 
     }
 
     private boolean isCurrentMusicGroup() {
-        return mClient.getMusicGroupType() == MusicStorage.GroupType.MUSIC_LIST
-                && mClient.getMusicGroupName().equals(MusicStorage.MUSIC_LIST_ALL_MUSIC);
+        return mClient.getPlayingMusicGroupType() == MusicStorage.GroupType.MUSIC_LIST
+                && mClient.getPlayingMusicGroupName().equals(MusicStorage.MUSIC_LIST_ALL_MUSIC);
     }
 
     private int getPlayingMusicPosition() {

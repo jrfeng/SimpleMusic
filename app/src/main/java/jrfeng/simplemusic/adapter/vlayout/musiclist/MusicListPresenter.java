@@ -136,8 +136,8 @@ class MusicListPresenter implements BasePresenter {
     }
 
     boolean playingCurrentMusicGroup() {
-        return mClient.getMusicGroupType() == mGroupType
-                && mClient.getMusicGroupName().equals(mGroupName);
+        return mClient.getPlayingMusicGroupType() == mGroupType
+                && mClient.getPlayingMusicGroupName().equals(mGroupName);
     }
 
     boolean isILove(Music music) {

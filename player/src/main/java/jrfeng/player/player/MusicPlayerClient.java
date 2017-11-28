@@ -175,18 +175,18 @@ public class MusicPlayerClient implements ServiceConnection, MusicPlayerControll
     }
 
     @Override
-    public List<Music> getMusicList() {
-        return mController.getMusicList();
+    public List<Music> getPlayingMusicGroup() {
+        return mController.getPlayingMusicGroup();
     }
 
     @Override
-    public MusicStorage.GroupType getMusicGroupType() {
-        return mController.getMusicGroupType();
+    public MusicStorage.GroupType getPlayingMusicGroupType() {
+        return mController.getPlayingMusicGroupType();
     }
 
     @Override
-    public String getMusicGroupName() {
-        return mController.getMusicGroupName();
+    public String getPlayingMusicGroupName() {
+        return mController.getPlayingMusicGroupName();
     }
 
     @Override

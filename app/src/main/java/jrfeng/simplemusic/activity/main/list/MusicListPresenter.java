@@ -152,7 +152,7 @@ public class MusicListPresenter extends PlayerActionDisposerAdapter implements M
 
     @Override
     public boolean isPlayingCurrentMusicGroup() {
-        return mClient.getMusicGroupType() == mGroupType
-                && mClient.getMusicGroupName().equals(mGroupName);
+        return mClient.getPlayingMusicGroupType() == mGroupType
+                && mClient.getPlayingMusicGroupName().equals(mGroupName);
     }
 }

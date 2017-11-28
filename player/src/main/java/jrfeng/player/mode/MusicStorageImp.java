@@ -124,7 +124,7 @@ public class MusicStorageImp implements MusicStorage {
     }
 
     @Override
-    public int getRecentPlaySize() {
+    public int getRecentPlayCount() {
         return mRecentPlay.size();
     }
 

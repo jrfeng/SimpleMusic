@@ -18,8 +18,8 @@ public interface MusicStorage {
 
     /**
      * 初始化 MusicStorage。这个方法由 MusicPlayerClient 负责调用。
-     * 注意！千万不要将该方法设计成异步的（不要在该方法中开启任何新线程）
-     * ，如果设计成异步的反而会坏事。
+     * 注意！千万不要将该方法设计成异步的（不要在该方法中开启任何新线
+     * 程），如果设计成异步的反而会坏事！！
      */
     void restore();
 
@@ -56,7 +56,7 @@ public interface MusicStorage {
      *
      * @return “最近播放” 列表中歌曲的数量。
      */
-    int getRecentPlaySize();
+    int getRecentPlayCount();
 
     /**
      * 获取最近播放列表。

@@ -323,17 +323,17 @@ public class MusicPlayerService extends Service {
         }
 
         @Override
-        public List<Music> getMusicList() {
+        public List<Music> getPlayingMusicGroup() {
             return mMusicGroup;
         }
 
         @Override
-        public MusicStorage.GroupType getMusicGroupType() {
+        public MusicStorage.GroupType getPlayingMusicGroupType() {
             return mMusicGroupType;
         }
 
         @Override
-        public String getMusicGroupName() {
+        public String getPlayingMusicGroupName() {
             return mMusicGroupName;
         }
 

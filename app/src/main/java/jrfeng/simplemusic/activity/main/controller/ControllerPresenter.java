@@ -90,8 +90,8 @@ public class ControllerPresenter implements ControllerContract.Presenter, Player
         if (mClient.isPlayingTempMusic()) {
             TempPlayDialog.show(mContext);
         } else {
-            PlayingMusicGroupDialog.show(mContext, mClient.getMusicGroupType(),
-                    mClient.getMusicGroupName(), mClient.getPlayingMusicIndex());
+            PlayingMusicGroupDialog.show(mContext, mClient.getPlayingMusicGroupType(),
+                    mClient.getPlayingMusicGroupName(), mClient.getPlayingMusicIndex());
         }
     }
 

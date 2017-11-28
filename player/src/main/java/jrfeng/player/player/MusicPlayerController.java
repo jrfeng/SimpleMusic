@@ -121,35 +121,38 @@ interface MusicPlayerController {
     int getPlayingMusicIndex();
 
     /**
-     * 获取已加载的音乐组的所有音乐。
+     * 获取正在播放的音乐组。
      *
-     * @return 已加载的音乐组的所有音乐.
+     * @return 正在播放的音乐组。如果没有正在播放的音乐组，则返回 null（一般
+     * 只会在一首音乐也不存在的情况下返回 null）。
      */
-    List<Music> getMusicList();
+    List<Music> getPlayingMusicGroup();
 
     /**
-     * 获取已加载的音乐组的类型。
+     * 获取正在播放的音乐组的类型。
      *
-     * @return 已加载的音乐组的类型 {@link jrfeng.player.mode.MusicStorage.GroupType}。
+     * @return 正在播放的音乐组的类型 {@link jrfeng.player.mode.MusicStorage.GroupType}。
      */
-    MusicStorage.GroupType getMusicGroupType();
+    MusicStorage.GroupType getPlayingMusicGroupType();
 
     /**
      * 获取已加载的音乐组的名字。
      *
      * @return 已加载的音乐组的名字。
      */
-    String getMusicGroupName();
+    String getPlayingMusicGroupName();
 
     /**
-     * 获取 “最近播放” 历史记录列表。
+     * 获取 “最近播放” 历史记录列表。{@link MusicStorage} 也提供了一个
+     * 类似的方法：{@link MusicStorage#getRecentPlay()}。
      *
      * @return “最近播放” 历史记录列表。
      */
     List<Music> getRecentPlayList();
 
     /**
-     * 获取 “最近播放” 历史记录列表的大小。
+     * 获取 “最近播放” 历史记录列表的大小。{@link MusicStorage} 也提供了一个
+     * 类似的方法：{@link MusicStorage#getRecentPlayCount()}。
      *
      * @return “最近播放” 历史记录列表的大小。
      */
@@ -185,10 +188,15 @@ interface MusicPlayerController {
      */
     void addTempPlayMusic(Music music);
 
+    /**
+     * 添加一组音乐到 “临时播” 列表。
+     *
+     * @param musics 要添加到 “临时播” 列表的音乐。
+     */
     void addTempPlayMusics(List<Music> musics);
 
     /**
-     * 判断当前是否在播放 “临时播” 列表中的音乐。
+     * 判断当前是否正在播放 “临时播” 列表中的音乐。
      *
      * @return 如果正在播放 “临时播” 列表中的音乐则返回 true，否则返回 false。
      */
@@ -197,33 +205,38 @@ interface MusicPlayerController {
     /**
      * 调整播放器的播放进度。
      *
-     * @param msec 要跳到的时间点（单位：毫秒）。
+     * @param msec 要跳到的时间点（单位：毫秒）。如果播放器还未准备好，调用该方法是无效的。
+     *             应该在播放器准备好以后再调用该方法 {@link #isPrepared()}。
      */
     void seekTo(int msec);
 
     /**
      * 获取正在播放音乐的时长（单位：毫秒）。
      *
-     * @return 正在播放音乐的时长（单位：毫秒）。
+     * @return 正在播放音乐的时长（单位：毫秒）。如果播放器还未准备好，则会返回 0。
+     * 应该在播放器准备好以后再调用该方法 {@link #isPrepared()}。
      */
     int getMusicLength();
 
     /**
      * 获取音乐的播放进度。
      *
-     * @return 音乐的播放进度（单位：毫秒）。
+     * @return 音乐的播放进度（单位：毫秒）。如果播放器还未准备好，则会返回 0。
+     * 应该在播放器准备好以后再调用该方法 {@link #isPrepared()}。
      */
     int getMusicProgress();
 
     /**
-     * 关闭播放器。
+     * 关闭播放器。注意！这会关闭整个应用！
      *
      * @param context Context 对象。
      */
     void shutdown(Context context);
 
     /**
-     * 添加播放器播放进度监听器。
+     * 添加播放器播放进度监听器。当播放音乐时，播放器会每隔 1 秒向进度监听器
+     * 发送通知，广播当前音乐的播放进度。播放器处于暂停/停止状态时会自动停止
+     * 向监听器发送通知。
      *
      * @param listener 要添加的播放器播放进度监听器。
      * @see #removeMusicProgressListener(MusicPlayerClient.PlayerProgressListener)
@@ -238,14 +251,39 @@ interface MusicPlayerController {
      */
     void removeMusicProgressListener(MusicPlayerClient.PlayerProgressListener listener);
 
+    /**
+     * 获取 “临时播” 列表。
+     *
+     * @return “临时播” 列表。
+     */
     List<Music> getTempList();
 
+    /**
+     * 获取 “临时播” 列表中所有音乐的名字。
+     *
+     * @return “临时播” 列表中所有音乐的名字。
+     */
     List<String> getTempListMusicNames();
 
+    /**
+     * 清空 “临时播” 列表。
+     */
     void clearTempList();
 
+    /**
+     * 判断 “临时播” 列表是否为空。
+     *
+     * @return 如果 “临时播” 列表为空，则返回 true，否则返回 false。
+     */
     boolean tempListIsEmpty();
 
+    /**
+     * 播放 “临时播” 列表指定位置处的音乐。
+     *
+     * @param position 要播放的音乐的位置。
+     * @param autoPlay 是否自动播放。如果为 true，则会在音乐准备好后
+     *                 自动播放，否则不会自动播放。
+     */
     void playTempMusic(int position, boolean autoPlay);
 
     /**
