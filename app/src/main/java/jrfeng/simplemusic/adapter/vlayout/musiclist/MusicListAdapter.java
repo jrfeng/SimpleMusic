@@ -75,10 +75,8 @@ public class MusicListAdapter extends DelegateAdapter.Adapter<MusicListAdapter.V
         mLastClickedMenuPosition = -1;
         mAlertDialog = new CustomAlertDialog(mContext);
 
-        if (groupType == MusicStorage.GroupType.ALBUM_LIST
-                || groupType == MusicStorage.GroupType.ARTIST_LIST) {
-            mDisableRemove = true;
-        }
+        mDisableRemove = (groupType == MusicStorage.GroupType.ALBUM_LIST)
+                || (groupType == MusicStorage.GroupType.ARTIST_LIST);
 
         initViewListeners();
     }
