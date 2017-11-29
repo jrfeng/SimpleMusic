@@ -19,7 +19,9 @@ public class ActivityStack {
     }
 
     public static void remove(BaseActivity activity) {
-        mStack.remove(activity);
+        if(mStack != null) {
+            mStack.remove(activity);
+        }
     }
 
     public static void finishAll() {

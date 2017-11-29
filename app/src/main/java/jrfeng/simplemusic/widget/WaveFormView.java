@@ -112,18 +112,17 @@ public class WaveFormView extends View implements LifecycleObserver {
         int half = mData.length / 2;
         int cutHalf = mCenterCutLength / 2;
 
+        int halfHeight = mRect.height() / 2;
+
         for (int i = 0; i < mData.length - 1; i++) {
             if (cutHalf > 0 && i > half - cutHalf && i < half + cutHalf) {
                 continue;
             }
             mPoints[i * 4] = mRect.width() * i / (mData.length - 1);
-            mPoints[i * 4 + 1] = (mRect.height() / 2)
-                    + ((byte) (mData[i] + 128)) * 128
-                    / mRect.height();
+            mPoints[i * 4 + 1] = halfHeight + ((byte) (mData[i] + 128)) * 128 / halfHeight / 2;
+
             mPoints[i * 4 + 2] = mRect.width() * (i + 1) / (mData.length - 1);
-            mPoints[i * 4 + 3] = (mRect.height() / 2)
-                    + ((byte) (mData[i + 1] + 128)) * 128
-                    / mRect.height();
+            mPoints[i * 4 + 3] = halfHeight + ((byte) (mData[i + 1] + 128)) * 128 / halfHeight / 2;
         }
         canvas.drawLines(mPoints, mPaint);
     }
