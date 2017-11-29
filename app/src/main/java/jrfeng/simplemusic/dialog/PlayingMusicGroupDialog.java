@@ -75,6 +75,11 @@ public class PlayingMusicGroupDialog {
             public void onPlay() {
                 dialog.setTarget(client.getPlayingMusicIndex());
             }
+
+            @Override
+            public void onError() {
+                dialog.setTarget(client.getPlayingMusicIndex());
+            }
         };
 
         final PlayerActionReceiver actionReceiver = new PlayerActionReceiver(context, disposerAdapter);

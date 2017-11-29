@@ -171,8 +171,16 @@ public class NavigationPresenter extends PlayerActionDisposerAdapter implements 
     public void onPlay() {
         mView.refreshRecentPlayCount();
         mView.refreshMusicList();
+        refreshPlayingIndicator();
+    }
+
+    @Override
+    public void onError() {
+        refreshPlayingIndicator();
+    }
+
+    private void refreshPlayingIndicator() {
         if (isCurrentMusicGroup()) {
-            log("onPlay");
             mView.refreshPlayingMusicPosition(mClient.getPlayingMusicIndex());
             mView.musicListScrollTo(getPlayingMusicPosition());
         }

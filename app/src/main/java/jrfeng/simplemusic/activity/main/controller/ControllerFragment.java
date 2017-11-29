@@ -193,7 +193,7 @@ public class ControllerFragment extends Fragment implements ControllerContract.V
     @Override
     public void notifyPlayError() {
         viewPause();
-        Toast.makeText(getContext(), "抱歉，出错了", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "抱歉 出错了", Toast.LENGTH_SHORT).show();
     }
 
     @Override

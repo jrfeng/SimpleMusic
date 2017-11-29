@@ -72,14 +72,23 @@ public class MusicListPresenter extends PlayerActionDisposerAdapter implements M
     @Override
     public void onPlay() {
         mView.refreshMusicList();
-        if (isPlayingCurrentMusicGroup()) {
-            mView.refreshPlayingMusicPosition(mClient.getPlayingMusicIndex());
-        }
+        refreshPlayingIndicator();
 
 //        int i = mMusicGroup.indexOf(mClient.getPlayingMusic());
 //        if (i != -1) {
 //            mView.musicListScrollTo(i);
 //        }
+    }
+
+    @Override
+    public void onError() {
+        refreshPlayingIndicator();
+    }
+
+    private void refreshPlayingIndicator() {
+        if (isPlayingCurrentMusicGroup()) {
+            mView.refreshPlayingMusicPosition(mClient.getPlayingMusicIndex());
+        }
     }
 
     private void refreshViews() {

@@ -402,7 +402,7 @@ public class MusicPlayerService extends Service {
 
         @Override
         public int getMusicProgress() {
-            if (mPlayingMusic == null && !mPrepared) {
+            if (mPlayingMusic == null || !mPrepared) {
                 return 0;
             }
             return mMediaPlayer.getCurrentPosition();
@@ -877,7 +877,7 @@ public class MusicPlayerService extends Service {
                                 //调试
                                 log("正在播放歌曲被删除");
 
-                                if(playingILoveGroup()) {
+                                if (playingILoveGroup()) {
                                     switchMusic();
                                 }
                             } else {
@@ -1005,7 +1005,10 @@ public class MusicPlayerService extends Service {
                 mMediaPlayer.setLooping(isLooping());
                 mMediaPlayer.prepareAsync();
             } catch (IOException e) {
+                //输出异常信息
+                Log.e("MusicPlayerService", e.toString());
                 e.printStackTrace();
+                sendActionBroadcast(MusicPlayerClient.Action.ACTION_ERROR);
             }
         }
 

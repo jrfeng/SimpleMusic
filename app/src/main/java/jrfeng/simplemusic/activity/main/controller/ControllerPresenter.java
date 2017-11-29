@@ -129,6 +129,7 @@ public class ControllerPresenter implements ControllerContract.Presenter, Player
     @Override
     public void onError() {
         mView.notifyPlayError();
+        notifyViewRefresh();
     }
 
     @Override
@@ -146,27 +147,25 @@ public class ControllerPresenter implements ControllerContract.Presenter, Player
     private void notifyViewRefresh() {
         String songName;
         String artist;
-        int songProgress;
-        int songLength;
-        byte[] image;
-        boolean isPLaying;
+        int songProgress = 0;
+        int songLength = 100;
+        byte[] image = null;
+        boolean isPLaying = false;
 
         Music music = mClient.getPlayingMusic();
         if (music == null) {
-            songName = null;
-            artist = null;
-            songProgress = 0;
-            songLength = 100;
-            image = null;
-            isPLaying = false;
-        } else {
-            songName = music.getName();
-            artist = music.getArtist();
+            return;
+        }
+
+        songName = music.getName();
+        artist = music.getArtist();
+        if (mClient.isPrepared()) {
             songProgress = mClient.getMusicProgress();
             songLength = mClient.getMusicLength();
             image = MP3Util.getMp3Image(new File(music.getPath()));
             isPLaying = mClient.isPlaying();
         }
+
         mView.refreshViews(songName, artist, songProgress, songLength, image, isPLaying);
         if (mClient.isPlayingTempMusic()) {
             mView.showTempPlayMark();

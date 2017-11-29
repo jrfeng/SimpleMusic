@@ -58,6 +58,8 @@ public class PlayerPresenter extends PlayerActionDisposerAdapter implements Play
     public void onError() {
         Toast.makeText(mContext, "抱歉 出错了", Toast.LENGTH_SHORT).show();
         mView.viewStop();
+        mImageAlreadySet = false;
+        updateView();
     }
 
     @Override
