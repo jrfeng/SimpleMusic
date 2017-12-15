@@ -74,6 +74,7 @@ public class PlayerActivity extends BaseActivity implements PlayerContract.View 
     protected void onStop() {
         super.onStop();
         mPresenter.end();
+        tvSongName.setSelected(false);
     }
 
     @Override

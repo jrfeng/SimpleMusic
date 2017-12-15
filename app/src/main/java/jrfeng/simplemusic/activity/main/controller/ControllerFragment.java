@@ -134,6 +134,7 @@ public class ControllerFragment extends Fragment implements ControllerContract.V
     public void onStop() {
         super.onStop();
         mPresenter.end();
+        tvCtlSongName.setSelected(false);
     }
 
     //***********************View*************************

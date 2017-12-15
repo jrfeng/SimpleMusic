@@ -25,6 +25,8 @@ public class PlayerPresenter extends PlayerActionDisposerAdapter implements Play
 
     private boolean mImageAlreadySet;
 
+    private int mPlayingMusicIndex;
+
     public PlayerPresenter(Context context, PlayerContract.View view) {
         mContext = context;
         mView = view;
@@ -42,6 +44,7 @@ public class PlayerPresenter extends PlayerActionDisposerAdapter implements Play
     @Override
     public void onPlay() {
         mView.viewStart();
+        mPlayingMusicIndex = mClient.getPlayingMusicIndex();
     }
 
     @Override
@@ -66,6 +69,13 @@ public class PlayerPresenter extends PlayerActionDisposerAdapter implements Play
     public void begin() {
         mPlayerActionReceiver.register();
         mClient.addMusicProgressListener(mProgressListener);
+
+        if (mPlayingMusicIndex != mClient.getPlayingMusicIndex()) {
+            //重置 View
+            mImageAlreadySet = false;
+            mView.viewStop();
+        }
+
         updateView();
     }
 
@@ -73,7 +83,7 @@ public class PlayerPresenter extends PlayerActionDisposerAdapter implements Play
     public void end() {
         mPlayerActionReceiver.unregister();
         mClient.removeMusicProgressListener(mProgressListener);
-        mView.viewStop();
+        mView.viewPause();
     }
 
     @Override

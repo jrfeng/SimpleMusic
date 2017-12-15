@@ -71,6 +71,5 @@ public class WelcomeActivity extends BaseActivity {
     protected void onStop() {
         super.onStop();
         mIsActive = false;
-        finish();
     }
 }
