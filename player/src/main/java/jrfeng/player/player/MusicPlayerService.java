@@ -1118,7 +1118,11 @@ public class MusicPlayerService extends Service {
             if (mRandom == null) {
                 mRandom = new Random();
             }
-            return mRandom.nextInt(mMusicGroup.size());
+            int position = mRandom.nextInt(mMusicGroup.size());
+            if (position == mMusicPosition) {
+                return randomPosition();
+            }
+            return position;
         }
 
         private int nextPosition() {
