@@ -497,8 +497,8 @@ public class MusicStorageImp implements MusicStorage {
     public boolean deleteMusicFile(Music music) {
         String path = music.getPath();
         File file = new File(path);
-        boolean result = file.delete();
-        if (result) {
+        boolean result = true;
+        if (file.exists() && (result = file.delete())) {
             removeMusicFromAllMusic(music);//该方法已经发送了通知，因此没必要再重复发送了。
         }
         return result;
