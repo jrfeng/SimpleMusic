@@ -4,8 +4,6 @@
 
 > **提示**：仅支持播放本地音乐。
 
-[**下载 App**](http://oh5447og7.bkt.clouddn.com/app/simplemusic_v1.0.apk)
-
 ## 已实现功能
 
 * 播放/暂停
