@@ -6,7 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.support.v7.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
 
 import jrfeng.player.R;
@@ -114,6 +114,8 @@ class DefaultNotifyControllerView implements MusicPlayerClient.NotifyControllerV
                 .build();
 
         NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(mNotifyId, notification);
+        if (notificationManager != null) {
+            notificationManager.notify(mNotifyId, notification);
+        }
     }
 }

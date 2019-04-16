@@ -1,8 +1,6 @@
 package jrfeng.player.utils.mp3;
 
-import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
-import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
-import org.jaudiotagger.tag.TagException;
+import android.media.MediaMetadataRetriever;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -41,14 +39,11 @@ public class MP3Util {
             rf.seek(rf.length() - 128);
             rf.read(mID3V1Data);
 
-            //计算歌曲时长
-            long lengthMesc = 0;
-            try {
-                org.jaudiotagger.audio.mp3.MP3File mp3File = new org.jaudiotagger.audio.mp3.MP3File(file);
-                lengthMesc = mp3File.getAudioHeader().getTrackLength();
-            } catch (IOException | TagException | ReadOnlyFileException | InvalidAudioFrameException e) {
-                System.out.println(e.toString());
-            }
+            //获取歌曲时长
+            MediaMetadataRetriever metadataRetriever = new MediaMetadataRetriever();
+            metadataRetriever.setDataSource(file.getAbsolutePath());
+            long lengthMesc = Integer.parseInt(
+                    metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
 
             ID3V1Info id3V1Info = null;
             ID3V2Info id3V2Info = null;
